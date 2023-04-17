@@ -1,36 +1,35 @@
 import {Body, Controller, Get, Post, UseGuards, UsePipes} from '@nestjs/common';
-import {CreateUserDto} from "./dto/create-user.dto";
+import {CreateEmployeeDto} from "./dto/create-employee.dto";
 import {EmployeesService} from "./employees.service";
 import {ApiOperation, ApiResponse, ApiTags} from "@nestjs/swagger";
-import {User} from "./employees.model";
-import {JwtAuthGuard} from "../auth/jwt-auth.guard";
+import {Employee} from "./employees.model";
 import {Roles} from "../auth/roles-auth.decorator";
 import {RolesGuard} from "../auth/roles.guard";
 import {AddRoleDto} from "./dto/add-role.dto";
-import {BanUserDto} from "./dto/ban-user.dto";
-import {ValidationPipe} from "../pipes/validation.pipe";
 
-@ApiTags('Пользователи')
-@Controller('users')
+@ApiTags('Сотрудники')
+@Controller('employees')
 export class EmployeesController {
 
     //инъекция чтобы использовать сервис
-    constructor(private usersService: EmployeesService) {}
+    constructor(private employeesService: EmployeesService) {}
 
-    @ApiOperation({summary: 'Создание пользователя'})
-    @ApiResponse({status: 200, type: User})
+    @ApiOperation({summary: 'Добавление сотрудника'})
+    @ApiResponse({status: 200, type: Employee})
+    @Roles("ADMIN")
+    @UseGuards(RolesGuard)
     @Post()
-    create(@Body() userDto: CreateUserDto) {
-        return this.usersService.createUser(userDto);
+    create(@Body() employeeDto: CreateEmployeeDto) {
+        return this.employeesService.createEmployee(employeeDto);
     }
 
-    @ApiOperation({summary: 'Получить всех пользователей'})
-    @ApiResponse({status: 200, type: [User]})
+    @ApiOperation({summary: 'Получить всех сотрудников'})
+    @ApiResponse({status: 200, type: [Employee]})
     @Roles("ADMIN")
     @UseGuards(RolesGuard)
     @Get()
     getAll() {
-        return this.usersService.getAllUsers();
+        return this.employeesService.getAllEmployees();
     }
     
     @ApiOperation({summary: 'Выдать роль'})
@@ -39,6 +38,6 @@ export class EmployeesController {
     @UseGuards(RolesGuard)
     @Post('/role')
     addRole(@Body() dto: AddRoleDto) {
-        return this.usersService.addRole(dto);
+        return this.employeesService.addRole(dto);
     }
 }
