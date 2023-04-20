@@ -10,12 +10,13 @@ import {AuthModule} from "../auth/auth.module";
 import {Post} from "../posts/posts.model";
 import {UsersModule} from "../users/users.module";
 import {User} from "../users/users.model";
+import {Client} from "../clients/clients.model";
 
 @Module({
   controllers: [EmployeesController],
   providers: [EmployeesService],
   imports: [
-      SequelizeModule.forFeature([Employee, Role, EmployeeRoles, User, Post]),
+      SequelizeModule.forFeature([Employee, Role, EmployeeRoles, User, Post, Client]),
       RolesModule,
       forwardRef(() => AuthModule),
   ],

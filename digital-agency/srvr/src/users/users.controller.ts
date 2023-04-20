@@ -1,4 +1,4 @@
-import {Body, Controller, Get, Post, UseGuards} from '@nestjs/common';
+import {Body, Controller, Get, Param, Patch, Post, UseGuards} from '@nestjs/common';
 import {CreateUserDto} from "./dto/create-user.dto";
 import {UsersService} from "./users.service";
 import {ApiOperation, ApiResponse, ApiTags} from "@nestjs/swagger";
@@ -6,6 +6,7 @@ import {User} from "./users.model";
 import {Roles} from "../auth/roles-auth.decorator";
 import {RolesGuard} from "../auth/roles.guard";
 import {BanUserDto} from "./dto/ban-user.dto";
+import {UpdateUserDto} from "./dto/update-user.dto";
 
 @ApiTags('Пользователи')
 @Controller('users')
@@ -30,6 +31,15 @@ export class UsersController {
     @Get()
     getAll() {
         return this.usersService.getAllUsers();
+    }
+
+    @ApiOperation({summary: 'Обновить пользователя'})
+    @ApiResponse({status: 200, type: User})
+    @Roles("ADMIN")
+    @UseGuards(RolesGuard)
+    @Patch(':id')
+    update(@Param('id') id: number, @Body() updateUserDto: UpdateUserDto): Promise<UpdateUserDto> {
+        return this.usersService.updateUser(+id, updateUserDto);
     }
 
     @ApiOperation({summary: 'Забанить пользователя'})

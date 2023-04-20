@@ -5,15 +5,17 @@ import {CreateEmployeeDto} from "./dto/create-employee.dto";
 import {RolesService} from "../roles/roles.service";
 import {AddRoleDto} from "./dto/add-role.dto";
 import {User} from "../users/users.model";
+import {Client} from "../clients/clients.model";
 
 @Injectable()//провайдер для внедрения в controller
 export class EmployeesService {
 
-    constructor(@InjectModel(User) private readonly userRepository: typeof User,
+    constructor(@InjectModel(User) private readonly userRepository: typeof User, @InjectModel(Client) private readonly clientRepository: typeof Client,
         @InjectModel(Employee) private employeeRepository: typeof Employee, private roleService: RolesService) {}
 
     async createEmployee(dto: CreateEmployeeDto) {
         const user = await this.userRepository.findByPk(dto.userId);
+        // const client = await this.clientRepository.findByPk(dto.userId);
         const employee = await this.employeeRepository.create(dto);
         const role = await this.roleService.getRoleByValue("ADMIN")
         await employee.$set('roles', [role.id])
@@ -21,6 +23,10 @@ export class EmployeesService {
 
         if (!user) {
             throw new NotFoundException('Пользователь не найден');
+        }
+
+        if (employee) {
+            throw new NotFoundException('Пользователь является клиентом');
         }
 
         // Создаем сотрудника и возвращаем результат
@@ -41,4 +47,10 @@ export class EmployeesService {
         }
         throw new HttpException('Сотрудник или роль не найдены', HttpStatus.NOT_FOUND);
     }
+
+    async getEmployeeById(id: number) {
+        const employee = await this.employeeRepository.findOne({where: {id}});
+        return employee;
+    }
+
 }

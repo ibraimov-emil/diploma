@@ -5,12 +5,14 @@ import {ConfigModule} from "@nestjs/config";
 import {User} from "./users/users.model";
 import { RolesModule } from './roles/roles.module';
 import {Role} from "./roles/roles.model";
-import { AuthModule } from './auth/auth.module';
 import {ServeStaticModule} from "@nestjs/serve-static";
 import * as path from 'path';
 import {EmployeeRoles} from "./roles/employee-roles.model";
 import {Employee} from "./employees/employees.model";
 import {EmployeesModule} from "./employees/employees.module";
+import { AuthModule } from './auth/auth.module';
+import {Client} from "./clients/clients.model";
+import {ClientsModule} from "./clients/clients.module";
 
 @Module({
     controllers: [],
@@ -29,13 +31,14 @@ import {EmployeesModule} from "./employees/employees.module";
             username: process.env.POSTGRES_USER,
             password: process.env.POSTGRESS_PASSWORD,
             database: process.env.POSTGRES_DB,
-            models: [User, Role, Employee, EmployeeRoles],
+            models: [User, Role, Employee, EmployeeRoles, Client],
             autoLoadModels: true
         }),
         UsersModule,
         EmployeesModule,
         RolesModule,
         AuthModule,
+        ClientsModule
     ]
 })
 export class AppModule {}

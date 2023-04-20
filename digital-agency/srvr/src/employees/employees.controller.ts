@@ -1,4 +1,4 @@
-import {Body, Controller, Get, Post, UseGuards, UsePipes} from '@nestjs/common';
+import {Body, Controller, Get, Param, Post, UseGuards, UsePipes} from '@nestjs/common';
 import {CreateEmployeeDto} from "./dto/create-employee.dto";
 import {EmployeesService} from "./employees.service";
 import {ApiOperation, ApiResponse, ApiTags} from "@nestjs/swagger";
@@ -6,6 +6,7 @@ import {Employee} from "./employees.model";
 import {Roles} from "../auth/roles-auth.decorator";
 import {RolesGuard} from "../auth/roles.guard";
 import {AddRoleDto} from "./dto/add-role.dto";
+import {Role} from "../roles/roles.model";
 
 @ApiTags('Сотрудники')
 @Controller('employees')
@@ -25,8 +26,8 @@ export class EmployeesController {
 
     @ApiOperation({summary: 'Получить всех сотрудников'})
     @ApiResponse({status: 200, type: [Employee]})
-    @Roles("ADMIN")
-    @UseGuards(RolesGuard)
+    // @Roles("ADMIN")
+    // @UseGuards(RolesGuard)
     @Get()
     getAll() {
         return this.employeesService.getAllEmployees();
@@ -34,10 +35,19 @@ export class EmployeesController {
     
     @ApiOperation({summary: 'Выдать роль'})
     @ApiResponse({status: 200})
-    @Roles("ADMIN")
-    @UseGuards(RolesGuard)
+    // @Roles("ADMIN")
+    // @UseGuards(RolesGuard)
     @Post('/role')
     addRole(@Body() dto: AddRoleDto) {
         return this.employeesService.addRole(dto);
+    }
+
+    @ApiOperation({summary: 'Получить сотрудника по id'})
+    @ApiResponse({status: 200, type: Role})
+    // @Roles("ADMIN")
+    // @UseGuards(RolesGuard)
+    @Get('/:id')
+    getByValue(@Param('value') id: number) {
+        return this.employeesService.getEmployeeById(id);
     }
 }

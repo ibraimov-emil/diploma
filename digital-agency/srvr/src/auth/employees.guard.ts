@@ -10,6 +10,7 @@ import {Observable} from "rxjs";
 import {JwtService} from "@nestjs/jwt";
 import {Reflector} from "@nestjs/core";
 import {ROLES_KEY} from "./roles-auth.decorator";
+import {EMPLOYEES_KEY} from "./employees-auth.decorator";
 
 @Injectable()
 export class RolesGuard implements CanActivate {
@@ -19,7 +20,7 @@ export class RolesGuard implements CanActivate {
 
     canActivate(context: ExecutionContext): boolean | Promise<boolean> | Observable<boolean> {
         try {
-            const requiredRoles = this.reflector.getAllAndOverride<string[]>(ROLES_KEY, [
+            const requiredRoles = this.reflector.getAllAndOverride<string[]>(EMPLOYEES_KEY, [
                 context.getHandler(),
                 context.getClass(),
             ])
@@ -37,6 +38,7 @@ export class RolesGuard implements CanActivate {
 
             const user = this.jwtService.verify(token);
             req.user = user;
+            console.log(user)
             return user.roles.some(role => requiredRoles.includes(role.value));
         } catch (e) {
             console.log(e)
