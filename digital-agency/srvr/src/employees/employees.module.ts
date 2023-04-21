@@ -17,8 +17,7 @@ import {Client} from "../clients/clients.model";
   providers: [EmployeesService],
   imports: [
       SequelizeModule.forFeature([Employee, Role, EmployeeRoles, User, Post, Client]),
-      RolesModule,
-      forwardRef(() => UsersModule),
+      forwardRef(() => RolesModule),
       forwardRef(() => AuthModule),
   ],
     exports: [

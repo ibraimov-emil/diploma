@@ -7,6 +7,8 @@ import {AddRoleDto} from "./dto/add-role.dto";
 import {User} from "../users/users.model";
 import {Client} from "../clients/clients.model";
 import {Role} from "../roles/roles.model";
+import {UpdateUserDto} from "../users/dto/update-user.dto";
+import {UpdateEmployeeDto} from "./dto/update-employee.dto";
 
 @Injectable()//провайдер для внедрения в controller
 export class EmployeesService {
@@ -48,8 +50,11 @@ export class EmployeesService {
         throw new HttpException('Сотрудник или роль не найдены', HttpStatus.NOT_FOUND);
     }
 
+    //проверка: является ли пользователь сотдруником
     async getEmployeeById(userId: number) {
+        console.log('employee')
         const employee = await this.employeeRepository.findOne({where: {userId}});
+        console.log(employee)
         return employee;
     }
 
@@ -61,4 +66,12 @@ export class EmployeesService {
         return employee;
     }
 
+    async updateEmployee(id: number, dto: UpdateEmployeeDto): Promise<UpdateEmployeeDto> {
+        const employee = await this.userRepository.findByPk(id);
+        if (!employee){
+            throw new HttpException('Сотрудник не найден', HttpStatus.NOT_FOUND);
+        }
+        await this.employeeRepository.update(dto, {where: {id}})
+        return dto;
+    }
 }

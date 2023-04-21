@@ -5,6 +5,7 @@ import {ApiOperation, ApiResponse, ApiTags} from "@nestjs/swagger";
 import {Client} from "./clients.model";
 import {Roles} from "../auth/roles-auth.decorator";
 import {RolesGuard} from "../auth/roles.guard";
+import {EmployeesGuard} from "../auth/employees.guard";
 
 @ApiTags('Клиенты')
 @Controller('clients')
@@ -15,8 +16,8 @@ export class ClientsController {
 
     @ApiOperation({summary: 'Добавление клиента'})
     @ApiResponse({status: 200, type: Client})
-    @Roles("ADMIN")
-    @UseGuards(RolesGuard)
+    // @Roles("ADMIN")
+    // @UseGuards(EmployeesGuard)
     @Post()
     create(@Body() ClientDto: CreateClientDto) {
         return this.ClientsService.createClient(ClientDto);
@@ -25,7 +26,7 @@ export class ClientsController {
     @ApiOperation({summary: 'Получить всех клиентов'})
     @ApiResponse({status: 200, type: [Client]})
     @Roles("ADMIN")
-    @UseGuards(RolesGuard)
+    @UseGuards(EmployeesGuard)
     @Get()
     getAll() {
         return this.ClientsService.getAllClients();
@@ -39,5 +40,4 @@ export class ClientsController {
     update() {
         return this.ClientsService.getAllClients();
     }
-    
 }

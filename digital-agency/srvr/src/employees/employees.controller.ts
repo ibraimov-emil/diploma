@@ -1,4 +1,4 @@
-import {Body, Controller, Get, Param, Post, UseGuards, UsePipes} from '@nestjs/common';
+import {Body, Controller, Get, Param, Post, Put, UseGuards, UsePipes} from '@nestjs/common';
 import {CreateEmployeeDto} from "./dto/create-employee.dto";
 import {EmployeesService} from "./employees.service";
 import {ApiOperation, ApiResponse, ApiTags} from "@nestjs/swagger";
@@ -8,6 +8,9 @@ import {RolesGuard} from "../auth/roles.guard";
 import {EmployeesGuard} from "../auth/employees.guard";
 import {AddRoleDto} from "./dto/add-role.dto";
 import {Role} from "../roles/roles.model";
+import {User} from "../users/users.model";
+import {UpdateUserDto} from "../users/dto/update-user.dto";
+import {UpdateEmployeeDto} from "./dto/update-employee.dto";
 
 @ApiTags('Сотрудники')
 @Controller('employees')
@@ -27,8 +30,8 @@ export class EmployeesController {
 
     @ApiOperation({summary: 'Получить всех сотрудников'})
     @ApiResponse({status: 200, type: [Employee]})
-    @Roles("ADMIN", "Manager")
-    @UseGuards(EmployeesGuard)
+    // @Roles("ADMIN", "Manager")
+    // @UseGuards(EmployeesGuard)
     @Get()
     getAll() {
         return this.employeesService.getAllEmployees();
@@ -47,8 +50,17 @@ export class EmployeesController {
     @ApiResponse({status: 200, type: Role})
     // @Roles("ADMIN")
     // @UseGuards(RolesGuard)
-    @Get('/:id')
+    @Get('/:userId')
     getByValue(@Param('userId') userId: number) {
         return this.employeesService.getEmployeeById(userId);
+    }
+
+    @ApiOperation({summary: 'Обновить пользователя'})
+    @ApiResponse({status: 200, type: User})
+    @Roles("ADMIN")
+    @UseGuards(EmployeesGuard)
+    @Put(':id')
+    update(@Param('id') id: number, @Body() updateEmployeeDto: UpdateEmployeeDto): Promise<UpdateEmployeeDto> {
+        return this.employeesService.updateEmployee(+id, updateEmployeeDto);
     }
 }
