@@ -14,6 +14,6 @@ export class EmployeeRoles extends Model<EmployeeRoles> {
     roleId: number;
 
     @ForeignKey(() => Employee)
-    @Column({type: DataType.INTEGER})
+    @Column({type: DataType.INTEGER, onDelete: 'CASCADE'})
     employeeId: number;
 }

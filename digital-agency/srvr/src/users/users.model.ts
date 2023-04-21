@@ -1,6 +1,7 @@
-import {Column, DataType, HasMany, HasOne, Model, Table} from "sequelize-typescript";
+import {BelongsTo, Column, DataType, ForeignKey, HasMany, HasOne, Model, Table} from "sequelize-typescript";
 import {ApiProperty} from "@nestjs/swagger";
 import {Employee} from "../employees/employees.model";
+import {Client} from "../clients/clients.model";
 
 interface UserCreationAttrs {
     surname: string;
@@ -48,4 +49,9 @@ export class User extends Model<User, UserCreationAttrs> {
 
     @HasOne(() => Employee)
     employee: Employee;
+    // @Column
+    // employeeId: number;
+    //
+    // @BelongsTo(() => Client)
+    // client: Client;
 }

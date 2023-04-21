@@ -5,6 +5,7 @@ import {ApiOperation, ApiResponse, ApiTags} from "@nestjs/swagger";
 import {Employee} from "./employees.model";
 import {Roles} from "../auth/roles-auth.decorator";
 import {RolesGuard} from "../auth/roles.guard";
+import {EmployeesGuard} from "../auth/employees.guard";
 import {AddRoleDto} from "./dto/add-role.dto";
 import {Role} from "../roles/roles.model";
 
@@ -17,8 +18,8 @@ export class EmployeesController {
 
     @ApiOperation({summary: 'Добавление сотрудника'})
     @ApiResponse({status: 200, type: Employee})
-    @Roles("ADMIN")
-    @UseGuards(RolesGuard)
+    // @Roles("ADMIN")
+    // @UseGuards(RolesGuard)
     @Post()
     create(@Body() employeeDto: CreateEmployeeDto) {
         return this.employeesService.createEmployee(employeeDto);
@@ -26,8 +27,8 @@ export class EmployeesController {
 
     @ApiOperation({summary: 'Получить всех сотрудников'})
     @ApiResponse({status: 200, type: [Employee]})
-    // @Roles("ADMIN")
-    // @UseGuards(RolesGuard)
+    @Roles("ADMIN", "Manager")
+    @UseGuards(EmployeesGuard)
     @Get()
     getAll() {
         return this.employeesService.getAllEmployees();
@@ -47,7 +48,7 @@ export class EmployeesController {
     // @Roles("ADMIN")
     // @UseGuards(RolesGuard)
     @Get('/:id')
-    getByValue(@Param('value') id: number) {
-        return this.employeesService.getEmployeeById(id);
+    getByValue(@Param('userId') userId: number) {
+        return this.employeesService.getEmployeeById(userId);
     }
 }

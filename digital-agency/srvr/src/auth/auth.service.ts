@@ -13,6 +13,7 @@ import * as bcrypt from 'bcryptjs'
 import {User} from "../users/users.model";
 import {LoginUserDto} from "../users/dto/login-user.dto";
 import {JwtAuthGuard} from "./jwt-auth.guard";
+import {Employee} from "../employees/employees.model";
 
 @Injectable()
 export class AuthService {
@@ -41,7 +42,7 @@ export class AuthService {
 
 
     private async generateToken(user: User) {
-        const payload = {email: user.email, id: user.id}
+        const payload = {email: user.email, id: user.id, employee: user.employee}
         return {
             token: this.jwtService.sign(payload)
         }

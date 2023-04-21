@@ -20,11 +20,11 @@ export class Employee extends Model<Employee, EmployeeCreationAttrs> {
 
     @ApiProperty({example: '1', description: 'ID пользователя'})
     @ForeignKey(() => User)
-    @Column({type: DataType.INTEGER, unique: true})
+    @Column({type: DataType.INTEGER, unique: true, onDelete: 'CASCADE'})
     userId: number;
 
     @BelongsTo(() => User)
-    author: User;
+    user: User;
 
     @BelongsToMany(() => Role, () => EmployeeRoles)
     roles: Role[];

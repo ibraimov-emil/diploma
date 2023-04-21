@@ -6,6 +6,7 @@ import {RolesService} from "../roles/roles.service";
 import {AddRoleDto} from "./dto/add-role.dto";
 import {User} from "../users/users.model";
 import {Client} from "../clients/clients.model";
+import {Role} from "../roles/roles.model";
 
 @Injectable()//провайдер для внедрения в controller
 export class EmployeesService {
@@ -15,18 +16,17 @@ export class EmployeesService {
 
     async createEmployee(dto: CreateEmployeeDto) {
         const user = await this.userRepository.findByPk(dto.userId);
-        // const client = await this.clientRepository.findByPk(dto.userId);
+        const client = await this.clientRepository.findByPk(dto.userId);
+        if (client) {
+            throw new NotFoundException('Пользователь является клиентом');
+        }
         const employee = await this.employeeRepository.create(dto);
-        const role = await this.roleService.getRoleByValue("ADMIN")
-        await employee.$set('roles', [role.id])
-        employee.roles = [role]
+        // const role = await this.roleService.getRoleByValue("ADMIN")
+        // await employee.$set('roles', [role.id])
+        // employee.roles = [role]
 
         if (!user) {
             throw new NotFoundException('Пользователь не найден');
-        }
-
-        if (employee) {
-            throw new NotFoundException('Пользователь является клиентом');
         }
 
         // Создаем сотрудника и возвращаем результат
@@ -48,8 +48,16 @@ export class EmployeesService {
         throw new HttpException('Сотрудник или роль не найдены', HttpStatus.NOT_FOUND);
     }
 
-    async getEmployeeById(id: number) {
-        const employee = await this.employeeRepository.findOne({where: {id}});
+    async getEmployeeById(userId: number) {
+        const employee = await this.employeeRepository.findOne({where: {userId}});
+        return employee;
+    }
+
+    async findOneById(id: number): Promise<Employee> {
+        const employee = await this.employeeRepository.findByPk(id, { include: Role });
+        if (!employee) {
+            throw new NotFoundException(`Employee with id ${id} not found`);
+        }
         return employee;
     }
 

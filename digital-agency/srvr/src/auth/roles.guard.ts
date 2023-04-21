@@ -14,8 +14,8 @@ import {ROLES_KEY} from "./roles-auth.decorator";
 @Injectable()
 export class RolesGuard implements CanActivate {
     constructor(private jwtService: JwtService,
-                    private reflector: Reflector) {
-        }
+                private reflector: Reflector) {
+    }
 
     canActivate(context: ExecutionContext): boolean | Promise<boolean> | Observable<boolean> {
         try {
@@ -37,8 +37,6 @@ export class RolesGuard implements CanActivate {
 
             const user = this.jwtService.verify(token);
             req.user = user;
-
-            console.log(req)
             return user.roles.some(role => requiredRoles.includes(role.value));
         } catch (e) {
             console.log(e)
