@@ -17,8 +17,8 @@ export class RolesController {
 
     @ApiOperation({summary: 'Создание роли'})
     @ApiResponse({status: 200, type: Role})
-    // @Roles("ADMIN")
-    // @UseGuards(RolesGuard)
+    @Roles("ADMIN")
+    @UseGuards(RolesGuard)
     @Post()
     create(@Body() dto: CreateRoleDto) {
         return this.roleService.createRole(dto);
@@ -41,7 +41,7 @@ export class RolesController {
         return this.roleService.getRoleByValue(value);
     }
 
-    @ApiOperation({summary: 'Обновить пользователя'})
+    @ApiOperation({summary: 'Обновить значение роли'})
     @ApiResponse({status: 200, type: User})
     @Roles("ADMIN")
     @UseGuards(EmployeesGuard)
