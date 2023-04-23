@@ -1,5 +1,6 @@
-import { BelongsTo, BelongsToMany, Column, DataType, ForeignKey, Model, Table } from "sequelize-typescript";
+import {BelongsTo, BelongsToMany, Column, DataType, ForeignKey, HasMany, Model, Table} from "sequelize-typescript";
 import { User } from "../users/users.model";
+import {RequestTable} from "../requests/requests.model";
 import {ApiProperty} from "@nestjs/swagger";
 
 interface ClientCreationAttrs {
@@ -23,4 +24,7 @@ export class Client extends Model<Client, ClientCreationAttrs> {
 
     @BelongsTo(() => User)
     author: User;
+
+    @HasMany(() => RequestTable)
+    requests: RequestTable[];
 }

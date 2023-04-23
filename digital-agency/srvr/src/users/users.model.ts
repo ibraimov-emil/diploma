@@ -49,6 +49,7 @@ export class User extends Model<User, UserCreationAttrs> {
 
     @HasOne(() => Employee)
     employee: Employee;
+
     // @Column
     // employeeId: number;
     //

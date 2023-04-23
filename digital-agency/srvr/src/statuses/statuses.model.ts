@@ -1,8 +1,9 @@
-import { BelongsTo, BelongsToMany, Column, DataType, ForeignKey, Model, Table } from "sequelize-typescript";
+import {BelongsTo, BelongsToMany, Column, DataType, ForeignKey, HasMany, Model, Table} from "sequelize-typescript";
 import { User } from "../users/users.model";
 import { Role } from "../roles/roles.model";
 import { EmployeeRoles } from "../roles/employee-roles.model";
 import {ApiProperty} from "@nestjs/swagger";
+import {RequestTable} from "../requests/requests.model";
 
 interface StatusCreationAttrs {
     name: string;
@@ -20,4 +21,7 @@ export class Status extends Model<Status, StatusCreationAttrs> {
     //
     // @BelongsToMany(() => Role, () => EmployeeRoles)
     // roles: Role[];
+
+    @HasMany(() => RequestTable)
+    requests: RequestTable[];
 }

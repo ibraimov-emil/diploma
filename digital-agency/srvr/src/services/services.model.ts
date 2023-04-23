@@ -1,8 +1,9 @@
-import { BelongsTo, BelongsToMany, Column, DataType, ForeignKey, Model, Table } from "sequelize-typescript";
+import {BelongsTo, BelongsToMany, Column, DataType, ForeignKey, HasMany, Model, Table} from "sequelize-typescript";
 import { User } from "../users/users.model";
 import { Role } from "../roles/roles.model";
 import { EmployeeRoles } from "../roles/employee-roles.model";
 import {ApiProperty} from "@nestjs/swagger";
+import {RequestTable} from "../requests/requests.model";
 
 interface ServiceCreationAttrs {
     name: string;
@@ -20,9 +21,11 @@ export class Service extends Model<Service, ServiceCreationAttrs> {
     name: string;
 
     @ApiProperty({example: 'Включает в себя, разработку сервера и клиента с использованием технологий NestJS, PostgresQL, React, ModeJS', description: 'Описание'})
-    @Column({ type: DataType.STRING, allowNull: true})
+    @Column({ type: DataType.STRING})
     description: string;
     //
-    // @BelongsToMany(() => Role, () => EmployeeRoles)
-    // roles: Role[];
+    @HasMany(() => RequestTable)
+    requests: RequestTable[];
+
+
 }

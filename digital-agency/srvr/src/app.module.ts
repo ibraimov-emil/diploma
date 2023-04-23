@@ -17,6 +17,8 @@ import {ServicesModule} from "./services/services.module";
 import {Service} from "./services/services.model";
 import {Status} from "./statuses/statuses.model";
 import {StatusesModule} from "./statuses/statuses.module";
+import {RequestsModule} from "./requests/requests.module";
+import {RequestTable} from "./requests/requests.model";
 
 @Module({
     controllers: [],
@@ -35,7 +37,7 @@ import {StatusesModule} from "./statuses/statuses.module";
             username: process.env.POSTGRES_USER,
             password: process.env.POSTGRESS_PASSWORD,
             database: process.env.POSTGRES_DB,
-            models: [User, Role, Employee, EmployeeRoles, Client, Service, Status],
+            models: [User, Role, Employee, EmployeeRoles, Client, Service, Status, RequestTable],
             autoLoadModels: true
         }),
         UsersModule,
@@ -45,6 +47,7 @@ import {StatusesModule} from "./statuses/statuses.module";
         ClientsModule,
         ServicesModule,
         StatusesModule,
+        RequestsModule
     ]
 })
 export class AppModule {}

@@ -1,4 +1,4 @@
-import {forwardRef, Module} from '@nestjs/common';
+import {forwardRef, Module, Req} from '@nestjs/common';
 import { ClientsController } from './clients.controller';
 import { ClientsService } from './clients.service';
 import {SequelizeModule} from "@nestjs/sequelize";
@@ -13,13 +13,16 @@ import {Employee} from "../employees/employees.model";
 import {EmployeeRoles} from "../roles/employee-roles.model";
 import {EmployeesService} from "../employees/employees.service";
 import {EmployeesModule} from "../employees/employees.module";
+import {RequestTable} from "../requests/requests.model";
+import {RequestsModule} from "../requests/requests.module";
 
 @Module({
   controllers: [ClientsController],
   providers: [ClientsService],
   imports: [
-      SequelizeModule.forFeature([Client, User, Post, Employee]),
+      SequelizeModule.forFeature([Client, User, Post, Employee, RequestTable]),
       EmployeesModule,
+      forwardRef(() => RequestsModule),
       forwardRef(() => AuthModule),
   ],
     exports: [

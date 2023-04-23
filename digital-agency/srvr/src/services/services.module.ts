@@ -13,12 +13,15 @@ import {User} from "../users/users.model";
 import {Client} from "../clients/clients.model";
 import {Employee} from "../employees/employees.model";
 import {EmployeesModule} from "../employees/employees.module";
+import {RequestTable} from "../requests/requests.model";
+import {RequestsModule} from "../requests/requests.module";
 
 @Module({
   controllers: [ServicesController],
   providers: [ServicesService],
   imports: [
-      SequelizeModule.forFeature([Service, Role, EmployeeRoles, User, Post, Client, Employee]),
+      SequelizeModule.forFeature([Service, Role, EmployeeRoles, User, Post, Client, Employee, RequestTable]),
+      forwardRef(() => RequestsModule),
       forwardRef(() => RolesModule),
       forwardRef(() => AuthModule),
       forwardRef(() => EmployeesModule),
