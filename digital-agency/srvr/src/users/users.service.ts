@@ -5,6 +5,7 @@ import {CreateUserDto} from "./dto/create-user.dto";
 import {BanUserDto} from "./dto/ban-user.dto";
 import {UpdateUserDto} from "./dto/update-user.dto";
 import {Employee} from "../employees/employees.model";
+import {Role} from "../roles/roles.model";
 
 @Injectable()//провайдер для внедрения в controller
 export class UsersService {
@@ -30,6 +31,14 @@ export class UsersService {
 
     async getUserByEmail(email: string) {
         const user = await this.userRepository.findOne({where: {email}, include: {all: true}})
+        return user;
+    }
+
+    async findById(id: number): Promise<User> {
+        const user = await this.userRepository.findByPk(id);
+        if (!user) {
+            throw new NotFoundException(`Employee with id ${id} not found`);
+        }
         return user;
     }
 

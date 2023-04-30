@@ -1,7 +1,7 @@
 import {Body, Controller, Get, Param, Post, Put, UseGuards, UsePipes} from '@nestjs/common';
 import {CreateEmployeeDto} from "./dto/create-employee.dto";
 import {EmployeesService} from "./employees.service";
-import {ApiOperation, ApiResponse, ApiTags} from "@nestjs/swagger";
+import {ApiBearerAuth, ApiOperation, ApiResponse, ApiTags} from "@nestjs/swagger";
 import {Employee} from "./employees.model";
 import {Roles} from "../auth/roles-auth.decorator";
 import {RolesGuard} from "../auth/roles.guard";
@@ -14,6 +14,7 @@ import {UpdateEmployeeDto} from "./dto/update-employee.dto";
 
 @ApiTags('Сотрудники')
 @Controller('employees')
+@ApiBearerAuth()
 export class EmployeesController {
 
     //инъекция чтобы использовать сервис
@@ -21,8 +22,8 @@ export class EmployeesController {
 
     @ApiOperation({summary: 'Добавление сотрудника'})
     @ApiResponse({status: 200, type: Employee})
-    // @Roles("ADMIN")
-    // @UseGuards(RolesGuard)
+    @Roles("ADMIN")
+    @UseGuards(RolesGuard)
     @Post()
     create(@Body() employeeDto: CreateEmployeeDto) {
         return this.employeesService.createEmployee(employeeDto);
@@ -30,8 +31,8 @@ export class EmployeesController {
 
     @ApiOperation({summary: 'Получить всех сотрудников'})
     @ApiResponse({status: 200, type: [Employee]})
-    // @Roles("ADMIN", "Manager")
-    // @UseGuards(EmployeesGuard)
+    @Roles("ADMIN")
+    @UseGuards(RolesGuard)
     @Get()
     getAll() {
         return this.employeesService.getAllEmployees();

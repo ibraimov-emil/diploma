@@ -1,23 +1,25 @@
 import {Body, Controller, Get, Param, Patch, Post, Put, UseGuards} from '@nestjs/common';
 import {CreateUserDto} from "./dto/create-user.dto";
 import {UsersService} from "./users.service";
-import {ApiOperation, ApiResponse, ApiTags} from "@nestjs/swagger";
+import {ApiBearerAuth, ApiOperation, ApiResponse, ApiTags} from "@nestjs/swagger";
 import {User} from "./users.model";
 import {Roles} from "../auth/roles-auth.decorator";
 import {RolesGuard} from "../auth/roles.guard";
 import {BanUserDto} from "./dto/ban-user.dto";
 import {UpdateUserDto} from "./dto/update-user.dto";
 import {EmployeesGuard} from "../auth/employees.guard";
+import {UserId} from "../decorators/user-id.decorator";
 
 @ApiTags('Пользователи')
 @Controller('users')
+@ApiBearerAuth()
 export class UsersController {
 
     //инъекция чтобы использовать сервис
     constructor(private usersService: UsersService) {}
 
     @ApiOperation({summary: 'Создание пользователя'})
-    @ApiResponse({status: 200, type: User})
+    @ApiResponse(   {status: 200, type: User})
     @Roles("ADMIN")
     @UseGuards(RolesGuard)
     @Post()
@@ -27,11 +29,20 @@ export class UsersController {
 
     @ApiOperation({summary: 'Получить всех пользователей'})
     @ApiResponse({status: 200, type: [User]})
-    // @Roles("ADMIN")
-    // @UseGuards(RolesGuard)
+    @Roles("ADMIN")
+    @UseGuards(RolesGuard)
     @Get()
     getAll() {
         return this.usersService.getAllUsers();
+    }
+
+    @ApiOperation({summary: 'Получить id пользователя'})
+    @ApiResponse({status: 200, type: [User]})
+    @Roles("ADMIN")
+    @UseGuards(RolesGuard)
+    @Get('/me')
+    getMe(@UserId() id: number) {
+        return this.usersService.findById(id);
     }
 
     @ApiOperation({summary: 'Обновить пользователя'})

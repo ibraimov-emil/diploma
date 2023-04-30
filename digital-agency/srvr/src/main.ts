@@ -13,10 +13,15 @@ async function start() {
         .setTitle('Digital-agency')
         .setDescription('Сервис по оказанию услуг по разработке, поддержку, консалтингу в IT сфере')
         .setVersion('1.0.0')
+        .addBearerAuth()
         // .addTag('ULBI TV')
         .build()
     const document = SwaggerModule.createDocument(app, config);
-    SwaggerModule.setup('/api/docs', app, document)
+    SwaggerModule.setup('/api/docs', app, document, {
+        swaggerOptions: {
+            persistAuthorization: true,
+        }
+    })
 
     app.useGlobalPipes(new ValidationPipe())
 

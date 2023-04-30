@@ -1,7 +1,7 @@
 import {Body, Controller, Delete, Get, Param, Post, Put, UseGuards, UsePipes} from '@nestjs/common';
 
 import {StatusesService} from "./statuses.service";
-import {ApiOperation, ApiResponse, ApiTags} from "@nestjs/swagger";
+import {ApiBearerAuth, ApiOperation, ApiResponse, ApiTags} from "@nestjs/swagger";
 import {Status} from "./statuses.model";
 import {Roles} from "../auth/roles-auth.decorator";
 import {RolesGuard} from "../auth/roles.guard";
@@ -10,6 +10,7 @@ import {CreateStatusDto} from "./dto/create-status.dto";
 
 @ApiTags('Статусы')
 @Controller('statuses')
+@ApiBearerAuth()
 export class StatusesController {
 
     //инъекция чтобы использовать сервис

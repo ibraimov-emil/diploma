@@ -1,7 +1,7 @@
 import {Body, Controller, Get, Param, Post, Put, UseGuards} from '@nestjs/common';
 import {RolesService} from "./roles.service";
 import {CreateRoleDto} from "./dto/create-role.dto";
-import {ApiOperation, ApiResponse, ApiTags} from "@nestjs/swagger";
+import {ApiBearerAuth, ApiOperation, ApiResponse, ApiTags} from "@nestjs/swagger";
 import {Roles} from "../auth/roles-auth.decorator";
 import {RolesGuard} from "../auth/roles.guard";
 import {Role} from "./roles.model";
@@ -12,6 +12,7 @@ import {UpdateRoleDto} from "./dto/update-employee.dto";
 
 @ApiTags('Роли')
 @Controller('roles')
+@ApiBearerAuth()
 export class RolesController {
     constructor(private roleService: RolesService) {}
 

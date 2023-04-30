@@ -1,5 +1,5 @@
 import {Body, Controller, Delete, Get, Param, Post, Put, UseGuards, UsePipes} from '@nestjs/common';
-import {ApiOperation, ApiResponse, ApiTags} from "@nestjs/swagger";
+import {ApiBearerAuth, ApiOperation, ApiResponse, ApiTags} from "@nestjs/swagger";
 import {RequestTable} from "./requests.model";
 import {Roles} from "../auth/roles-auth.decorator";
 import {RolesGuard} from "../auth/roles.guard";
@@ -10,6 +10,7 @@ import {UpdateRequestDto} from "./dto/update-request.dto";
 
 @ApiTags('Заявки')
 @Controller('requests')
+@ApiBearerAuth()
 export class RequestsController {
 
     //инъекция чтобы использовать сервис
