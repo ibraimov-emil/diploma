@@ -44,7 +44,7 @@ const FormPage = observer(() => {
         >
             <Card style={{width: "600px"}}>
                 <Form className="d-flex flex-column m-5">
-                    <h2 className="m-auto">{isLogin ? "Авторизация" : "Регистрация"}</h2>
+                    <h2 className="m-auto">{isLogin ? "Вход" : "Оставить заявку"}</h2>
                     <Form.Group className="mb-3" controlId="validationFormik01">
                         <Form.Label>Имя</Form.Label>
                         <Form.Control
@@ -63,6 +63,7 @@ const FormPage = observer(() => {
                             onChange={e => setSurname(e.target.value)}
                         />
                     </Form.Group>
+                    
                     <Form.Group className="mb-3" controlId="validationFormik03">
                         <Form.Label>Телефон</Form.Label>
                         <Form.Control
@@ -72,6 +73,7 @@ const FormPage = observer(() => {
                             onChange={e => setPhone(e.target.value)}
                         />
                     </Form.Group>
+
                     <Form.Group className="mb-3" controlId="formBasicEmail">
                         <Form.Label>Email address</Form.Label>
                         <Form.Control

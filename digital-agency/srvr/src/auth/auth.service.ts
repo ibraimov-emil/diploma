@@ -50,7 +50,7 @@ export class AuthService {
         const user = await this.userService.createUser({...userClientDto, password: hashPassword})
         const client = await this.clientService.createClient({...userClientDto, userId: user.id})
         console.log({...userClientDto})
-        const request = await this.requestService.createRequest({...userClientDto, clientId: client.id, statusId: 1})
+        await this.requestService.createRequest({...userClientDto, clientId: client.id, statusId: 1})
         return this.generateToken(user)
     }
 
