@@ -8,10 +8,12 @@ import {EmployeesService} from "../employees/employees.service";
 import {RolesModule} from "../roles/roles.module";
 import { ClientsModule } from 'src/clients/clients.module';
 import { RequestsModule } from 'src/requests/requests.module';
+import {AccessTokenStrategy} from "./strategies/accessToken.strategy";
+import {RefreshTokenStrategy} from "./strategies/refreshToken.strategy";
 
 @Module({
   controllers: [AuthController],
-  providers: [AuthService],
+  providers: [AuthService, AccessTokenStrategy, RefreshTokenStrategy],
   imports: [
       forwardRef(() => RolesModule),
       forwardRef(() => EmployeesModule),
