@@ -1,12 +1,14 @@
 import React, {useContext} from 'react';
 import {Button, Container, Nav, Navbar} from "react-bootstrap";
-import {Context} from "../index";
+// import {ContextProvider} from "../index";
 import {NavLink, useNavigate} from "react-router-dom";
 import {ADMIN_ROUTE, LOGIN_ROUTE, REGISTRATION_ROUTE, SHOP_ROUTE} from "../utils/consts";
 import {observer} from "mobx-react-lite";
+import {ContextProvider, useStateContext} from "../contexts/ContextProvider";
+import {AuthContext} from "../contexts/authContext";
 
 const NavBar = observer(() => {
-    const {user} = useContext(Context)
+    const {user} = useContext(AuthContext)
     const navigate = useNavigate()
 
     const logOut = () => {

@@ -1,10 +1,10 @@
 import React, {useContext} from 'react';
-import {Context} from "../index";
 import {Card, Row} from "react-bootstrap";
 import {observer} from "mobx-react-lite";
+import {ContextProvider} from "../contexts/ContextProvider";
 
 const BrandBar = observer(() => {
-    const {device} = useContext(Context)
+    const {device} = useContext(ContextProvider)
     return (
         <Row>
             {device.brands.map(brand =>

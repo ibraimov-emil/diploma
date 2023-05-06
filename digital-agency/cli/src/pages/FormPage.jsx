@@ -2,12 +2,14 @@ import React, {useContext, useState} from 'react';
 import {Button, Container, Form, Card, Row} from "react-bootstrap";
 import {NavLink, useLocation, useNavigate} from "react-router-dom";
 import {LOGIN_ROUTE, REGISTRATION_ROUTE, SHOP_ROUTE, FORM_ROUTE} from "../utils/consts";
+import 'bootstrap/dist/css/bootstrap.min.css';
 import {login, registrationClient} from "../http/userAPI";
 import {observer} from "mobx-react-lite";
 import {Context} from "../index";
+import {ContextProvider, useStateContext} from "../contexts/ContextProvider";
 
 const FormPage = observer(() => {
-    const {user} = useContext(Context)
+    const {user} = useStateContext()
     const location = useLocation()
     const navigate = useNavigate()
     const isLogin = location.pathname == LOGIN_ROUTE

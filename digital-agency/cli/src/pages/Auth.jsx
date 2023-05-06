@@ -4,10 +4,11 @@ import {NavLink, useLocation, useNavigate} from "react-router-dom";
 import {LOGIN_ROUTE, REGISTRATION_ROUTE, SHOP_ROUTE, FORM_ROUTE} from "../utils/consts";
 import {login, registration} from "../http/userAPI";
 import {observer} from "mobx-react-lite";
-import {Context} from "../index";
+import {ContextProvider, useStateContext} from "../contexts/ContextProvider";
+import {AuthContext} from "../contexts/authContext";
 
 const Auth = observer(() => {
-    const {user} = useContext(Context)
+    const {user} = useContext(AuthContext)
     const location = useLocation()
     const navigate = useNavigate()
     const isLogin = location.pathname == LOGIN_ROUTE
@@ -19,6 +20,7 @@ const Auth = observer(() => {
             let data
             if(isLogin){
                 data = await login(email, password)
+                // console.log(data)
             } else {
                 data = await registration(email, password)
                 console.log(data)

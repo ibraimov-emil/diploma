@@ -8,7 +8,10 @@ import {ValidationPipe} from "./pipes/validation.pipe";
 async function start() {
     const PORT = process.env.PORT || 5000;
     const app = await NestFactory.create(AppModule)
-    app.enableCors();
+    app.enableCors({
+        origin: "localhost:3000",
+        credentials: true
+    });
     const config = new DocumentBuilder()
         .setTitle('Digital-agency')
         .setDescription('Сервис по оказанию услуг по разработке, поддержку, консалтингу в IT сфере')

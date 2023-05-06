@@ -1,12 +1,13 @@
 import React, {useContext} from 'react';
 import {Routes, Route, Navigate} from "react-router-dom";
 import {authRoutes, publicRoutes} from "../routes";
-import {SHOP_ROUTE} from "../utils/consts";
-import {Context} from "../index";
+import {SHOP_ROUTE, FORM_ROUTE} from "../utils/consts";
 import {observer} from "mobx-react-lite";
+import {ContextProvider, useStateContext} from "../contexts/ContextProvider";
+import {AuthContext} from "../contexts/authContext";
 
 const AppRouter = observer(() => {
-    const {user} = useContext(Context)
+    const {user} = useContext(AuthContext)
 
     return (
         <Routes>
@@ -16,7 +17,7 @@ const AppRouter = observer(() => {
             {publicRoutes.map(({path, Component}) =>
                 <Route key={path} path={path} element={Component} exact/>
             )}
-            <Route path="*" element={<Navigate to={SHOP_ROUTE}/>}/>
+            {/*<Route path="*" element={<Navigate to={FORM_ROUTE}/>}/>*/}
         </Routes>
     );
 });

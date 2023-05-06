@@ -4,9 +4,10 @@ import {Button, Dropdown, Form, Row, Col} from "react-bootstrap";
 import {Context} from "../../index";
 import {createDevice, fetchBrands, fetchDevices, fetchTypes} from "../../http/deviceAPI";
 import {observer} from "mobx-react-lite";
+import {ContextProvider} from "../../contexts/ContextProvider";
 
 const CreateDevice = observer(({show, onHide}) => {
-    const {device} = useContext(Context)
+    const {device} = useContext(ContextProvider)
     const [name, setName] = useState('')
     const [price, setPrice] = useState(0)
     const [file, setFile] = useState(null)

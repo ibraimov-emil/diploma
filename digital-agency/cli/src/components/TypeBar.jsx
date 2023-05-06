@@ -1,10 +1,10 @@
 import React, {useContext} from 'react';
-import {Context} from "../index";
 import ListGroup from "react-bootstrap/ListGroup";
 import {observer} from "mobx-react-lite";
+import {ContextProvider} from "../contexts/ContextProvider";
 
 const TypeBar = observer(() => {
-    const {device} = useContext(Context)
+    const {device} = useContext(ContextProvider)
     return (
         <ListGroup>
             {device.types.map(type =>

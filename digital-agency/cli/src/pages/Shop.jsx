@@ -7,9 +7,10 @@ import {observer} from "mobx-react-lite";
 import {Context} from "../index";
 import {fetchBrands, fetchDevices, fetchTypes} from "../http/deviceAPI";
 import Pages from "../components/Pages";
+import {ContextProvider, useStateContext} from "../contexts/ContextProvider";
 
 const Shop = observer(() => {
-    const {device} = useContext(Context)
+    const {device} = useStateContext()
 
     useEffect(() => {
         fetchTypes().then(data => device.setTypes(data))
