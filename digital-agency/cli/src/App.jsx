@@ -10,19 +10,22 @@ import {ContextProvider, useStateContext} from './contexts/ContextProvider';
 import {TooltipComponent} from "@syncfusion/ej2-react-popups";
 import {Footer, Navbar, Sidebar, ThemeSettings} from "./components/Dashboard";
 import './App.css';
+import {AuthContext} from "./contexts/authContext";
 // import {FiSettings} from "react-icons/fs";
 function Employees() {
     return null;
 }
 
 const App = observer(() => {
-    const {user, setCurrentColor, setCurrentMode, currentMode, activeMenu, currentColor, themeSettings, setThemeSettings } = useStateContext();
-    // const {user} = useContext(ContextProvider)
+    const {user} = useContext(AuthContext)
+    const {setCurrentColor, setCurrentMode, currentMode, activeMenu, currentColor, themeSettings, setThemeSettings } = useStateContext();
     const [loading, setLoading] = useState(true)
 
     useEffect(() => {
+        console.log('das')
             check().then(data => {
-                user.setUser(true)
+                console.log('das')
+                user.setUser(data)
                 user.setIsAuth(true)
             }).finally(() => setLoading(false))
     }, [])
@@ -36,11 +39,13 @@ const App = observer(() => {
         }
     }, []);
 
-    if(loading){
-        return  <Spinner animation = {'grow'}/>
-    }
+    console.log(user.isAuth)
 
-    if(true) {
+    // if(loading){
+    //     return  <Spinner animation = {'grow'}/>
+    // }
+
+    if(!user.isAuth) {
         return (
             <BrowserRouter>
                 <NavBar/>
@@ -49,7 +54,7 @@ const App = observer(() => {
         );
     }
 
-    if (false){
+    if (user.isAuth){
         return (
             <div className={currentMode === 'Dark' ? 'dark' : ''}>
                 <BrowserRouter>

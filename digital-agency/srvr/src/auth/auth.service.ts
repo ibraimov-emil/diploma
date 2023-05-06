@@ -60,7 +60,7 @@ export class AuthService {
 
 
     private async generateToken(user: User) {
-        const payload = {email: user.email, id: user.id, employee: user.employee}
+        const payload = {email: user.email, id: user.id, employee: user.employee, client: user.client}
         return {
             token: this.jwtService.sign(payload)
         }
@@ -73,5 +73,10 @@ export class AuthService {
             return user;
         }
         throw new UnauthorizedException({message: 'Некорректный email или пароль'})
+    }
+
+    async check() {
+        // const user = await this.validateUser(userDto)
+        // return this.generateToken(user)
     }
 }

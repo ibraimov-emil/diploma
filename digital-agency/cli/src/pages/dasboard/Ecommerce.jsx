@@ -11,6 +11,7 @@ import SparkLine from "../../components/Dashboard/Charts/SparkLine";
 import Stacked from "../../components/Dashboard/Charts/Stacked";
 import Pie from "../../components/Dashboard/Charts/Pie";
 import LineChart from "../../components/Dashboard/Charts/LineChart";
+import {observer} from "mobx-react-lite";
 
 const DropDown = ({ currentMode }) => (
   <div className="w-28 border-1 border-color px-2 py-1 rounded-md">
@@ -333,4 +334,4 @@ const Ecommerce = () => {
   );
 };
 
-export default Ecommerce;
+export default observer(Ecommerce);

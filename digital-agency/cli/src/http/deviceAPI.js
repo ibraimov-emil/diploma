@@ -1,5 +1,5 @@
 //авторизация, регистрация, проверка токена
-import {$authHost, $host} from "./index"
+    import {$authHost, $host} from "./index"
 import jwt_decode from 'jwt-decode'
 
 export const createType = async (type) => {

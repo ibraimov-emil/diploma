@@ -44,6 +44,34 @@ export const authRoutes = [
     path: BASKET_ROUTE,
     Component: <Basket />,
   },
+   // dashboard
+   { path: "/", Component: <Ecommerce /> },
+
+   { path: "/ecommerce", Component: <Ecommerce /> },
+ 
+   // pages
+   { path: "/orders", Component: <Orders /> },
+   {
+     path: "/employees",
+     Component: <Employees />,
+   },
+   { path: "/customers", Component: <Customers /> },
+ 
+   // apps
+   { path: "/kanban", Component: <Kanban /> },
+   { path: "/editor", Component: <Editor /> },
+   { path: "/calendar", Component: <Calendar /> },
+   { path: "/color-picker", Component: <ColorPicker /> },
+ 
+   // charts
+   { path: "/line", Component: <Line /> },
+   { path: "/area", Component: <Area /> },
+   { path: "/bar", Component: <Bar /> },
+   { path: "/pie", Component: <Pie /> },
+   { path: "/financial", Component: <Financial /> },
+   { path: "/color-mapping", Component: <ColorMapping /> },
+   { path: "/pyramid", Component: <Pyramid /> },
+   { path: "/stacked", Component: <Stacked /> },
 ];
 
 export const publicRoutes = [
@@ -68,32 +96,5 @@ export const publicRoutes = [
     Component: <DevicePage />,
   },
 
-  // dashboard
-  { path: "/", Component: <Ecommerce /> },
-
-  { path: "/ecommerce", Component: <Ecommerce /> },
-
-  // pages
-  { path: "/orders", Component: <Orders /> },
-  {
-    path: "/employees",
-    Component: <Employees />,
-  },
-  { path: "/customers", Component: <Customers /> },
-
-  // apps
-  { path: "/kanban", Component: <Kanban /> },
-  { path: "/editor", Component: <Editor /> },
-  { path: "/calendar", Component: <Calendar /> },
-  { path: "/color-picker", Component: <ColorPicker /> },
-
-  // charts
-  { path: "/line", Component: <Line /> },
-  { path: "/area", Component: <Area /> },
-  { path: "/bar", Component: <Bar /> },
-  { path: "/pie", Component: <Pie /> },
-  { path: "/financial", Component: <Financial /> },
-  { path: "/color-mapping", Component: <ColorMapping /> },
-  { path: "/pyramid", Component: <Pyramid /> },
-  { path: "/stacked", Component: <Stacked /> },
+ 
 ];

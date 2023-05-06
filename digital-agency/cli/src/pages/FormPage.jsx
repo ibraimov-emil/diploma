@@ -30,9 +30,9 @@ const FormPage = observer(() => {
                 data = await registrationClient(email, password, phone, surname, name, description, nameCompany)
                 console.log(data)
             }
-            user.setUser(user)
+            user.setUser(data)
             user.setIsAuth(true)
-            navigate(SHOP_ROUTE)
+            navigate('/dashboard')
         } catch (e) {
             alert(e.response.data.message)
         }

@@ -1,4 +1,4 @@
-import {Body, Controller, ExecutionContext, Post, Req, UseGuards} from '@nestjs/common';
+import {Body, Controller, ExecutionContext, Get, Post, Req, UseGuards} from '@nestjs/common';
 import {ApiOperation, ApiResponse, ApiTags} from "@nestjs/swagger";
 import {CreateUserDto} from "../users/dto/create-user.dto";
 import {LoginUserDto} from "../users/dto/login-user.dto";
@@ -41,5 +41,13 @@ export class AuthController {
     @Post('/logout')
     loguot(@Body() context: ExecutionContext) {
         return this.authService.logout()
+    }
+
+    @ApiOperation({summary: 'Проверка'})
+    @ApiResponse({status: 200})
+    @UseGuards(JwtAuthGuard)
+    @Get('/check')
+    check(@Body() context: ExecutionContext) {
+        return this.authService.check()
     }
 }
