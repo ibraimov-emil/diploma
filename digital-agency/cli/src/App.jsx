@@ -21,13 +21,19 @@ const App = observer(() => {
     const {setCurrentColor, setCurrentMode, currentMode, activeMenu, currentColor, themeSettings, setThemeSettings } = useStateContext();
     const [loading, setLoading] = useState(true)
 
+    // useEffect(() => {
+    //     console.log('das')
+    //         check().then(data => {
+    //             console.log('das')
+    //             user.setUser(data)
+    //             user.setIsAuth(true)
+    //         }).finally(() => setLoading(false))
+    // }, [])
+
     useEffect(() => {
-        console.log('das')
-            check().then(data => {
-                console.log('das')
-                user.setUser(data)
-                user.setIsAuth(true)
-            }).finally(() => setLoading(false))
+        if (localStorage.getItem('token')) {
+            user.checkAuth()
+        }
     }, [])
 
     useEffect(() => {
@@ -39,11 +45,9 @@ const App = observer(() => {
         }
     }, []);
 
-    console.log(user.isAuth)
-
-    // if(loading){
-    //     return  <Spinner animation = {'grow'}/>
-    // }
+    if(user.isLoading){
+        return  <Spinner animation = {'grow'}/>
+    }
 
     if(!user.isAuth) {
         return (

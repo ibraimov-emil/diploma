@@ -44,10 +44,13 @@ export class UsersService {
 
     async updateUser(id: number, dto: UpdateUserDto): Promise<UpdateUserDto> {
         const user = await this.userRepository.findByPk(id);
+        console.log(id)
+        console.log(user)
         if (!user){
             throw new HttpException('Пользователь не найден', HttpStatus.NOT_FOUND);
         }
         await this.userRepository.update(dto, {where: {id}})
+        const updatedUser  = await this.userRepository.findByPk(id);
         // const user = await this.userRepository.findOne({where: {id}, include: {all: true}})
         // const user = await this.userRepository.findOne({where: {id}, include: {all: true}})
         // if (!user) {
@@ -56,7 +59,7 @@ export class UsersService {
         // const updatedModel = Object.assign(user, updateDto);
         // return this.save(updatedModel);
         // const user = await this.userRepository.update({where: {id}}, dto)
-        return dto;
+        return updatedUser;
     }
 
     // async delete(id: number) {

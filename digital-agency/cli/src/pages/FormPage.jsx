@@ -7,9 +7,12 @@ import {login, registrationClient} from "../http/userAPI";
 import {observer} from "mobx-react-lite";
 import {Context} from "../index";
 import {ContextProvider, useStateContext} from "../contexts/ContextProvider";
+import UserStore from "../store/UserStore";
+import {AuthContext} from "../contexts/authContext";
 
 const FormPage = observer(() => {
-    const {user} = useStateContext()
+    const {user} = useContext(AuthContext)
+
     const location = useLocation()
     const navigate = useNavigate()
     const isLogin = location.pathname == LOGIN_ROUTE
@@ -21,18 +24,18 @@ const FormPage = observer(() => {
     const [description, setDescription] = useState('')
     const [nameCompany, setNameCompany] = useState('')
 
-    const click = async () => {
+    const click = () => {
         try {
+            console.log('kjh')
             let data
             if(isLogin){
-                data = await login(email, password)
+                data = user.login(email, password)
             } else {
-                data = await registrationClient(email, password, phone, surname, name, description, nameCompany)
+                data = user.registration(email, password, phone, surname, name, description, nameCompany)
                 console.log(data)
+                navigate('/')
             }
-            user.setUser(data)
-            user.setIsAuth(true)
-            navigate('/dashboard')
+
         } catch (e) {
             alert(e.response.data.message)
         }

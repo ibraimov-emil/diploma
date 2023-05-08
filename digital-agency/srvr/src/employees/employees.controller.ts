@@ -5,7 +5,6 @@ import {ApiBearerAuth, ApiOperation, ApiResponse, ApiTags} from "@nestjs/swagger
 import {Employee} from "./employees.model";
 import {Roles} from "../auth/roles-auth.decorator";
 import {RolesGuard} from "../auth/roles.guard";
-import {EmployeesGuard} from "../auth/employees.guard";
 import {AddRoleDto} from "./dto/add-role.dto";
 import {Role} from "../roles/roles.model";
 import {User} from "../users/users.model";
@@ -59,7 +58,7 @@ export class EmployeesController {
     @ApiOperation({summary: 'Обновить пользователя'})
     @ApiResponse({status: 200, type: User})
     @Roles("ADMIN")
-    @UseGuards(EmployeesGuard)
+    @UseGuards(RolesGuard)
     @Put(':id')
     update(@Param('id') id: number, @Body() updateEmployeeDto: UpdateEmployeeDto): Promise<UpdateEmployeeDto> {
         return this.employeesService.updateEmployee(+id, updateEmployeeDto);

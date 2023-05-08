@@ -1,13 +1,31 @@
-import React from 'react';
+import React, {useContext} from 'react';
 import { MdOutlineCancel } from 'react-icons/md';
 
 import { Button } from '.';
 import { userProfileData } from '../../data/dummy';
 import { useStateContext } from '../../contexts/ContextProvider';
 import avatar from '../../data/avatar.jpg';
+import {observer} from "mobx-react-lite";
+import UserService from "../../services/UserService";
+import authService from "../../services/UserService";
+import {AuthContext} from "../../contexts/authContext";
+import {useNavigate} from "react-router-dom";
 
 const UserProfile = () => {
-  const { currentColor } = useStateContext();
+    const navigate = useNavigate()
+    const {user} = useContext(AuthContext)
+    const { currentColor } = useStateContext();
+
+    async function logout (){
+        try {
+            console.log('logout')
+            await user.logout();
+            console.log('logouttrue')
+            navigate('/login')
+        } catch (e) {
+            console.log(e);
+        }
+    }
 
   return (
     <div className="nav-item absolute right-1 top-16 bg-white dark:bg-[#42464D] p-8 rounded-lg w-96">
@@ -51,7 +69,7 @@ const UserProfile = () => {
           </div>
         ))}
       </div>
-      <div className="mt-5">
+      <div onClick={logout} className="mt-5">
         <Button
           color="white"
           bgColor={currentColor}
@@ -65,4 +83,4 @@ const UserProfile = () => {
   );
 };
 
-export default UserProfile;
+export default observer(UserProfile);

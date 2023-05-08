@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 import { BsCurrencyDollar } from 'react-icons/bs';
 import { GoPrimitiveDot } from 'react-icons/go';
 import { IoIosMore } from 'react-icons/io';
@@ -12,6 +12,7 @@ import Stacked from "../../components/Dashboard/Charts/Stacked";
 import Pie from "../../components/Dashboard/Charts/Pie";
 import LineChart from "../../components/Dashboard/Charts/LineChart";
 import {observer} from "mobx-react-lite";
+import UserService from "../../services/UserService";
 
 const DropDown = ({ currentMode }) => (
   <div className="w-28 border-1 border-color px-2 py-1 rounded-md">
@@ -21,6 +22,15 @@ const DropDown = ({ currentMode }) => (
 
 const Ecommerce = () => {
   const { currentColor, currentMode } = useStateContext();
+  const [users, setUsers] = useState([]);
+  async function getUsers() {
+    try {
+      const response = await UserService.fetchUsers();
+      setUsers(response.data);
+    } catch (e) {
+      console.log(e);
+    }
+  }
 
   return (
     <div className="mt-24">
@@ -68,6 +78,13 @@ const Ecommerce = () => {
             </div>
           ))}
         </div>
+      </div>
+
+      <div>
+        <button onClick={getUsers}>Получить пользователей</button>
+      {users.map(user =>
+          <div key={user.email}>{user.email}</div>
+      )}
       </div>
 
       <div className="flex gap-10 flex-wrap justify-center">

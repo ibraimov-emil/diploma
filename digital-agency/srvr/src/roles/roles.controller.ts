@@ -6,7 +6,6 @@ import {Roles} from "../auth/roles-auth.decorator";
 import {RolesGuard} from "../auth/roles.guard";
 import {Role} from "./roles.model";
 import {User} from "../users/users.model";
-import {EmployeesGuard} from "../auth/employees.guard";
 import {UpdateEmployeeDto} from "../employees/dto/update-employee.dto";
 import {UpdateRoleDto} from "./dto/update-employee.dto";
 
@@ -28,7 +27,7 @@ export class RolesController {
     @ApiOperation({summary: 'Получить все роли'})
     @ApiResponse({status: 200, type: Role})
     @Roles("ADMIN")
-    @UseGuards(EmployeesGuard)
+    @UseGuards(RolesGuard)
     @Get()
     getAllRoles() {
         return this.roleService.getAllRoles();
@@ -36,7 +35,7 @@ export class RolesController {
     @ApiOperation({summary: 'Получить роль по значению'})
     @ApiResponse({status: 200, type: Role})
     @Roles("ADMIN")
-    @UseGuards(EmployeesGuard)
+    @UseGuards(RolesGuard)
     @Get('/:value')
     getByValue(@Param('value') value: string) {
         return this.roleService.getRoleByValue(value);
@@ -45,7 +44,7 @@ export class RolesController {
     @ApiOperation({summary: 'Обновить значение роли'})
     @ApiResponse({status: 200, type: User})
     @Roles("ADMIN")
-    @UseGuards(EmployeesGuard)
+    @UseGuards(RolesGuard)
     @Put(':value')
     update(@Param('value') value: string, @Body() updateRoleDto: UpdateRoleDto): Promise<UpdateRoleDto> {
         return this.roleService.update(value, updateRoleDto);

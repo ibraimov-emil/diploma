@@ -1,5 +1,5 @@
 import {Module} from "@nestjs/common";
-import {SequelizeModule} from "@nestjs/sequelize";
+    import {SequelizeModule} from "@nestjs/sequelize";
 import { UsersModule } from './users/users.module';
 import {ConfigModule} from "@nestjs/config";
 import {User} from "./users/users.model";
@@ -38,7 +38,8 @@ import {RequestTable} from "./requests/requests.model";
             password: process.env.POSTGRESS_PASSWORD,
             database: process.env.POSTGRES_DB,
             models: [User, Role, Employee, EmployeeRoles, Client, Service, Status, RequestTable],
-            autoLoadModels: true
+            autoLoadModels: true,
+            synchronize: true
         }),
         UsersModule,
         EmployeesModule,

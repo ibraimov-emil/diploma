@@ -47,6 +47,10 @@ export class User extends Model<User, UserCreationAttrs> {
     @Column({type: DataType.STRING, allowNull: true})
     banReason: string;
 
+    @ApiProperty({example: 'Токен', description: 'Рефреш'})
+    @Column({type: DataType.STRING})
+    refreshToken: any;
+
     @HasOne(() => Employee)
     employee: Employee;
 

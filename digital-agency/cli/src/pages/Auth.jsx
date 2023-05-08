@@ -6,6 +6,7 @@ import {login, registration} from "../http/userAPI";
 import {observer} from "mobx-react-lite";
 import {ContextProvider, useStateContext} from "../contexts/ContextProvider";
 import {AuthContext} from "../contexts/authContext";
+import UserStore from "../store/UserStore";
 
 const Auth = observer(() => {
     const {user} = useContext(AuthContext)
@@ -15,19 +16,22 @@ const Auth = observer(() => {
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
 
-    const click = async () => {
+
+    const click = () => {
         try {
+            // console.log('dsdas')
             let data
-            if(isLogin){
-                data = await login(email, password)
-                // console.log(data)
-            } else {
-                data = await registration(email, password)
-                console.log(data)
-            }
-            user.setUser(data)
-            user.setIsAuth(true)
-            navigate('/dashboard')
+            // console.log('dsdas')
+            // if(isLogin){
+                data = user.login(email, password)
+            console.log(data)
+            // } else {
+            //     data = await user.registration(email, password)
+            //     console.log(data)
+            // }
+            // user.setUser(data)
+            // user.setIsAuth(true)
+            navigate('/')
         } catch (e) {
             alert(e.response.data.message)
         }

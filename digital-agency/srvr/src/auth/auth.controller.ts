@@ -1,12 +1,15 @@
-import {Body, Controller, ExecutionContext, Get, Post, Req, UseGuards} from '@nestjs/common';
+import {Body, Controller, ExecutionContext, Get, Post, Req, Res, UseGuards} from '@nestjs/common';
 import {ApiOperation, ApiResponse, ApiTags} from "@nestjs/swagger";
 import {CreateUserDto} from "../users/dto/create-user.dto";
 import {LoginUserDto} from "../users/dto/login-user.dto";
 import {AuthService} from "./auth.service";
+import {Request, Response} from 'express';
 import {Role} from "../roles/roles.model";
 import {JwtAuthGuard} from "./jwt-auth.guard";
 import { CreateRequestDto } from 'src/requests/dto/create-request.dto';
 import { CreateClientRequestDto } from './dto/create-client-request.dto';
+import {AccessTokenGuard} from "../common/guards/accessToken.guard";
+import {RefreshTokenGuard} from "../common/guards/refreshToken.guard";
 
 @ApiTags('Авторизация')
 @Controller('auth')
@@ -17,8 +20,13 @@ export class AuthController {
     @ApiOperation({summary: 'Вход'})
     @ApiResponse({status: 200})
     @Post('/login')
-    login(@Body() userDto: LoginUserDto) {
-        return this.authService.login(userDto)
+    login(@Body() userDto: LoginUserDto)
+    {
+        const data = this.authService.login(userDto)
+        console.log(data.catch())
+        console.log()
+        // res.cookie('refreshToken', data.catch(), {maxAge: 30 * 24 * 60 * 60 * 1000, httpOnly: true})
+        return data
     }
 
     @ApiOperation({summary: 'Регистрация'})
@@ -35,19 +43,37 @@ export class AuthController {
         return this.authService.registrationClient(userClientDto)
     }
 
+    // @ApiOperation({summary: 'Выход'})
+    // @ApiResponse({status: 200})
+    // @UseGuards(AccessTokenGuard)
+    // @Post('/logout')
+    // loguot(@Body() userId: number) {
+    //     return this.authService.logout(userId)
+    // }
     @ApiOperation({summary: 'Выход'})
     @ApiResponse({status: 200})
-    @UseGuards(JwtAuthGuard)
-    @Post('/logout')
-    loguot(@Body() context: ExecutionContext) {
-        return this.authService.logout()
+    @UseGuards(AccessTokenGuard)
+    @Get('/logout')
+    loguot(@Req() req: Request) {
+        const { userId} = req.cookies;
+        // console.log(req.cookies)
+        this.authService.logout(userId);
     }
 
-    @ApiOperation({summary: 'Проверка'})
-    @ApiResponse({status: 200})
-    @UseGuards(JwtAuthGuard)
-    @Get('/check')
-    check(@Body() context: ExecutionContext) {
-        return this.authService.check()
+    @UseGuards(RefreshTokenGuard)
+    @Get('refresh')
+    refreshTokens(@Req() req: Request) {
+        const { userId } = req.cookies;
+        const { refreshToken } = req.cookies;
+        console.log(userId)
+        return this.authService.refreshTokens(userId, refreshToken);
     }
+
+    // @ApiOperation({summary: 'Проверка'})
+    // @ApiResponse({status: 200})
+    //     @UseGuards(JwtAuthGuard)
+    // @Get('/check')
+    // check(@Body() context: ExecutionContext) {
+    //     return this.authService.check()
+    // }
 }

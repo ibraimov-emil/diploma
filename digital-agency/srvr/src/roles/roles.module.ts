@@ -8,15 +8,15 @@ import {Employee} from "../employees/employees.model";
 import {AuthModule} from "../auth/auth.module";
 import {UsersModule} from "../users/users.module";
 import {EmployeesService} from "../employees/employees.service";
-import {EmployeesGuard} from "../auth/employees.guard";
 import {EmployeesModule} from "../employees/employees.module";
 
 @Module({
-  providers: [RolesService, EmployeesGuard],
+  providers: [RolesService],
   controllers: [RolesController],
   imports: [
     SequelizeModule.forFeature([Role, Employee, EmployeeRoles]),
-    AuthModule,
+
+    forwardRef(() => AuthModule),
     forwardRef(() => EmployeesModule),
   ],
   exports: [
