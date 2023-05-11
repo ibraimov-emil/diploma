@@ -22,11 +22,10 @@ export class AuthController {
     @Post('/login')
     login(@Body() userDto: LoginUserDto)
     {
-        const data = this.authService.login(userDto)
-        console.log(data.catch())
-        console.log()
+        // const data = 
+
         // res.cookie('refreshToken', data.catch(), {maxAge: 30 * 24 * 60 * 60 * 1000, httpOnly: true})
-        return data
+        return this.authService.login(userDto)
     }
 
     @ApiOperation({summary: 'Регистрация'})
