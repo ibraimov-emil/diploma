@@ -17,18 +17,18 @@ const Auth = observer(() => {
     const [password, setPassword] = useState('')
 
 
-    const click = () => {
+    const click = async () => {
         try {
             // console.log('dsdas')
             let data
             // console.log('dsdas')
-            // if(isLogin){
-                data = user.login(email, password)
+            if(isLogin){
+                data = await user.login(email, password)
             console.log(data)
-            // } else {
-            //     data = await user.registration(email, password)
-            //     console.log(data)
-            // }
+            } else {
+                data = await user.registration(email, password)
+                console.log(data)
+            }
             // user.setUser(data)
             // user.setIsAuth(true)
             navigate('/')
