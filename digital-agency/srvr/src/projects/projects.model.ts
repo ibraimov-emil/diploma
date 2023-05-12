@@ -3,21 +3,28 @@ import {ApiProperty} from "@nestjs/swagger";
 import {Service} from "../services/services.model";
 import {Client} from "../clients/clients.model";
 import {Status} from "../statuses/statuses.model";
+import {RequestTable} from "../requests/requests.model";
 
-interface RequestCreationAttrs {
+interface ProjectCreationAttrs {
+    name: string;
     description: string;
+    requestId: number;
     serviceId: number;
     clientId: number;
     statusId: number;
 }
 
-@Table({tableName: 'requests'})
-export class RequestTable extends Model<RequestTable, RequestCreationAttrs> {
+@Table({tableName: 'projects'})
+export class Project extends Model<Project, ProjectCreationAttrs> {
     @ApiProperty({example: '1', description: 'Уникальный идентификатор'})
     @Column({type: DataType.INTEGER, unique: true, autoIncrement: true, primaryKey: true})
     id: number;
 
-    @ApiProperty({example: 'Необходимо разработать приложения для продажи велосипедов', description: 'Описание'})
+    @ApiProperty({example: 'Поиск дешёвых авиабилетов', description: 'Название'})
+    @Column({ type: DataType.STRING, allowNull: false})
+    name: string;
+
+    @ApiProperty({example: 'Разработка веб-приложения на NestJS + React', description: 'Описание'})
     @Column({ type: DataType.STRING, allowNull: true})
     description: string;
 
@@ -33,11 +40,18 @@ export class RequestTable extends Model<RequestTable, RequestCreationAttrs> {
     @Column({type: DataType.INTEGER})
     statusId: number;
 
-    @BelongsTo(() => Client)
-    author: Client
+    @ForeignKey(() => RequestTable)
+    @Column({type: DataType.INTEGER})
+    requestId: number;
+
+    @BelongsTo(() => RequestTable)
+    request: RequestTable
 
     @BelongsTo(() => Service)
     service: Service
+
+    @BelongsTo(() => Client)
+    author: Client
 
     @BelongsTo(() => Status)
     status: Status

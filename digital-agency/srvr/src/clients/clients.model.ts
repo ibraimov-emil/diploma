@@ -2,6 +2,7 @@ import {BelongsTo, BelongsToMany, Column, DataType, ForeignKey, HasMany, Model, 
 import { User } from "../users/users.model";
 import {RequestTable} from "../requests/requests.model";
 import {ApiProperty} from "@nestjs/swagger";
+import {Project} from "../projects/projects.model";
 
 interface ClientCreationAttrs {
     userId: number;
@@ -27,4 +28,7 @@ export class Client extends Model<Client, ClientCreationAttrs> {
 
     @HasMany(() => RequestTable)
     requests: RequestTable[];
+
+    @HasMany(() => Project)
+    projects: Project[];
 }

@@ -1,8 +1,11 @@
 import {ApiProperty} from "@nestjs/swagger";
 import {IsEmail, IsNumber, IsString, Length} from "class-validator";
 
-export class CreateRequestDto {
+export class CreateProjectDto {
 
+    @ApiProperty({example: '1', description: 'ID заявки'})
+    @IsNumber({}, { message: 'requestId должен быть числом' })
+    readonly requestId: number;
 
     @ApiProperty({example: '2', description: 'ID услуги'})
     @IsNumber({}, { message: 'serviceId должен быть числом' })
@@ -16,7 +19,11 @@ export class CreateRequestDto {
     @IsNumber({}, { message: 'statusId должен быть числом' })
     readonly statusId: number;
 
-    @ApiProperty({example: 'Необходимо разработать приложения для продажи велосипедов', description: 'Описание'})
+    @ApiProperty({example: 'Поиск дешёвых авиабилетов', description: 'Название'})
+    @IsString({message: 'Должно быть строкой'})
+    readonly name: string;
+
+    @ApiProperty({example: 'Разработка веб-приложения на NestJS + React', description: 'Описание'})
     @IsString({message: 'Должно быть строкой'})
     readonly description: string;
 }

@@ -4,6 +4,7 @@ import { Role } from "../roles/roles.model";
 import { EmployeeRoles } from "../roles/employee-roles.model";
 import {ApiProperty} from "@nestjs/swagger";
 import {RequestTable} from "../requests/requests.model";
+import {Project} from "../projects/projects.model";
 
 interface ServiceCreationAttrs {
     name: string;
@@ -27,5 +28,6 @@ export class Service extends Model<Service, ServiceCreationAttrs> {
     @HasMany(() => RequestTable)
     requests: RequestTable[];
 
-
+    @HasMany(() => Project)
+    projects: Project[];
 }

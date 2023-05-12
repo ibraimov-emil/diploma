@@ -16,17 +16,20 @@ import {RequestTable} from "./requests.model";
 import {ServicesModule} from "../services/services.module";
 import {StatusesModule} from "../statuses/statuses.module";
 import {ClientsModule} from "../clients/clients.module";
+import {ProjectsModule} from "../projects/projects,.module";
+import {Project} from "../projects/projects.model";
 
 @Module({
   controllers: [RequestsController],
   providers: [RequestsService],
   imports: [
-      SequelizeModule.forFeature([Status, Role, EmployeeRoles, User, Post, Client, Employee, RequestTable]),
+      SequelizeModule.forFeature([Status, Role, EmployeeRoles, User, Post, Client, Employee, RequestTable, Project]),
       forwardRef(() => ServicesModule),
       forwardRef(() => StatusesModule),
       forwardRef(() => ClientsModule),
       forwardRef(() => AuthModule),
       forwardRef(() => EmployeesModule),
+      forwardRef(() => ProjectsModule),
   ],
     exports: [
         RequestsService,
