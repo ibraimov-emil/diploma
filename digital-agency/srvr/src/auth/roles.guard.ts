@@ -93,7 +93,8 @@ export class RolesGuard implements CanActivate {
             // console.log(token)
             const user = this.jwtService.verify(token);
 
-            // console.log(user)
+            console.log(token)
+            console.log(user)
             req.user = user;
             const employeeId = user.employee.id
             if(!employeeId){
@@ -101,7 +102,7 @@ export class RolesGuard implements CanActivate {
             }
 
             const employee = await this.employeeService.findOneById(user.employee.id);
-            console.log(employee.roles.some(role => requiredRoles.includes(role.value)))
+            // console.log(employee.roles.some(role => requiredRoles.includes(role.value)))
             return employee.roles.some(role => requiredRoles.includes(role.value));
 
         } catch (e) {

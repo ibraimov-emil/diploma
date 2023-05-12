@@ -81,7 +81,7 @@ export class AuthService {
       ...userClientDto,
       userId: user.id,
     });
-    console.log({ ...userClientDto });
+    // console.log({ ...userClientDto });
     await this.requestService.createRequest({
       ...userClientDto,
       clientId: client.id,
@@ -134,6 +134,7 @@ export class AuthService {
   }
 
   async getTokens(userId: number, user: User) {
+    console.log(user)
     const [accessToken, refreshToken] = await Promise.all([
       this.jwtService.signAsync(
         {
@@ -184,11 +185,12 @@ export class AuthService {
     );
 
     console.log("user.refreshToken");
-    console.log(user.refreshToken);
-    console.log(refreshToken);
-    console.log(refreshTokenMatches);
+    // console.log(user.refreshToken);
+    // console.log(refreshToken);
+    // console.log(refreshTokenMatches);
     if (!refreshTokenMatches) throw new ForbiddenException("Access Denied");
     const tokens = await this.getTokens(user.id, user);
+    // console.log(user)
     await this.updateRefreshToken(user.id, tokens.refreshToken);
     return { ...tokens, user };
   }

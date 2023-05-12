@@ -35,7 +35,8 @@ export class UsersService {
     }
 
     async findById(id: number): Promise<User> {
-        const user = await this.userRepository.findByPk(id);
+        const user = await this.userRepository.findOne({where: {id}, include: {all: true}});
+        console.log(user)
         if (!user) {
             throw new NotFoundException(`Employee with id ${id} not found`);
         }
@@ -44,8 +45,8 @@ export class UsersService {
 
     async updateUser(id: number, dto: UpdateUserDto): Promise<UpdateUserDto> {
         const user = await this.userRepository.findByPk(id);
-        console.log(id)
-        console.log(user)
+        // console.log(id)
+        // console.log(user)
         if (!user){
             throw new HttpException('Пользователь не найден', HttpStatus.NOT_FOUND);
         }

@@ -56,12 +56,12 @@ export class AuthController {
         this.authService.logout(userId);
     }
 
-    @UseGuards(RefreshTokenGuard)
+    // @UseGuards(RefreshTokenGuard)
     @Get('refresh')
     refreshTokens(@Req() req: Request) {
         const { userId } = req.cookies;
         const { refreshToken } = req.cookies;
-        console.log(userId)
+        // console.log(refreshToken)
         return this.authService.refreshTokens(userId, refreshToken);
     }
 

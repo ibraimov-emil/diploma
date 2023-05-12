@@ -51,7 +51,7 @@ export class Project extends Model<Project, ProjectCreationAttrs> {
     service: Service
 
     @BelongsTo(() => Client)
-    author: Client
+    client: Client
 
     @BelongsTo(() => Status)
     status: Status

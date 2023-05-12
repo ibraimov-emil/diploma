@@ -26,9 +26,6 @@ $host.interceptors.response.use((config) => {
     return config;
 },async (error) => {
     const originalRequest = error.config;
-    console.log(error.response.status)
-    console.log(error.config)
-    console.log(error.config._isRetry)
     if (originalRequest.status == 401 && originalRequest && !originalRequest._isRetry) {
         originalRequest._isRetry = true;
         try {

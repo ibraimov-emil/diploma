@@ -7,6 +7,7 @@ import {
   REGISTRATION_ROUTE,
   SHOP_ROUTE,
   FORM_ROUTE,
+  PROJECT_ROUTE,
 } from "./utils/consts";
 import Basket from "./pages/Basket";
 import Shop from "./pages/Shop";
@@ -34,6 +35,9 @@ import {
   Stacked,
 } from "./pages/dasboard";
 import React from "react";
+import ProjectPage from "./pages/ProjectPage";
+import { GrProjects } from "react-icons/gr";
+import Projects from "./pages/dasboard/Projects";
 
 export const authRoutes = [
   {
@@ -50,6 +54,7 @@ export const authRoutes = [
    { path: "/ecommerce", Component: <Ecommerce /> },
  
    // pages
+   { path: "/projects", Component: <Projects /> },
    { path: "/orders", Component: <Orders /> },
    {
      path: "/employees",
@@ -72,6 +77,10 @@ export const authRoutes = [
    { path: "/color-mapping", Component: <ColorMapping /> },
    { path: "/pyramid", Component: <Pyramid /> },
    { path: "/stacked", Component: <Stacked /> },
+   {
+    path: PROJECT_ROUTE + "/:id",
+    Component: <ProjectPage />,
+  },
 ];
 
 export const publicRoutes = [
@@ -91,10 +100,7 @@ export const publicRoutes = [
     path: REGISTRATION_ROUTE,
     Component: <Auth />,
   },
-  {
-    path: DEVICE_ROUTE + "/:id",
-    Component: <DevicePage />,
-  },
+
 
  
 ];

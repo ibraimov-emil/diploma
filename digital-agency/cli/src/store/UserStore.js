@@ -29,9 +29,9 @@ class UserStore{
     // get isAuth(){
     //     return this._isAuth
     // }
-    // get User(){
-    //     return this._user
-    // }
+    get User(){
+        return this.user
+    }
 
     async login(email, password ) {
 

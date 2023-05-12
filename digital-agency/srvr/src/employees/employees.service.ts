@@ -54,7 +54,7 @@ export class EmployeesService {
     async getEmployeeById(userId: number) {
         console.log('employee')
         const employee = await this.employeeRepository.findOne({where: {userId}});
-        console.log(employee)
+        // console.log(employee)
         return employee;
     }
 

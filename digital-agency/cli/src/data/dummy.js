@@ -484,6 +484,10 @@ export const links = [
     title: 'Pages',
     links: [
       {
+        name: 'projects',
+        icon: <AiOutlineShoppingCart />,
+      },
+      {
         name: 'orders',
         icon: <AiOutlineShoppingCart />,
       },
@@ -871,49 +875,49 @@ export const userProfileData = [
 ];
 
 export const ordersGrid = [
+  // {
+  //   headerText: 'Image',
+  //   template: gridOrderImage,
+  //   textAlign: 'Center',
+  //   width: '120',
+  // },
   {
-    headerText: 'Image',
-    template: gridOrderImage,
-    textAlign: 'Center',
-    width: '120',
-  },
-  {
-    field: 'OrderItems',
-    headerText: 'Item',
+    field: 'name',
+    headerText: 'Название',
     width: '150',
     editType: 'dropdownedit',
     textAlign: 'Center',
   },
-  { field: 'CustomerName',
-    headerText: 'Customer Name',
+  { field: 'description',
+    headerText: 'Описание проекта',
     width: '150',
     textAlign: 'Center',
   },
+  // {
+  //   field: 'TotalAmount',
+  //   headerText: 'Total Amount',
+  //   format: 'C2',
+  //   textAlign: 'Center',
+  //   editType: 'numericedit',
+  //   width: '150',
+  // },
   {
-    field: 'TotalAmount',
-    headerText: 'Total Amount',
-    format: 'C2',
-    textAlign: 'Center',
-    editType: 'numericedit',
-    width: '150',
-  },
-  {
-    headerText: 'Status',
+    headerText: 'Статус',
     template: gridOrderStatus,
-    field: 'OrderItems',
+    field: 'status.name',
     textAlign: 'Center',
     width: '120',
   },
   {
-    field: 'OrderID',
-    headerText: 'Order ID',
+    field: 'service.name',
+    headerText: 'Услуга',
     width: '120',
     textAlign: 'Center',
   },
 
   {
-    field: 'Location',
-    headerText: 'Location',
+    field: 'clientId',
+    headerText: 'ClientId',
     width: '150',
     textAlign: 'Center',
   },
