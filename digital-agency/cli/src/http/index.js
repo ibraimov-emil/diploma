@@ -16,7 +16,7 @@ const authInterceptor = config => {
     console.log(config)
     // config.headers.authorization = `Bearer ${localStorage.getItem('token')}`
 
-    config.headers.authorization = `Bearer ${Cookies.get('refreshToken')}`
+    config.headers.authorization = `Bearer ${localStorage.getItem('token')}`
     return config
 }
 
@@ -26,7 +26,10 @@ $host.interceptors.response.use((config) => {
     return config;
 },async (error) => {
     const originalRequest = error.config;
-    if (error.response.status == 401 && error.config && !error.config._isRetry) {
+    console.log(error.response.status)
+    console.log(error.config)
+    console.log(error.config._isRetry)
+    if (originalRequest.status == 401 && originalRequest && !originalRequest._isRetry) {
         originalRequest._isRetry = true;
         try {
             const response = await $host.get(`${API_URL}auth/refresh`, {withCredentials: true})

@@ -9,6 +9,7 @@ import {BanUserDto} from "./dto/ban-user.dto";
 import {UpdateUserDto} from "./dto/update-user.dto";
 import {UserId} from "../decorators/user-id.decorator";
 import {RefreshTokenGuard} from "../common/guards/refreshToken.guard";
+import {AccessTokenGuard} from "../common/guards/accessToken.guard";
 
 @ApiTags('Пользователи')
 @Controller('users')
@@ -29,9 +30,9 @@ export class UsersController {
 
     @ApiOperation({summary: 'Получить всех пользователей'})
     @ApiResponse({status: 200, type: [User]})
-    @UseGuards(RefreshTokenGuard)
-    // @Roles("ADMIN")
-    // @UseGuards(RolesGuard)
+    @UseGuards(AccessTokenGuard)
+    @Roles("ADMIN")
+    @UseGuards(RolesGuard)
     @Get()
     getAll() {
         return this.usersService.getAllUsers();

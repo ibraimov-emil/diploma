@@ -34,18 +34,13 @@ class UserStore{
     // }
 
     async login(email, password ) {
-        try {
+
             const response = await AuthService.login(email, password);
-            console.log(response)
-            console.log('net')
             Cookies.set('userId', response.data.user.id, { expires: 30 * 24 * 60 * 60 * 1000 });
             Cookies.set('refreshToken', response.data.refreshToken, { expires: 30 * 24 * 60 * 60 * 1000 });
             localStorage.setItem('token', response.data.accessToken);
             this.setIsAuth(true);
             this.setUser(response.data.user);
-        } catch (e) {
-            console.log(e.response?.data?.message);
-        }
     }
 
     async registration(email, password, phone, surname, name, description, nameCompany) {

@@ -22,9 +22,6 @@ export class AuthController {
     @Post('/login')
     login(@Body() userDto: LoginUserDto)
     {
-        // const data = 
-
-        // res.cookie('refreshToken', data.catch(), {maxAge: 30 * 24 * 60 * 60 * 1000, httpOnly: true})
         return this.authService.login(userDto)
     }
 

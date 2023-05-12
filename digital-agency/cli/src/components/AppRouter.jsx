@@ -14,10 +14,11 @@ const AppRouter = observer(() => {
             {user.isAuth && authRoutes.map(({path, Component}) =>
                 <Route key={path} path={path} element={Component} exact/>
             )}
-            {publicRoutes.map(({path, Component}) =>
+            {console.log(user.isAuth)}
+            {!user.isAuth && publicRoutes.map(({path, Component}) =>
                 <Route key={path} path={path} element={Component} exact/>
             )}
-            {/*<Route path="*" element={<Navigate to={FORM_ROUTE}/>}/>*/}
+            {/* <Route path="*" element={<Navigate to="/"/>}/> */}
         </Routes>
     );
 });

@@ -77,11 +77,12 @@ export class RolesGuard implements CanActivate {
             if (!requiredRoles) {
                 return true;
             }
-            console.log('test')
+            console.log('rolesguard')
 
             const req = context.switchToHttp().getRequest();
 
             const authHeader = req.headers.authorization;
+
             const bearer = authHeader.split(' ')[0]
             const token = authHeader.split(' ')[1]
 
@@ -89,9 +90,10 @@ export class RolesGuard implements CanActivate {
                 throw new UnauthorizedException({message: 'Пользователь не авторизован'})
             }
             // const payload = this.jwtService.verify(token);
-
+            // console.log(token)
             const user = this.jwtService.verify(token);
-            console.log(user)
+
+            // console.log(user)
             req.user = user;
             const employeeId = user.employee.id
             if(!employeeId){
@@ -99,6 +101,7 @@ export class RolesGuard implements CanActivate {
             }
 
             const employee = await this.employeeService.findOneById(user.employee.id);
+            console.log(employee.roles.some(role => requiredRoles.includes(role.value)))
             return employee.roles.some(role => requiredRoles.includes(role.value));
 
         } catch (e) {

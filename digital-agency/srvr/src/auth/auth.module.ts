@@ -23,7 +23,7 @@ import {ConfigModule} from "@nestjs/config";
       forwardRef(() => RequestsModule),
       forwardRef(() => UsersModule),
       JwtModule.register({
-          secret: process.env.JWT_REFRESH_SECRET || 'SECRET',
+          secret: process.env.JWT_ACCESS_SECRET || 'JWT_ACCESS_SECRET',
           signOptions: {
               expiresIn: '30d'
           }
