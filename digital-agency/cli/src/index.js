@@ -7,7 +7,9 @@ import UserStore from "./store/UserStore";
 import DeviceStore from "./store/DeviceStore";
 import { ContextProvider } from "./contexts/ContextProvider";
 import { AuthContextProvider } from "./contexts/authContext";
+import {QueryClient, QueryClientProvider} from "react-query";
 // export const Context = createContext(null);
+const queryClient = new QueryClient()
 
 const root = createRoot(document.getElementById("root"));
 root.render(
@@ -17,7 +19,9 @@ root.render(
       //   device: new DeviceStore(),
       // }}
     >
+        <QueryClientProvider client={queryClient}>
       <App />
+        </QueryClientProvider>
     </ContextProvider>
   </AuthContextProvider>
 );

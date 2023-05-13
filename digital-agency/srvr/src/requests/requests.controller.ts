@@ -45,8 +45,8 @@ export class RequestsController {
 
 
 
-    @ApiOperation({summary: 'Обновить услугу'})
-    @ApiResponse({status: 200, type: Service})
+    @ApiOperation({summary: 'Обновить заявку'})
+    @ApiResponse({status: 200, type: RequestTable})
     @Roles("ADMIN")
     @UseGuards(RolesGuard)
     @Put(':id')
@@ -54,7 +54,7 @@ export class RequestsController {
         return this.requestsService.updateRequest(id, updateRequestDto);
     }
 
-    @ApiOperation({summary: 'Удалить статус по id'})
+    @ApiOperation({summary: 'Удалить заявку по id'})
     @ApiResponse({status: 200, type: RequestTable})
     @Roles("ADMIN")
     @UseGuards(RolesGuard)

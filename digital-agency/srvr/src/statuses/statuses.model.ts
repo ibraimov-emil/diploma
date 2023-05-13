@@ -5,6 +5,7 @@ import { EmployeeRoles } from "../roles/employee-roles.model";
 import {ApiProperty} from "@nestjs/swagger";
 import {RequestTable} from "../requests/requests.model";
 import {Project} from "../projects/projects.model";
+import {Stage} from "../stages/stage.model";
 
 interface StatusCreationAttrs {
     name: string;
@@ -28,4 +29,7 @@ export class Status extends Model<Status, StatusCreationAttrs> {
 
     @HasMany(() => Project)
     projects: Project[];
+
+    @HasMany(() => Project)
+    stages: Stage[];
 }

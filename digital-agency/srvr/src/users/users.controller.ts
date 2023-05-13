@@ -47,6 +47,15 @@ export class UsersController {
         return this.usersService.findById(id);
     }
 
+    @ApiOperation({summary: 'Получить пользователя по Id'})
+    @ApiResponse({status: 200, type: [User]})
+    @Roles("ADMIN")
+    @UseGuards(RolesGuard)
+    @Get('/:id')
+    getByValue(@Param('id') id: number) {
+        return this.usersService.findById(id);
+    }
+
     @ApiOperation({summary: 'Обновить пользователя'})
     @ApiResponse({status: 200, type: User})
     @Roles("ADMIN")

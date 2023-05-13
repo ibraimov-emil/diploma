@@ -1,6 +1,6 @@
 import {ApiProperty, PartialType} from "@nestjs/swagger";
 import {IsEmail, IsString, Length} from "class-validator";
-import {CreateStageWorktDto} from "./create-stageWork.dto";
+import {CreateStageDto} from "./create-stage.dto";
 
-export class UpdateStageWorkDto extends PartialType(CreateStageWorktDto) {}
+export class UpdateStageDto extends PartialType(CreateStageDto) {}
 

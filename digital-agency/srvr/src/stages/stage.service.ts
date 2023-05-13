@@ -1,68 +1,61 @@
 import {HttpException, HttpStatus, Injectable, NotFoundException} from '@nestjs/common';
-import {RequestTable} from "./requests.model";
+
 import {InjectModel} from "@nestjs/sequelize";
-import {CreateRequestDto} from "./dto/create-request.dto";
-import {UpdateRequestDto} from "./dto/update-request.dto";
+
 import {UpdateServiceDto} from "../services/dto/update-service.dto";
+import {Stage} from "./stage.model";
+import {CreateStageDto} from "./dto/create-stage.dto";
+import {UpdateStageDto} from "./dto/update-stage.dto";
 
 @Injectable()//провайдер для внедрения в controller
-export class RequestsService {
+export class StagesService {
 
-    constructor(@InjectModel(RequestTable) private readonly requestRepository: typeof RequestTable) {}
+    constructor(@InjectModel(Stage) private readonly stageRepository: typeof Stage) {}
 
-    async createRequest(dto: CreateRequestDto) {
-        const request = await this.requestRepository.create(dto);
-        return request;
+    async createStage(dto: CreateStageDto){
+        const stage = await this.stageRepository.create(dto);
+        return stage;
     }
 
-    async getAllRequests() {
-        const requests = await this.requestRepository.findAll({include: {all: true}});
-        return requests;
+    async getAllStages(){
+        const stages = await this.stageRepository.findAll({include: {all: true}});
+        return stages;
     }
 
-    // async getRequestById(userId: number) {
-    //     const request = await this.requestRepository.findOne({where: {userId}});
-    //     return request;
+    // async getStageById(userId: number) {
+    //     const stage = await this.stageRepository.findOne({where: {userId}});
+    //     return stage;
     // }
 
-    async findOneById(id: number): Promise<RequestTable> {
-        console.log('request')
-        const request = await this.requestRepository.findByPk(id);
+    async findOneById(id: number): Promise<Stage> {
+        console.log('stage')
+        const stage = await this.stageRepository.findByPk(id);
 
-        if (!request) {
-            throw new NotFoundException(`Request with id ${id} not found`);
+        if (!stage) {
+            throw new NotFoundException(`Stage with id ${id} not found`);
         }
-        return request;
+        return stage;
     }
 
-    // async update(id: number, dto: UpdateRequestDto) {
-    //     const request = await this.requestRepository.findByPk(id);
-    //     if (!request){
-    //         throw new HttpException('Заявка не найдена', HttpStatus.NOT_FOUND);
-    //     }
-    //     await this.requestRepository.update({ dto }, { where: { id } })
-    //     return this.getById(id);
-    // }
-
-    async updateRequest(id: number, dto: UpdateRequestDto) {
-        const request = await this.requestRepository.findByPk(id);
-        if (!request){
+    async updateStage(id: number, dto: UpdateStageDto) {
+        const stage = await this.stageRepository.findByPk(id);
+        if (!stage){
             throw new HttpException('Заявка не найдена', HttpStatus.NOT_FOUND);
         }
-        await this.requestRepository.update(dto, {where: {id}})
+        await this.stageRepository.update(dto, {where: {id}})
         return dto;
     }
 
     async getById(id: number) {
-        return this.requestRepository.findByPk(id);
+        return this.stageRepository.findByPk(id);
     }
 
-    async deleteRequestById(id: number): Promise<{ message: string }> {
-        const request = await this.requestRepository.findByPk(id);
-        if (!request) {
+    async deleteStageById(id: number): Promise<{ message: string }> {
+        const stage = await this.stageRepository.findByPk(id);
+        if (!stage) {
             throw new Error('Заявка не найдена');
         }
-        await request.destroy();
+        await stage.destroy();
         return { message: `Заявка успешно удалена` };
     }
 }

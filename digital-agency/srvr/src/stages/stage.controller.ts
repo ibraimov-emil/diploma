@@ -1,66 +1,68 @@
 import {Body, Controller, Delete, Get, Param, Post, Put, UseGuards, UsePipes} from '@nestjs/common';
 import {ApiBearerAuth, ApiOperation, ApiResponse, ApiTags} from "@nestjs/swagger";
-import {RequestTable} from "./requests.model";
+
 import {Roles} from "../auth/roles-auth.decorator";
 import {RolesGuard} from "../auth/roles.guard";
-import {CreateRequestDto} from "./dto/create-request.dto";
-import {RequestsService} from "./requests.service";
 import {Service} from "../services/services.model";
-import {UpdateRequestDto} from "./dto/update-request.dto";
+
+import { Stage } from './stage.model';
+import {StagesService} from "./stage.service";
+import {CreateStageDto} from "./dto/create-stage.dto";
+import {UpdateStageDto} from "./dto/update-stage.dto";
 
 @ApiTags('Заявки')
 @Controller('requests')
 @ApiBearerAuth()
-export class StageController {
+export class StagesController {
 
     //инъекция чтобы использовать сервис
-    constructor(private requestsService: RequestsService) {}
+    constructor(private stagesService: StagesService) {}
 
     @ApiOperation({summary: 'Добавление заявки'})
-    @ApiResponse({status: 200, type: RequestTable})
+    @ApiResponse({status: 200, type: Stage})
     @Roles("ADMIN")
     @UseGuards(RolesGuard)
     @Post()
-    create(@Body() requestDto: CreateRequestDto) {
-        return this.requestsService.createRequest(requestDto);
+    create(@Body() requestDto: CreateStageDto) {
+        return this.stagesService.createStage(requestDto);
     }
 
     @ApiOperation({summary: 'Получить все заявки'})
-    @ApiResponse({status: 200, type: [RequestTable]})
+    @ApiResponse({status: 200, type: [Stage]})
     @Roles("ADMIN", "Manager")
     @UseGuards(RolesGuard)
     @Get()
     getAll() {
-        return this.requestsService.getAllRequests();
+        return this.stagesService.getAllStages();
     }
 
     @ApiOperation({summary: 'Получить заявку по id'})
-    @ApiResponse({status: 200, type: RequestTable})
+    @ApiResponse({status: 200, type: Stage})
     @Roles("ADMIN")
     @UseGuards(RolesGuard)
     @Get('/:id')
     getByValue(@Param('id') id: number) {
-        return this.requestsService.findOneById(id);
+        return this.stagesService.findOneById(id);
     }
 
 
 
-    @ApiOperation({summary: 'Обновить услугу'})
-    @ApiResponse({status: 200, type: Service})
+    @ApiOperation({summary: 'Обновить заявку'})
+    @ApiResponse({status: 200, type: Stage})
     @Roles("ADMIN")
     @UseGuards(RolesGuard)
     @Put(':id')
-    update(@Param('id') id: number, @Body() updateRequestDto: UpdateRequestDto) {
-        return this.requestsService.updateRequest(id, updateRequestDto);
+    update(@Param('id') id: number, @Body() updateStageDto: UpdateStageDto) {
+        return this.stagesService.updateStage(id, updateStageDto);
     }
 
-    @ApiOperation({summary: 'Удалить статус по id'})
-    @ApiResponse({status: 200, type: RequestTable})
+    @ApiOperation({summary: 'Удалить заявку по id'})
+    @ApiResponse({status: 200, type: Stage})
     @Roles("ADMIN")
     @UseGuards(RolesGuard)
     @Delete(':id')
     delete(@Param('id') id: number): Promise<{ message: string }> {
-        return this.requestsService.deleteRequestById(id);
+        return this.stagesService.deleteStageById(id);
     }
 
 }

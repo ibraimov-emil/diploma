@@ -5,46 +5,35 @@ import {Client} from "../clients/clients.model";
 import {Status} from "../statuses/statuses.model";
 import {Project} from "../projects/projects.model";
 
-interface RequestCreationAttrs {
-    description: string;
-    serviceId: number;
-    clientId: number;
+interface StageCreationAttrs {
+    name: string;
+    projectId: number;
     statusId: number;
 }
 
-@Table({tableName: 'requests'})
-export class RequestTable extends Model<RequestTable, RequestCreationAttrs> {
+@Table({tableName: 'projects'})
+export class Stage extends Model<Stage, StageCreationAttrs> {
     @ApiProperty({example: '1', description: 'Уникальный идентификатор'})
     @Column({type: DataType.INTEGER, unique: true, autoIncrement: true, primaryKey: true})
     id: number;
 
-    @ApiProperty({example: 'Необходимо разработать приложения для продажи велосипедов', description: 'Описание'})
-    @Column({ type: DataType.STRING, allowNull: true})
-    description: string;
+    @ApiProperty({example: 'Дизайн', description: 'Название этапа'})
+    @Column({ type: DataType.STRING, allowNull: false})
+    name: string;
 
-    @ForeignKey(() => Service)
-    @Column({type: DataType.INTEGER})
-    serviceId: number;
-
-    @ForeignKey(() => Client)
-    @Column({type: DataType.INTEGER})
-    clientId: number;
+    @ForeignKey(() => Project)
+    @Column({type: DataType.INTEGER, allowNull: false})
+    projectId: number;
 
     @ForeignKey(() => Status)
     @Column({type: DataType.INTEGER})
     statusId: number;
 
-    @BelongsTo(() => Client)
-    author: Client
-
-    @BelongsTo(() => Service)
-    service: Service
-
     @BelongsTo(() => Status)
     status: Status
 
-    @HasMany(() => Project)
-    projects: Project[];
+    @BelongsTo(() => Project)
+    projects: Project;
 
     //
     // @BelongsToMany(() => Role, () => EmployeeRoles)

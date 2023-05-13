@@ -1,9 +1,11 @@
-import { BelongsTo, BelongsToMany, Column, DataType, ForeignKey, Model, Table } from "sequelize-typescript";
+import {BelongsTo, BelongsToMany, Column, DataType, ForeignKey, HasMany, Model, Table} from "sequelize-typescript";
 import {ApiProperty} from "@nestjs/swagger";
 import {Service} from "../services/services.model";
 import {Client} from "../clients/clients.model";
 import {Status} from "../statuses/statuses.model";
 import {RequestTable} from "../requests/requests.model";
+import {User} from "../users/users.model";
+import {Stage} from "../stages/stage.model";
 
 interface ProjectCreationAttrs {
     name: string;
@@ -55,6 +57,9 @@ export class Project extends Model<Project, ProjectCreationAttrs> {
 
     @BelongsTo(() => Status)
     status: Status
+
+    @HasMany(() => Project)
+    stages: Stage[];
 
     //
     // @BelongsToMany(() => Role, () => EmployeeRoles)

@@ -10,20 +10,20 @@ import {Client} from "../clients/clients.model";
 import {Employee} from "../employees/employees.model";
 import {EmployeesModule} from "../employees/employees.module";
 import {Status} from "../statuses/statuses.model";
-import {RequestsController} from "./requests.controller";
-import {RequestsService} from "./requests.service";
-import {RequestTable} from "./requests.model";
 import {ServicesModule} from "../services/services.module";
 import {StatusesModule} from "../statuses/statuses.module";
 import {ClientsModule} from "../clients/clients.module";
 import {ProjectsModule} from "../projects/projects,.module";
 import {Project} from "../projects/projects.model";
+import {StagesController} from "./stage.controller";
+import {StagesService} from "./stage.service";
+import {Stage} from "./stage.model";
 
 @Module({
-  controllers: [RequestsController],
-  providers: [RequestsService],
+  controllers: [StagesController],
+  providers: [StagesService],
   imports: [
-      SequelizeModule.forFeature([Status, Role, EmployeeRoles, User, Post, Client, Employee, RequestTable, Project]),
+      SequelizeModule.forFeature([Status, Role, EmployeeRoles, User, Post, Client, Employee, Stage, Project]),
       forwardRef(() => ServicesModule),
       forwardRef(() => StatusesModule),
       forwardRef(() => ClientsModule),
@@ -32,7 +32,7 @@ import {Project} from "../projects/projects.model";
       forwardRef(() => ProjectsModule),
   ],
     exports: [
-        RequestsService,
+        StagesService,
     ]
 })
-export class RequestsModule {}
+export class StagesModule {}

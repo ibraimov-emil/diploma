@@ -42,6 +42,6 @@ $host.interceptors.response.use((config) => {
 export default $host;
 
 export {
-    // $host,
+    $host,
     $authHost
 }

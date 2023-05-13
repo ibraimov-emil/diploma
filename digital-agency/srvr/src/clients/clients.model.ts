@@ -24,7 +24,7 @@ export class Client extends Model<Client, ClientCreationAttrs> {
     userId: number;
 
     @BelongsTo(() => User)
-    author: User;
+    user: User;
 
     @HasMany(() => RequestTable)
     requests: RequestTable[];

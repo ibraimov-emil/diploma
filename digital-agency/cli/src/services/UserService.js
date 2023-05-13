@@ -5,3 +5,8 @@ export default class UserService {
     return $host.get('/users')
 }
 }
+
+export const fetchOneUser = async (id) => {
+    const {data} = await $host.get('users/' + id)
+    return data
+}
