@@ -23,7 +23,7 @@ import {Project} from "../projects/projects.model";
   providers: [ClientsService],
   imports: [
       SequelizeModule.forFeature([Client, User, Post, Employee, RequestTable, Project]),
-      EmployeesModule,
+      forwardRef(() => EmployeesModule),
       forwardRef(() => RequestsModule),
       forwardRef(() => AuthModule),
       forwardRef(() => ProjectsModule),

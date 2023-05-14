@@ -9,12 +9,14 @@ import {Client} from "../clients/clients.model";
 import {Role} from "../roles/roles.model";
 import {UpdateUserDto} from "../users/dto/update-user.dto";
 import {UpdateEmployeeDto} from "./dto/update-employee.dto";
+import {AddProjectDto} from "./dto/add-project.dto";
+import {ProjectsService} from "../projects/projects.service";
 
 @Injectable()//провайдер для внедрения в controller
 export class EmployeesService {
 
     constructor(@InjectModel(User) private readonly userRepository: typeof User, @InjectModel(Client) private readonly clientRepository: typeof Client,
-        @InjectModel(Employee) private employeeRepository: typeof Employee, private roleService: RolesService) {}
+        @InjectModel(Employee) private employeeRepository: typeof Employee, private roleService: RolesService, private projectService: ProjectsService) {}
 
     async createEmployee(dto: CreateEmployeeDto) {
         const user = await this.userRepository.findByPk(dto.userId);
@@ -48,6 +50,16 @@ export class EmployeesService {
             return dto;
         }
         throw new HttpException('Сотрудник или роль не найдены', HttpStatus.NOT_FOUND);
+    }
+
+    async addProject(dto: AddProjectDto) {
+        const employee = await this.employeeRepository.findByPk(dto.employeeId);
+        const project = await this.projectService.findOneById(dto.projectId);
+        if (project && employee) {
+            await employee.$add('project', project.id);
+            return dto;
+        }
+        throw new HttpException('Сотрудник или проект не найдены', HttpStatus.NOT_FOUND);
     }
 
     //проверка: является ли пользователь сотдруником

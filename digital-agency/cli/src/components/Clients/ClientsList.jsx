@@ -11,6 +11,16 @@ const ClientsList = observer(() => {
 
     // console.log(data)
     // const {device} = useContext(ContextProvider)
+
+    if(isLoading){
+        return <div>Loading...</div>
+    }
+
+    if(isError){
+        return <div>Error</div>
+    }
+
+
     return (
         <Row className="lg:flex md:flex-wrap">
             {/*{data && data.map(client =>*/}

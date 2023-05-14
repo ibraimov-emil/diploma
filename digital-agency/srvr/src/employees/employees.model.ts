@@ -3,6 +3,8 @@ import { User } from "../users/users.model";
 import { Role } from "../roles/roles.model";
 import { EmployeeRoles } from "../roles/employee-roles.model";
 import {ApiProperty} from "@nestjs/swagger";
+import {Project} from "../projects/projects.model";
+import {EmployeesProjects} from "../projects/employees-projects.model";
 
 interface EmployeeCreationAttrs {
     userId: number;
@@ -28,4 +30,7 @@ export class Employee extends Model<Employee, EmployeeCreationAttrs> {
 
     @BelongsToMany(() => Role, () => EmployeeRoles)
     roles: Role[];
+
+    @BelongsToMany(() => Project, () => EmployeesProjects)
+    projects: Project[];
 }

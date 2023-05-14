@@ -6,6 +6,9 @@ import {Status} from "../statuses/statuses.model";
 import {RequestTable} from "../requests/requests.model";
 import {User} from "../users/users.model";
 import {Stage} from "../stages/stage.model";
+import {Employee} from "../employees/employees.model";
+import {EmployeeRoles} from "../roles/employee-roles.model";
+import {EmployeesProjects} from "./employees-projects.model";
 
 interface ProjectCreationAttrs {
     name: string;
@@ -58,8 +61,11 @@ export class Project extends Model<Project, ProjectCreationAttrs> {
     @BelongsTo(() => Status)
     status: Status
 
-    @HasMany(() => Project)
+    @HasMany(() => Stage)
     stages: Stage[];
+
+    @BelongsToMany(() => Employee, () => EmployeesProjects)
+    employees: Employee[];
 
     //
     // @BelongsToMany(() => Role, () => EmployeeRoles)

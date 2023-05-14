@@ -10,6 +10,7 @@ import {Role} from "../roles/roles.model";
 import {User} from "../users/users.model";
 import {UpdateUserDto} from "../users/dto/update-user.dto";
 import {UpdateEmployeeDto} from "./dto/update-employee.dto";
+import {AddProjectDto} from "./dto/add-project.dto";
 
 @ApiTags('Сотрудники')
 @Controller('employees')
@@ -39,17 +40,26 @@ export class EmployeesController {
     
     @ApiOperation({summary: 'Выдать роль'})
     @ApiResponse({status: 200})
-    // @Roles("ADMIN")
-    // @UseGuards(RolesGuard)
+    @Roles("ADMIN")
+    @UseGuards(RolesGuard)
     @Post('/role')
     addRole(@Body() dto: AddRoleDto) {
         return this.employeesService.addRole(dto);
     }
 
+    @ApiOperation({summary: 'Добавить к проекту'})
+    @ApiResponse({status: 200})
+    @Roles("ADMIN")
+    @UseGuards(RolesGuard)
+    @Post('/project')
+    addProject(@Body() dto: AddProjectDto) {
+        return this.employeesService.addProject(dto);
+    }
+
     @ApiOperation({summary: 'Получить сотрудника по id'})
     @ApiResponse({status: 200, type: Role})
-    // @Roles("ADMIN")
-    // @UseGuards(RolesGuard)
+    @Roles("ADMIN")
+    @UseGuards(RolesGuard)
     @Get('/:userId')
     getByValue(@Param('userId') userId: number) {
         return this.employeesService.getEmployeeById(userId);
