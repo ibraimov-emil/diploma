@@ -492,6 +492,10 @@ export const links = [
         icon: <AiOutlineShoppingCart />,
       },
       {
+        name: 'chats',
+        icon: <AiOutlineShoppingCart />,
+      },
+      {
         name: 'orders',
         icon: <AiOutlineShoppingCart />,
       },
