@@ -11,7 +11,7 @@ interface StageCreationAttrs {
     statusId: number;
 }
 
-@Table({tableName: 'projects'})
+@Table({tableName: 'stages'})
 export class Stage extends Model<Stage, StageCreationAttrs> {
     @ApiProperty({example: '1', description: 'Уникальный идентификатор'})
     @Column({type: DataType.INTEGER, unique: true, autoIncrement: true, primaryKey: true})

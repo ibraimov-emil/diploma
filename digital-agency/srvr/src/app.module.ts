@@ -1,4 +1,4 @@
-import {Module} from "@nestjs/common";
+import {MiddlewareConsumer, Module, NestModule} from "@nestjs/common";
     import {SequelizeModule} from "@nestjs/sequelize";
 import {ConfigModule} from "@nestjs/config";
 import {ServeStaticModule} from "@nestjs/serve-static";
@@ -24,6 +24,11 @@ import {StatusesModule} from "./statuses/statuses.module";
 import {RequestsModule} from "./requests/requests.module";
 import {ProjectsModule} from "./projects/projects,.module";
 import {StagesModule} from "./stages/stage.module";
+import {ChatsModule} from "./chats/chats.module";
+import {Chat} from "./chats/chats.model";
+import {Message} from "./chats/messages.model";
+import {ChatParticipant} from "./chats/chat-participants.model";
+import {AuthMiddleware} from "./auth/auth.middleware";
 
 @Module({
     controllers: [],
@@ -42,7 +47,7 @@ import {StagesModule} from "./stages/stage.module";
             username: process.env.POSTGRES_USER,
             password: process.env.POSTGRESS_PASSWORD,
             database: process.env.POSTGRES_DB,
-            models: [User, Role, Employee, EmployeeRoles, EmployeesProjects, Client, Service, Status, RequestTable, Project, Stage],
+            models: [User, Role, Employee, EmployeeRoles, EmployeesProjects, Client, Service, Status, RequestTable, Project, Stage, Chat, Message, ChatParticipant],
             autoLoadModels: true,
             synchronize: true
         }),
@@ -55,7 +60,21 @@ import {StagesModule} from "./stages/stage.module";
         StatusesModule,
         RequestsModule,
         ProjectsModule,
-        StagesModule
+        StagesModule,
+        ChatsModule
     ]
 })
-export class AppModule {}
+export class AppModule implements NestModule {
+    configure(consumer: MiddlewareConsumer) {
+        consumer
+            .apply(AuthMiddleware)
+            .forRoutes('*');
+    }
+}
+// export class AppModule implements NestModule {
+//     configure(consumer: MiddlewareConsumer) {
+//         consumer
+//             .apply(AuthMiddleware)
+//             .forRoutes('*');
+//     }
+// }

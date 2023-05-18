@@ -77,7 +77,7 @@ export class RolesGuard implements CanActivate {
             if (!requiredRoles) {
                 return true;
             }
-            console.log('rolesguard')
+            // console.log('rolesguard')
 
             const req = context.switchToHttp().getRequest();
 
@@ -93,8 +93,8 @@ export class RolesGuard implements CanActivate {
             // console.log(token)
             const user = this.jwtService.verify(token);
 
-            console.log(token)
-            console.log(user)
+            // console.log(token)
+            // console.log(user)
             req.user = user;
             const employeeId = user.employee.id
             if(!employeeId){

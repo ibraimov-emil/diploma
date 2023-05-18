@@ -2,8 +2,9 @@ import {NestFactory} from "@nestjs/core";
 import {AppModule} from "./app.module";
 import {DocumentBuilder, SwaggerModule} from "@nestjs/swagger";
 import {JwtAuthGuard} from "./auth/jwt-auth.guard";
-import {ValidationPipe} from "./pipes/validation.pipe";
+import { ValidationPipe } from '@nestjs/common';
 import * as cookieParser from 'cookie-parser';
+import {AuthMiddleware} from "./auth/auth.middleware";
 
 
 async function start() {
@@ -15,12 +16,13 @@ async function start() {
         origin:'http://localhost:3000',
         credentials: true
     });
+    // app.use(AuthMiddleware);
     const config = new DocumentBuilder()
         .setTitle('Digital-agency')
         .setDescription('Сервис по оказанию услуг по разработке, поддержку, консалтингу в IT сфере')
         .setVersion('1.0.0')
         .addBearerAuth()
-        // .addTag('ULBI TV')
+        // .addTag(Emil Dev')
         .build()
     const document = SwaggerModule.createDocument(app, config);
     SwaggerModule.setup('/api/docs', app, document, {

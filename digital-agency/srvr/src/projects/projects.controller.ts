@@ -40,7 +40,7 @@ export class ProjectsController {
     @Roles("ADMIN")
     @UseGuards(RolesGuard)
     @Get('/:id')
-    getByValue(@Param('id') id: number) {
+    getByValue(@Param('id') id: number) {   
         return this.projectsService.findOneById(id);
     }
 

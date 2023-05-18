@@ -134,7 +134,7 @@ export class AuthService {
   }
 
   async getTokens(userId: number, user: User) {
-    console.log(user)
+    // console.log(user)
     const [accessToken, refreshToken] = await Promise.all([
       this.jwtService.signAsync(
         {
@@ -184,7 +184,7 @@ export class AuthService {
       refreshToken
     );
 
-    console.log("user.refreshToken");
+    // console.log("user.refreshToken");
     // console.log(user.refreshToken);
     // console.log(refreshToken);
     // console.log(refreshTokenMatches);
