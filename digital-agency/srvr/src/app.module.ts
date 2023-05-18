@@ -29,6 +29,9 @@ import {Chat} from "./chats/chats.model";
 import {Message} from "./chats/messages.model";
 import {ChatParticipant} from "./chats/chat-participants.model";
 import {AuthMiddleware} from "./auth/auth.middleware";
+import {ChatsGateway} from "./chats/chats.gateway";
+import {ChatService} from "./chats/chats.service";
+import {ChatController} from "./chats/chats.controller";
 
 @Module({
     controllers: [],
@@ -68,6 +71,11 @@ export class AppModule implements NestModule {
     configure(consumer: MiddlewareConsumer) {
         consumer
             .apply(AuthMiddleware)
+            .exclude(
+                // { path: 'cats', method: RequestMethod.GET },
+                // { path: 'cats', method: RequestMethod.POST },
+                'auth/(.*)',
+            )
             .forRoutes('*');
     }
 }

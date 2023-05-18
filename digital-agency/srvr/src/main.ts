@@ -5,6 +5,8 @@ import {JwtAuthGuard} from "./auth/jwt-auth.guard";
 import { ValidationPipe } from '@nestjs/common';
 import * as cookieParser from 'cookie-parser';
 import {AuthMiddleware} from "./auth/auth.middleware";
+import {ChatsGateway} from "./chats/chats.gateway";
+import { WsAdapter } from '@nestjs/platform-ws'
 
 
 async function start() {
@@ -16,10 +18,10 @@ async function start() {
         origin:'http://localhost:3000',
         credentials: true
     });
-    // app.use(AuthMiddleware);
+    app.useWebSocketAdapter(new WsAdapter(app))
     const config = new DocumentBuilder()
         .setTitle('Digital-agency')
-        .setDescription('Сервис по оказанию услуг по разработке, поддержку, консалтингу в IT сфере')
+        .setDescription('Сервис для оказания услуг по разработке, сопровождению, консалтингу в IT сфере')
         .setVersion('1.0.0')
         .addBearerAuth()
         // .addTag(Emil Dev')
