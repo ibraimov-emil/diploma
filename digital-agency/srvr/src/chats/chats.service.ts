@@ -47,14 +47,17 @@ export class ChatService {
         });
     }
 
-    async getChatParticipants(chatId: number): Promise<User[]> {
-        return this.userModel.findAll({
-            include: [
-                {
-                    model: ChatParticipant,
-                    where: { chatId },
-                },
-            ],
+    async getChatParticipants(chatId: number): Promise<ChatParticipant[]> {
+        return this.chatParticipantModel.findAll({
+            where: { chatId },
+            include: [User],
+        });
+    }
+
+    async getUserChats(userId: number): Promise<ChatParticipant[]> {
+        return this.chatParticipantModel.findAll({
+            where: { userId },
+            include: [Chat],
         });
     }
 

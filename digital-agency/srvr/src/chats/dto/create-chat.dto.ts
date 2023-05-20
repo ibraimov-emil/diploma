@@ -6,7 +6,7 @@ export class CreateChatDto {
     @IsString({message: 'Должно быть строкой'})
     readonly name: string;
 
-    @ApiProperty({example: '1', description: 'ID создателя'})
-    @IsNumber({}, { message: 'creatorId должен быть числом' })
-    readonly creatorId: number;
+    // @ApiProperty({example: '1', description: 'ID создателя'})
+    // @IsNumber({}, { message: 'creatorId должен быть числом' })
+    // readonly creatorId: number;
 }

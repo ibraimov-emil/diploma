@@ -20,6 +20,6 @@ export class CreateUserDto {
     @ApiProperty({example: 'Эмиль', description: 'Имя'})
     @IsString({message: 'Должно быть строкой'})
     readonly name: string;
-    @ApiProperty({example: 'Рефреш', description: 'Токен'})
-    readonly refreshToken: any;
+    // @ApiProperty({example: 'Рефреш', description: 'Токен'})
+    // readonly refreshToken: any;
 }

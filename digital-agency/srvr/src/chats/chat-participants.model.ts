@@ -5,14 +5,6 @@ import {Client} from "../clients/clients.model";
 import {User} from "../users/users.model";
 import {Chat} from "./chats.model";
 
-interface ChatCreationAttrs {
-    surname: string;
-    name: string;
-    email: string;
-    password: string;
-    phone: string;
-}
-
 @Table({tableName: 'chat_participants'})
 export class ChatParticipant extends Model<ChatParticipant> {
     @ForeignKey(() => Chat)
@@ -22,4 +14,10 @@ export class ChatParticipant extends Model<ChatParticipant> {
     @ForeignKey(() => User)
     @Column({ type: DataType.INTEGER })
     userId: number;
+
+    @BelongsTo(() => Chat)
+    chat: Chat;
+
+    @BelongsTo(() => User)
+    user: User;
 }

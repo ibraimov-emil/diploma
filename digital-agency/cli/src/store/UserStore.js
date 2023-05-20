@@ -34,7 +34,6 @@ class UserStore{
     }
 
     async login(email, password ) {
-
             const response = await AuthService.login(email, password);
             Cookies.set('userId', response.data.user.id, { expires: 30 * 24 * 60 * 60 * 1000 });
             Cookies.set('refreshToken', response.data.refreshToken, { expires: 30 * 24 * 60 * 60 * 1000 });

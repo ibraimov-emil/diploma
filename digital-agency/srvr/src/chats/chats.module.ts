@@ -23,19 +23,21 @@ import {ChatService} from "./chats.service";
 import {ChatController} from "./chats.controller";
 import {UsersModule} from "../users/users.module";
 import {ChatsGateway} from "./chats.gateway";
+import {ProjectsModule} from "../projects/projects,.module";
 
 @Module({
     controllers: [ChatController],
-    providers: [ChatService, ChatsGateway],
+    providers: [ChatService],
     imports: [
         SequelizeModule.forFeature([Status, Role, EmployeeRoles, User, Post, Client, Employee, RequestTable, Project, Chat, ChatParticipant, Message]),
+        forwardRef(() => RequestsModule),
+        forwardRef(() => UsersModule),
         forwardRef(() => ServicesModule),
         forwardRef(() => StatusesModule),
         forwardRef(() => ClientsModule),
         forwardRef(() => AuthModule),
         forwardRef(() => EmployeesModule),
-        forwardRef(() => RequestsModule),
-        forwardRef(() => UsersModule),
+        forwardRef(() => ProjectsModule),
     ],
     exports: [
         ChatService,

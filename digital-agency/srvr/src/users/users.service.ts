@@ -5,6 +5,7 @@ import {CreateUserDto} from "./dto/create-user.dto";
 import {BanUserDto} from "./dto/ban-user.dto";
 import {UpdateUserDto} from "./dto/update-user.dto";
 import {Employee} from "../employees/employees.model";
+import * as bcrypt from "bcryptjs";
 import {Role} from "../roles/roles.model";
 
 @Injectable()//провайдер для внедрения в controller
@@ -15,7 +16,19 @@ export class UsersService {
                 ) {}
 
     async createUser(dto: CreateUserDto) {
-        const user = await this.userRepository.create(dto);
+        const candidate = await this.getUserByEmail(dto.email);
+        if (candidate) {
+            throw new HttpException(
+                "Пользователь с таким email существует",
+                HttpStatus.BAD_REQUEST
+            );
+        }
+        const hashPassword = await bcrypt.hash(dto.password, 5);
+        const user = await this.userRepository.create({
+            ...dto,
+            password: hashPassword,
+        });
+
         // const role = await this.roleService.getRoleByValue("ADMIN")
         // await user.$set('roles', [role.id])
         // user.roles = [role]
@@ -25,7 +38,7 @@ export class UsersService {
     }
 
     async getAllUsers() {
-        const users = await this.userRepository.findAll({include: {all: true}});
+        const users = await this.userRepository.findAll({attributes: ['id', 'name', 'email', 'surname', 'phone']});
         return users;
     }
 

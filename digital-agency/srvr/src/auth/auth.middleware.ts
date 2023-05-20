@@ -14,19 +14,25 @@ export class AuthMiddleware implements NestMiddleware {
     async use(req: AuthenticatedRequest, res: Response, next: NextFunction) {
         // Получить информацию о пользователе (например, из токена аутентификации)
         const authHeader = req.headers.authorization;
+        console.log(req.headers.authorization)
         if(authHeader) {
             const bearer = authHeader.split(' ')[0]
             const token = authHeader.split(' ')[1]
 
-            const payload = this.jwtService.verify(token);
+            try {
+                const payload = this.jwtService.verify(token);
 
-            const userId = payload.id; // Логика получения ID пользователя
+                const userId = payload.id; // Логика получения ID пользователя
 
-            // Загрузить пользователя из сервиса пользователей
-            const user = await this.userService.findById(userId);
+                // Загрузить пользователя из сервиса пользователей
+                const user = await this.userService.findById(userId);
 
-            // Добавить пользователя в объект запроса
-            req.user = user;
+                // Добавить пользователя в объект запроса
+                req.user = user;
+            } catch (error) {
+                // Обработка ошибки верификации токена
+                throw new UnauthorizedException('Токен аутентификации истёк или неверный');
+            }
         }
         // Продолжить выполнение цепочки middleware
         next();

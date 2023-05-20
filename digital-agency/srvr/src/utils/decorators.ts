@@ -11,7 +11,7 @@ export const AuthUser = createParamDecorator(
         const request = <AuthenticatedRequest>ctx.switchToHttp().getRequest();
 
         // console.log('request.headers')
-        // console.log(request.user)
+        // console.log(request)
         return request.user;
     },
 );

@@ -40,6 +40,7 @@ import { GrProjects } from "react-icons/gr";
 import Projects from "./pages/dasboard/Projects";
 import Clients from "./pages/dasboard/Clients";
 import Chats from "./pages/dasboard/Chats";
+import Chat from "./pages/Chat/Chat";
 
 export const authRoutes = [
   {
@@ -58,7 +59,7 @@ export const authRoutes = [
    // pages
    { path: "/projects", Component: <Projects /> },
    { path: "/clients", Component: <Clients /> },
-   { path: "/chats", Component: <Chats /> },
+   { path: "/chats", Component: <Chat /> },
    { path: "/orders", Component: <Orders /> },
    {
      path: "/employees",

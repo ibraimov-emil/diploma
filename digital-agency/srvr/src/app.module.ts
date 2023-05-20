@@ -30,12 +30,10 @@ import {Message} from "./chats/messages.model";
 import {ChatParticipant} from "./chats/chat-participants.model";
 import {AuthMiddleware} from "./auth/auth.middleware";
 import {ChatsGateway} from "./chats/chats.gateway";
-import {ChatService} from "./chats/chats.service";
-import {ChatController} from "./chats/chats.controller";
 
 @Module({
     controllers: [],
-    providers: [],
+    providers: [ChatsGateway],
     imports: [
         ConfigModule.forRoot({
            envFilePath: `.${process.env.NODE_ENV}.env`
