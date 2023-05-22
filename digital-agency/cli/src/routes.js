@@ -41,6 +41,7 @@ import Projects from "./pages/dasboard/Projects";
 import Clients from "./pages/dasboard/Clients";
 import Chats from "./pages/dasboard/Chats";
 import Chat from "./pages/Chat/Chat";
+import {ChattingPage, Messages} from "./pages/Messages";
 
 export const authRoutes = [
   {
@@ -60,6 +61,7 @@ export const authRoutes = [
    { path: "/projects", Component: <Projects /> },
    { path: "/clients", Component: <Clients /> },
    { path: "/chats", Component: <Chat /> },
+   { path: "/messages", Component: <Messages /> },
    { path: "/orders", Component: <Orders /> },
    {
      path: "/employees",

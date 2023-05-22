@@ -46,12 +46,12 @@ export class ChatsGateway implements OnGatewayConnection, OnGatewayDisconnect {
 
     @UseGuards(AccessTokenGuard)
     @SubscribeMessage('joinChat')
-    async handleJoinChat(client: Socket, data: { chatId: number }) {
-        const { chatId } = data;
+    async handleJoinChat(client: Socket, data: { chatId: number, userId: number }) {
+        const { chatId, userId } = data;
         // Join the client to the specified chat
         client.join(`chat:${chatId}`);
         // Send the list of chat participants to the client
-        const participants = await this.chatService.getChatParticipants(chatId);
+        const participants = await this.chatService.getChatParticipants(chatId, userId);
         this.server.to(client.id).emit('chatParticipants', participants);
     }
 

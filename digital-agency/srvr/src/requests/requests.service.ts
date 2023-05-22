@@ -27,7 +27,7 @@ export class RequestsService {
 
     async findOneById(id: number): Promise<RequestTable> {
         console.log('request')
-        const request = await this.requestRepository.findByPk(id);
+        const request = await this.requestRepository.findOne({where: {id}, include: {all: true}});;
 
         if (!request) {
             throw new NotFoundException(`Request with id ${id} not found`);

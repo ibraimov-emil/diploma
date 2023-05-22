@@ -9,10 +9,10 @@ export class CreateStageDto {
     readonly projectId: number;
 
     @ApiProperty({example: '1', description: 'ID клиента'})
-    @IsNumber({}, { message: 'clientId должен быть числом' })
+    @IsNumber({}, { message: 'statusId должен быть числом' })
     readonly statusId: number;
 
-    @ApiProperty({example: 'Необходимо разработать приложения для продажи велосипедов', description: 'Описание'})
+    @ApiProperty({example: 'Формирование ТЗ', description: 'Описание'})
     @IsString({message: 'Должно быть строкой'})
     readonly name: string;
 }

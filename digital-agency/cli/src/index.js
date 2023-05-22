@@ -9,6 +9,8 @@ import { ContextProvider } from "./contexts/ContextProvider";
 import { AuthContextProvider } from "./contexts/authContext";
 import { QueryClient, QueryClientProvider } from "react-query";
 import { SocketContextProvider } from "./contexts/SocketContext";
+import {Provider} from "react-redux";
+import { store } from "./components/Chats/Redux/store";
 // export const Context = createContext(null);
 const queryClient = new QueryClient();
 
@@ -22,7 +24,9 @@ root.render(
       // }}
       >
         <QueryClientProvider client={queryClient}>
+            <Provider store={store}>
           <App />
+            </Provider>
         </QueryClientProvider>
       </ContextProvider>
     </SocketContextProvider>

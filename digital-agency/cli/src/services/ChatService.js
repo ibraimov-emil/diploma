@@ -26,8 +26,7 @@ export const getMessages =  (id) => {
 
 }
 
-export const addMessage = (data) => {
-    const {res} = $host.post('/chats/' + data.chatId + '/messages', data)
-    console.log(res)
-    return res
+export const addMessage = (message) => {
+    // const {data} =
+    return $host.post('/chats/' + message.chatId + '/messages', message)
 }

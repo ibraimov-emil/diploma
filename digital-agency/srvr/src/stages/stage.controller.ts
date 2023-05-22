@@ -10,15 +10,15 @@ import {StagesService} from "./stage.service";
 import {CreateStageDto} from "./dto/create-stage.dto";
 import {UpdateStageDto} from "./dto/update-stage.dto";
 
-@ApiTags('Заявки')
-@Controller('requests')
+@ApiTags('Этапы')
+@Controller('stages')
 @ApiBearerAuth()
 export class StagesController {
 
     //инъекция чтобы использовать сервис
     constructor(private stagesService: StagesService) {}
 
-    @ApiOperation({summary: 'Добавление заявки'})
+    @ApiOperation({summary: 'Добавление этапа'})
     @ApiResponse({status: 200, type: Stage})
     @Roles("ADMIN")
     @UseGuards(RolesGuard)
@@ -27,7 +27,7 @@ export class StagesController {
         return this.stagesService.createStage(requestDto);
     }
 
-    @ApiOperation({summary: 'Получить все заявки'})
+    @ApiOperation({summary: 'Получить все этапы'})
     @ApiResponse({status: 200, type: [Stage]})
     @Roles("ADMIN", "Manager")
     @UseGuards(RolesGuard)
@@ -47,7 +47,7 @@ export class StagesController {
 
 
 
-    @ApiOperation({summary: 'Обновить заявку'})
+    @ApiOperation({summary: 'Обновить этап'})
     @ApiResponse({status: 200, type: Stage})
     @Roles("ADMIN")
     @UseGuards(RolesGuard)
@@ -56,7 +56,7 @@ export class StagesController {
         return this.stagesService.updateStage(id, updateStageDto);
     }
 
-    @ApiOperation({summary: 'Удалить заявку по id'})
+    @ApiOperation({summary: 'Удалить этап по id'})
     @ApiResponse({status: 200, type: Stage})
     @Roles("ADMIN")
     @UseGuards(RolesGuard)

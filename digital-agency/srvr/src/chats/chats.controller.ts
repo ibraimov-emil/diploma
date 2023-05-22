@@ -1,4 +1,15 @@
-import {Controller, Get, Post, Put, Delete, Param, Body, UseGuards} from '@nestjs/common';
+import {
+    Controller,
+    Get,
+    Post,
+    Put,
+    Delete,
+    Param,
+    Body,
+    UseGuards,
+    BadRequestException,
+    UnauthorizedException
+} from '@nestjs/common';
 
 import { CreateChatDto } from './dto/create-chat.dto';
 import { AddUserToChatDto } from './dto/add-user-to-chat.dto';
@@ -14,6 +25,7 @@ import {Message} from "./messages.model";
 import {AccessTokenGuard} from "../common/guards/accessToken.guard";
 import {Roles} from "../auth/roles-auth.decorator";
 import {RolesGuard} from "../auth/roles.guard";
+import {LoginUserDto} from "../users/dto/login-user.dto";
 
 @ApiTags('Чат')
 @Controller('chats')
@@ -41,8 +53,8 @@ export class ChatController {
     @ApiResponse({status: 200, type: [User]})
     @UseGuards(AccessTokenGuard)
     @Get(':chatId/participants')
-    getChatParticipants(@Param('chatId') chatId: number) {
-        return this.chatService.getChatParticipants(chatId);
+    getChatParticipants(@AuthUser() user: User,@Param('chatId') chatId: number) {
+        return this.chatService.getChatParticipants(chatId, user.id);
     }
 
     // @ApiOperation({summary: 'Получить участников чата'})
@@ -55,8 +67,6 @@ export class ChatController {
     @ApiOperation({summary: 'Получить чаты пользователя'})
     @ApiResponse({status: 200, type: [Chat]})
     @UseGuards(AccessTokenGuard)
-    @Roles("ADMIN")
-    @UseGuards(RolesGuard)
     @Get()
     getUserChats(@AuthUser() user: User) {
         console.log(user)
@@ -66,6 +76,8 @@ export class ChatController {
     @ApiOperation({summary: 'Получить чаты пользователя (админ)'})
     @ApiResponse({status: 200, type: [Chat]})
     @UseGuards(AccessTokenGuard)
+    @Roles("ADMIN")
+    @UseGuards(RolesGuard)
     @Get(':userId/chatsadm')
     getUserChatsAdm(@Param('userId') userId: number) {
         return this.chatService.getUserChats(userId);
@@ -83,8 +95,8 @@ export class ChatController {
     @ApiResponse({status: 200, type: [Message]})
     @UseGuards(AccessTokenGuard)
     @Get(':chatId/messages')
-    getChatMessages(@Param('chatId') chatId: number) {
-        return this.chatService.getChatMessages(chatId);
+    getChatMessages(@AuthUser() user: User, @Param('chatId') chatId: number) {
+        return this.chatService.getChatMessages(chatId, user.id);
     }
 
     @ApiOperation({summary: 'Обновить информацию чата'})
@@ -102,5 +114,8 @@ export class ChatController {
     deleteChat(@Param('chatId') chatId: number) {
         return this.chatService.deleteChat(chatId);
     }
+
+
+
 }
 

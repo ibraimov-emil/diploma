@@ -6,6 +6,7 @@ import {UpdateServiceDto} from "../services/dto/update-service.dto";
 import {Stage} from "./stage.model";
 import {CreateStageDto} from "./dto/create-stage.dto";
 import {UpdateStageDto} from "./dto/update-stage.dto";
+import {Project} from "../projects/projects.model";
 
 @Injectable()//провайдер для внедрения в controller
 export class StagesService {
@@ -29,7 +30,7 @@ export class StagesService {
 
     async findOneById(id: number): Promise<Stage> {
         console.log('stage')
-        const stage = await this.stageRepository.findByPk(id);
+        const stage = await this.stageRepository.findOne({where: {id}, include: {all: true}});
 
         if (!stage) {
             throw new NotFoundException(`Stage with id ${id} not found`);

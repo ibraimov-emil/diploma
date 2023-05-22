@@ -18,18 +18,22 @@ import {Project} from "../projects/projects.model";
 import {StagesController} from "./stage.controller";
 import {StagesService} from "./stage.service";
 import {Stage} from "./stage.model";
+import {Task} from "../tasks/tasks.model";
+import {EmployeesTasks} from "../tasks/employees-tasks.model";
+import {TasksModule} from "../tasks/tasks,.module";
 
 @Module({
   controllers: [StagesController],
   providers: [StagesService],
   imports: [
-      SequelizeModule.forFeature([Status, Role, EmployeeRoles, User, Post, Client, Employee, Stage, Project]),
+      SequelizeModule.forFeature([Status, Role, EmployeeRoles, User, Post, Client, Employee, Stage, Project, Task, EmployeesTasks]),
       forwardRef(() => ServicesModule),
       forwardRef(() => StatusesModule),
       forwardRef(() => ClientsModule),
       forwardRef(() => AuthModule),
       forwardRef(() => EmployeesModule),
       forwardRef(() => ProjectsModule),
+      forwardRef(() => TasksModule),
   ],
     exports: [
         StagesService,

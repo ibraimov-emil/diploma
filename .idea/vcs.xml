@@ -2,6 +2,7 @@
 <project version="4">
   <component name="VcsDirectoryMappings">
     <mapping directory="" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/digital-agency/client" vcs="Git" />
     <mapping directory="$PROJECT_DIR$/digital-agency/srvr/nest-sequelize-migration" vcs="Git" />
   </component>
 </project>

@@ -32,6 +32,12 @@
 }
 
 .message>span:nth-child(2){
+    /*font-size: 0.7rem;*/
+    color: var(--textColor);
+    align-self: end;
+}
+
+.message>span:nth-child(3){
     font-size: 0.7rem;
     color: var(--textColor);
     align-self: end;

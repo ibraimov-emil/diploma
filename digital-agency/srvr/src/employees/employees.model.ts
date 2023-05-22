@@ -5,6 +5,8 @@ import { EmployeeRoles } from "../roles/employee-roles.model";
 import {ApiProperty} from "@nestjs/swagger";
 import {Project} from "../projects/projects.model";
 import {EmployeesProjects} from "../projects/employees-projects.model";
+import { Task } from "src/tasks/tasks.model";
+import { EmployeesTasks } from "src/tasks/employees-tasks.model";
 
 interface EmployeeCreationAttrs {
     userId: number;
@@ -33,4 +35,7 @@ export class Employee extends Model<Employee, EmployeeCreationAttrs> {
 
     @BelongsToMany(() => Project, () => EmployeesProjects)
     projects: Project[];
+
+    @BelongsToMany(() => Task, () => EmployeesTasks)
+    tasks: Task[];
 }

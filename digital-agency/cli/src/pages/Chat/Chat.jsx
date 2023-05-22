@@ -81,14 +81,14 @@ const Chat = () => {
           <h2>Chats</h2>
           <div className="Chat-list">
             {chats.map((chat) => (
-              <div
+              <div key={chat.chat.id}
                 onClick={() => {
                   setCurrentChat(chat);
                 }}
               >
                 <Conversation key={chat.chat.id}
                   data={chat}
-                  currentUser={user.User.id}
+                  currentChat={chat.chat.name}
                   // online={checkOnlineStatus(chat)}
                   online={true}
                 />

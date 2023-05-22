@@ -4,10 +4,8 @@ import {Service} from "../services/services.model";
 import {Client} from "../clients/clients.model";
 import {Status} from "../statuses/statuses.model";
 import {RequestTable} from "../requests/requests.model";
-import {User} from "../users/users.model";
 import {Stage} from "../stages/stage.model";
 import {Employee} from "../employees/employees.model";
-import {EmployeeRoles} from "../roles/employee-roles.model";
 import {EmployeesProjects} from "./employees-projects.model";
 
 interface ProjectCreationAttrs {

@@ -6,6 +6,9 @@ import InputEmoji from "react-input-emoji";
 import {addMessage, getMessages} from "../../services/ChatService";
 import {fetchOneUser} from "../../services/UserService";
 import {observer} from "mobx-react-lite";
+import MessageItem from "./MessageItem";
+import {useMutation, useQueryClient} from "react-query";
+import {deleteOneProject} from "../../services/ProjectService";
 
 const ChatBox = ({ chat, currentUser, setSendMessage,  receivedMessage }) => {
   const [userData, setUserData] = useState(null);
@@ -16,22 +19,36 @@ const ChatBox = ({ chat, currentUser, setSendMessage,  receivedMessage }) => {
     setNewMessage(newMessage)
   }
 
-  // fetching data for header
-  useEffect(() => {
-    // const userId = chat?.members?.find((id) => id !== currentUser);
-    // const userId = chat?.members?.find((id) => id !== currentUser);
-    console.log(chat)
-    const getUserData = async () => {
-      try {
-        const { data } = await fetchOneUser(10);
-        setUserData(data);
-      } catch (error) {
-        console.log(error);
-      }
-    };
+  // const queryClient = useQueryClient()
+  // const sendMessage = (message) => {
+  //   try {
+  //     // await ProjectService.deleteOneProject(id);
+  //     mutation.mutate(message)
+  //   } catch (e) {
+  //     alert(e)
+  //     console.log(e);
+  //   }
+  // }
+  // const mutation = useMutation(message => addMessage(message),
+  //     {onSuccess: () => queryClient.invalidateQueries(["messages"])}
+  // )
 
-    if (chat !== null) getUserData();
-    }, [chat, currentUser]);
+  // fetching data for header
+  // useEffect(() => {
+  //   // const userId = chat?.members?.find((id) => id !== currentUser);
+  //   // const userId = chat?.members?.find((id) => id !== currentUser);
+  //   console.log(chat)
+  //   const getUserData = async () => {
+  //     try {
+  //       const { data } = await fetchOneUser(10);
+  //       setUserData(data);
+  //     } catch (error) {
+  //       console.log(error);
+  //     }
+  //   };
+  //
+  //   if (chat !== null) getUserData();
+  //   }, [chat, currentUser]);
 
   // fetch messages
   useEffect(() => {
@@ -57,22 +74,24 @@ const ChatBox = ({ chat, currentUser, setSendMessage,  receivedMessage }) => {
 
 
   // Send Message
-  const handleSend = async(e)=> {
+  const handleSend = async (e)=> {
     e.preventDefault()
-    console.log(chat.chatId)
     const message = {
       senderId : currentUser,
       content: newMessage,
       chatId: chat.chatId,
     }
-  // const receiverId = chat.members.find((id)=>id!==currentUser);
-  // send message to socket server
-  // setSendMessage({...message, receiverId})
-  setSendMessage({...message})
+
+  // setSendMessage({...message})
   // send message to database
   try {
     const { data } = await addMessage(message);
+    console.log(chat)
+    // const receiverId = chat.members.find((id)=>id!==currentUser);
+    // send message to socket server
+    // setSendMessage({...message, receiverId})
     setMessages([...messages, data]);
+
     setNewMessage("");
   }
   catch
@@ -117,7 +136,7 @@ useEffect(()=> {
                   />
                   <div className="name" style={{ fontSize: "0.9rem" }}>
                     <span>
-                      {userData?.firstname} {userData?.lastname}
+                      {chat.chat.name}
                     </span>
                   </div>
                 </div>
@@ -133,18 +152,12 @@ useEffect(()=> {
             {/* chat-body */}
             <div className="chat-body" >
               {messages.map((message) => (
-                <>
-                  <div ref={scroll}
-                    className={
-                      message.senderId === currentUser
-                        ? "message own"
-                        : "message"
-                    }
-                  >
-                    <span>{message.content}</span>{" "}
-                    <span>{format(message.createdAt)}</span>
-                  </div>
-                </>
+                  <MessageItem
+                    key={message.id}
+                    scroll={scroll}
+                    message={message}
+                    currentUser={currentUser}
+                  />
               ))}
             </div>
             {/* chat-sender */}
@@ -154,7 +167,7 @@ useEffect(()=> {
                 value={newMessage}
                 onChange={handleChange}
               />
-              <div className="send-button button" onClick = {handleSend}>Send</div>
+              <div className="send-button button" onClick = {newMessage ? handleSend : ''}>Send</div>
               <input
                 type="file"
                 name=""
@@ -166,7 +179,7 @@ useEffect(()=> {
           </>
         ) : (
           <span className="chatbox-empty-message">
-            Tap on a chat to start conversation...
+            Выберите чат для общения...
           </span>
         )}
       </div>

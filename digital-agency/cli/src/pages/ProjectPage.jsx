@@ -1,17 +1,19 @@
 import React, {useEffect, useState} from 'react';
 import {Button, Card, Col, Container, Image, Row} from "react-bootstrap";
 import {useParams} from "react-router-dom";
-import {fetchOneProject} from "../services/ProjectService";
+import {fetchOneProject, fetchProjects} from "../services/ProjectService";
 import {Descriptions} from "antd";
 import {Header} from "../components/Dashboard";
 import ProjectList from "../components/Projects/ProjectList";
 import {fetchOneUser} from "../services/UserService";
 import {useQuery} from "react-query";
+import StageCard from "../components/Projects/StageCard";
 
 
 const ProjectPage = () => {
     const {id} = useParams()
     const {data: projectData, isLoading, isError} = useQuery(['project', id], () => fetchOneProject(id))
+
     const [user, setUser] = useState({info: []})
 
     useEffect(() => {
@@ -40,6 +42,7 @@ const ProjectPage = () => {
                 {projectData.service.name}
             </Descriptions.Item>
         </Descriptions>
+        <StageCard project={projectData} />
         {/*<GridComponent*/}
         {/*  id="gridcomp"*/}
         {/*  // dataSource={ordersData}*/}

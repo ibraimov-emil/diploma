@@ -102,7 +102,7 @@ const App = observer(() => {
                                 {themeSettings && (<ThemeSettings />)}
                                 <AppRouter/>
                             </div>
-                            <Footer />
+                            {/*<Footer />*/}
                         </div>
                     </div>
                 </BrowserRouter>

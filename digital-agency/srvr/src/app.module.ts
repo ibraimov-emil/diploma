@@ -30,6 +30,9 @@ import {Message} from "./chats/messages.model";
 import {ChatParticipant} from "./chats/chat-participants.model";
 import {AuthMiddleware} from "./auth/auth.middleware";
 import {ChatsGateway} from "./chats/chats.gateway";
+import {TasksModule} from "./tasks/tasks,.module";
+import {Task} from "./tasks/tasks.model";
+import {EmployeesTasks} from "./tasks/employees-tasks.model";
 
 @Module({
     controllers: [],
@@ -48,7 +51,7 @@ import {ChatsGateway} from "./chats/chats.gateway";
             username: process.env.POSTGRES_USER,
             password: process.env.POSTGRESS_PASSWORD,
             database: process.env.POSTGRES_DB,
-            models: [User, Role, Employee, EmployeeRoles, EmployeesProjects, Client, Service, Status, RequestTable, Project, Stage, Chat, Message, ChatParticipant],
+            models: [User, Role, Employee, EmployeeRoles, EmployeesProjects, Client, Service, Status, RequestTable, Project, Stage, Chat, Message, ChatParticipant, Task, EmployeesTasks],
             autoLoadModels: true,
             synchronize: true
         }),
@@ -62,7 +65,8 @@ import {ChatsGateway} from "./chats/chats.gateway";
         RequestsModule,
         ProjectsModule,
         StagesModule,
-        ChatsModule
+        ChatsModule,
+        TasksModule
     ]
 })
 export class AppModule implements NestModule {

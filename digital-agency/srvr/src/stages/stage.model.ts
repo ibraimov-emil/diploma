@@ -4,6 +4,7 @@ import {Service} from "../services/services.model";
 import {Client} from "../clients/clients.model";
 import {Status} from "../statuses/statuses.model";
 import {Project} from "../projects/projects.model";
+import { Task } from "src/tasks/tasks.model";
 
 interface StageCreationAttrs {
     name: string;
@@ -33,9 +34,8 @@ export class Stage extends Model<Stage, StageCreationAttrs> {
     status: Status
 
     @BelongsTo(() => Project)
-    projects: Project;
+    project: Project;
 
-    //
-    // @BelongsToMany(() => Role, () => EmployeeRoles)
-    // roles: Role[];
+    @HasMany(() => Task)
+    tasks: Task[];
 }

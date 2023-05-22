@@ -1,4 +1,11 @@
-import {HttpException, HttpStatus, Injectable, NotFoundException} from '@nestjs/common';
+import {
+    BadRequestException,
+    HttpException,
+    HttpStatus,
+    Injectable,
+    NotFoundException,
+    UnauthorizedException
+} from '@nestjs/common';
 import { InjectModel } from '@nestjs/sequelize';
 import {Chat} from "./chats.model";
 import {User} from "../users/users.model";
@@ -47,7 +54,8 @@ export class ChatService {
         });
     }
 
-    async getChatParticipants(chatId: number): Promise<ChatParticipant[]> {
+    async getChatParticipants(chatId: number, userId: number): Promise<ChatParticipant[]> {
+        await this.validateChatUser(chatId, userId);
         return this.chatParticipantModel.findAll({
             where: { chatId },
             include: [User],
@@ -62,21 +70,14 @@ export class ChatService {
     }
 
     async sendMessage(chatId: number, senderId: number, content: string): Promise<Message> {
-        const chat = await this.chatModel.findByPk(chatId);
-        if (!chat){
-            throw new HttpException('Чат не найден', HttpStatus.NOT_FOUND);
-        }
-
-        const chatParticipan = await this.chatParticipantModel.findOne({where: {chatId, userId: senderId}, include: {all: true}})
-        if (!chatParticipan){
-            throw new HttpException('Не является участником чата', HttpStatus.NOT_FOUND);
-        }
-
-        return this.messageModel.create({ chatId, senderId, content });
+        await this.validateChatUser(chatId, senderId);
+        const message = await this.messageModel.create({ chatId, senderId, content }); // Создание экземпляра модели
+        return  this.messageModel.findOne({ where: { id: message.id }, include: {all: true} })
     }
 
-    async getChatMessages(chatId: number): Promise<Message[]> {
-        return this.messageModel.findAll({ where: { chatId } });
+    async getChatMessages(chatId: number, userId): Promise<Message[]> {
+        await this.validateChatUser(chatId, userId);
+        return this.messageModel.findAll({ where: { chatId }, include: {all: true} });
     }
 
     async updateChat(chatId: number, dto: UpdateChatDto){
@@ -89,5 +90,16 @@ export class ChatService {
 
     async deleteChat(chatId: number): Promise<number> {
         return this.chatModel.destroy({ where: { id: chatId } });
+    }
+
+    private async validateChatUser(chatId: number, userId: number) {
+        const chat = await this.chatModel.findByPk(chatId);
+        if (!chat){
+            throw new HttpException('Чат не найден', HttpStatus.NOT_FOUND);
+        }
+        const chatParticipan = await this.chatParticipantModel.findOne({where: {chatId, userId: userId}, include: {all: true}})
+        if (!chatParticipan){
+            throw new HttpException('Не является участником чата', HttpStatus.NOT_FOUND);
+        }
     }
 }

@@ -2,8 +2,6 @@ import {ApiProperty} from "@nestjs/swagger";
 import {IsEmail, IsNumber, IsString, Length} from "class-validator";
 
 export class CreateRequestDto {
-
-
     @ApiProperty({example: '2', description: 'ID услуги'})
     @IsNumber({}, { message: 'serviceId должен быть числом' })
     readonly serviceId: number;

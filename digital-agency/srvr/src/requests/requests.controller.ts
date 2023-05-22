@@ -43,8 +43,6 @@ export class RequestsController {
         return this.requestsService.findOneById(id);
     }
 
-
-
     @ApiOperation({summary: 'Обновить заявку'})
     @ApiResponse({status: 200, type: RequestTable})
     @Roles("ADMIN")
