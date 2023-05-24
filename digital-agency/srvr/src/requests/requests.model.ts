@@ -35,7 +35,7 @@ export class RequestTable extends Model<RequestTable, RequestCreationAttrs> {
     statusId: number;
 
     @BelongsTo(() => Client)
-    author: Client
+    client: Client
 
     @BelongsTo(() => Service)
     service: Service

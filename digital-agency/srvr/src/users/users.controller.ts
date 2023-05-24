@@ -40,8 +40,6 @@ export class UsersController {
 
     @ApiOperation({summary: 'Получить id пользователя'})
     @ApiResponse({status: 200, type: [User]})
-    @Roles("ADMIN")
-    @UseGuards(RolesGuard)
     @Get('/me')
     getMe(@UserId() id: number) {
         return this.usersService.findById(id);

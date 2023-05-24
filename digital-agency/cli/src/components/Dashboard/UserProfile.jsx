@@ -1,31 +1,31 @@
-import React, {useContext} from 'react';
-import { MdOutlineCancel } from 'react-icons/md';
+import React, { useContext } from "react";
+import { MdOutlineCancel } from "react-icons/md";
 
-import { Button } from '.';
-import { userProfileData } from '../../data/dummy';
-import { useStateContext } from '../../contexts/ContextProvider';
-import avatar from '../../data/avatar.jpg';
-import {observer} from "mobx-react-lite";
+import { Button } from ".";
+import { userProfileData } from "../../data/dummy";
+import { useStateContext } from "../../contexts/ContextProvider";
+import avatar from "../../data/avatar.jpg";
+import { observer } from "mobx-react-lite";
 import UserService from "../../services/UserService";
 import authService from "../../services/UserService";
-import {AuthContext} from "../../contexts/authContext";
-import {useNavigate} from "react-router-dom";
+import { AuthContext } from "../../contexts/authContext";
+import { Link, NavLink, useNavigate } from "react-router-dom";
 
 const UserProfile = () => {
-    const navigate = useNavigate()
-    const {user} = useContext(AuthContext)
-    const { currentColor } = useStateContext();
+  const navigate = useNavigate();
+  const { user } = useContext(AuthContext);
+  const { currentColor } = useStateContext();
 
-    async function logout (){
-        try {
-            console.log('logout')
-            await user.logout();
-            console.log('logouttrue')
-            navigate('/login')
-        } catch (e) {
-            console.log(e);
-        }
+  async function logout() {
+    try {
+      console.log("logout");
+      await user.logout();
+      console.log("logouttrue");
+      navigate("/login");
+    } catch (e) {
+      console.log(e);
     }
+  }
 
   return (
     <div className="nav-item absolute right-1 top-16 bg-white dark:bg-[#42464D] p-8 rounded-lg w-96">
@@ -46,27 +46,56 @@ const UserProfile = () => {
           alt="user-profile"
         />
         <div>
-          <p className="font-semibold text-xl dark:text-gray-200"> Michael Roberts </p>
-          <p className="text-gray-500 text-sm dark:text-gray-400">  Administrator   </p>
-          <p className="text-gray-500 text-sm font-semibold dark:text-gray-400"> info@shop.com </p>
+          <p className="font-semibold text-xl dark:text-gray-200">
+            {" "}
+            {user.User.name} {user.User.surname}{" "}
+          </p>
+          <p className="text-gray-500 text-sm dark:text-gray-400">
+            {" "}
+            {
+              user.User.employee ? (
+                <>
+                Сотрудник
+                </>
+              ) : (
+                <>
+                Клиент
+                </>
+              )
+            }
+            {" "}
+          </p>
+          <p className="text-gray-500 text-sm font-semibold dark:text-gray-400">
+            {" "}
+            {user.User.email}{" "}
+          </p>
         </div>
       </div>
       <div>
         {userProfileData.map((item, index) => (
-          <div key={index} className="flex gap-5 border-b-1 border-color p-4 hover:bg-light-gray cursor-pointer  dark:hover:bg-[#42464D]">
-            <button
-              type="button"
+          <NavLink
+            to={item.link}
+            type="button"
+            key={index}
+            className="flex gap-5 border-b-1 border-color p-4 hover:bg-light-gray cursor-pointer  dark:hover:bg-[#42464D]"
+          >
+            <div
               style={{ color: item.iconColor, backgroundColor: item.iconBg }}
               className=" text-xl rounded-lg p-3 hover:bg-light-gray"
             >
               {item.icon}
-            </button>
 
-            <div>
-              <p className="font-semibold dark:text-gray-200 ">{item.title}</p>
-              <p className="text-gray-500 text-sm dark:text-gray-400"> {item.desc} </p>
+              <div>
+                <p className="font-semibold dark:text-gray-200 ">
+                  {item.title}
+                </p>
+                <p className="text-gray-500 text-sm dark:text-gray-400">
+                  {" "}
+                  {item.desc}{" "}
+                </p>
+              </div>
             </div>
-          </div>
+          </NavLink>
         ))}
       </div>
       <div onClick={logout} className="mt-5">
@@ -79,7 +108,6 @@ const UserProfile = () => {
         />
       </div>
     </div>
-
   );
 };
 

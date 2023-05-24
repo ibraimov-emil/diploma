@@ -22,8 +22,12 @@ export class Stage extends Model<Stage, StageCreationAttrs> {
     @Column({ type: DataType.STRING, allowNull: false})
     name: string;
 
+    @ApiProperty({example: '23000', description: 'Стоимость выполнения этапа'})
+    @Column({ type: DataType.STRING, allowNull: true})
+    cost: number;
+
     @ForeignKey(() => Project)
-    @Column({type: DataType.INTEGER, allowNull: false})
+    @Column({type: DataType.INTEGER, allowNull: true})
     projectId: number;
 
     @ForeignKey(() => Status)

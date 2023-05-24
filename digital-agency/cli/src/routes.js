@@ -42,6 +42,12 @@ import Clients from "./pages/dasboard/Clients";
 import Chats from "./pages/dasboard/Chats";
 import Chat from "./pages/Chat/Chat";
 import {ChattingPage, Messages} from "./pages/Messages";
+import MyProfile from "./pages/MyProfile";
+import Requests from "./pages/dasboard/Requests";
+import TestList from "./components/Dashboard/Requests/test";
+import AddRequest from "./components/Dashboard/Requests/AddRequest";
+import ViewRequest from "./components/Dashboard/Requests/ViewRequest";
+import EditRequest from "./components/Dashboard/Requests/EditRequest";
 
 export const authRoutes = [
   {
@@ -60,7 +66,15 @@ export const authRoutes = [
    // pages
    { path: "/projects", Component: <Projects /> },
    { path: "/clients", Component: <Clients /> },
+
+   { path: "/requests", Component: <Requests /> },
+   { path: "/test", Component: <TestList /> },
+   { path: "/requests/add", Component: <AddRequest /> },
+   { path: "/requests/view/:id", Component: <ViewRequest /> },
+   { path: "/requests/edit/:id", Component: <EditRequest /> },
+
    { path: "/chats", Component: <Chat /> },
+   { path: "/myProfile", Component: <MyProfile /> },
    { path: "/messages", Component: <Messages /> },
    { path: "/orders", Component: <Orders /> },
    {

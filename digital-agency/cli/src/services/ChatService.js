@@ -21,7 +21,7 @@ export const deleteOneClient = async (id) => {
     return data
 }
 
-export const getMessages =  (id) => {
+export const getMessages = (id) => {
     return  $host.get('/chats/' + id + '/messages')
 
 }

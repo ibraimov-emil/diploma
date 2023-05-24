@@ -15,4 +15,8 @@ export class CreateStageDto {
     @ApiProperty({example: 'Формирование ТЗ', description: 'Описание'})
     @IsString({message: 'Должно быть строкой'})
     readonly name: string;
+
+    @ApiProperty({example: '25000', description: 'Стоимость выполнения этапа'})
+    @IsNumber({}, { message: 'cost должен быть числом' })
+    readonly cost: number;
 }
