@@ -1,17 +1,14 @@
 import React, {useContext, useEffect, useState} from 'react';
 import {BrowserRouter, Route, Routes} from "react-router-dom";
 import AppRouter from "./components/AppRouter";
-import NavBar from "./components/NavBar";
 import {observer} from "mobx-react-lite";
-import {Context} from "./index";
 import {Spinner} from "react-bootstrap";
-import {check} from "./http/userAPI";
-import {ContextProvider, useStateContext} from './contexts/ContextProvider';
+import {useStateContext} from './contexts/ContextProvider';
 import {TooltipComponent} from "@syncfusion/ej2-react-popups";
-import {Footer, Navbar, Sidebar, ThemeSettings} from "./components/Dashboard";
+import { Navbar, Sidebar, ThemeSettings} from "./components/Dashboard";
 import './App.css';
 import {AuthContext} from "./contexts/authContext";
-// import {FiSettings} from "react-icons/fs";
+
 function Employees() {
     return null;
 }
@@ -52,7 +49,6 @@ const App = observer(() => {
     if(!user.isAuth) {
         return (
             <BrowserRouter>
-                <NavBar/>
                 <AppRouter/>
             </BrowserRouter>
         );

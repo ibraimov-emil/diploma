@@ -1,7 +1,4 @@
 import {BelongsTo, Column, DataType, ForeignKey, HasMany, HasOne, Model, Table} from "sequelize-typescript";
-import {ApiProperty} from "@nestjs/swagger";
-import {Employee} from "../employees/employees.model";
-import {Client} from "../clients/clients.model";
 import {User} from "../users/users.model";
 import {Chat} from "./chats.model";
 

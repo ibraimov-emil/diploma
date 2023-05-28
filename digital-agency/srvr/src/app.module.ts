@@ -1,4 +1,4 @@
-import {MiddlewareConsumer, Module, NestModule} from "@nestjs/common";
+import {MiddlewareConsumer, Module, NestModule, RequestMethod} from "@nestjs/common";
     import {SequelizeModule} from "@nestjs/sequelize";
 import {ConfigModule} from "@nestjs/config";
 import {ServeStaticModule} from "@nestjs/serve-static";
@@ -33,6 +33,7 @@ import {ChatsGateway} from "./chats/chats.gateway";
 import {TasksModule} from "./tasks/tasks,.module";
 import {Task} from "./tasks/tasks.model";
 import {EmployeesTasks} from "./tasks/employees-tasks.model";
+import {Payment} from "./stages/payment.model";
 
 @Module({
     controllers: [],
@@ -51,7 +52,7 @@ import {EmployeesTasks} from "./tasks/employees-tasks.model";
             username: process.env.POSTGRES_USER,
             password: process.env.POSTGRESS_PASSWORD,
             database: process.env.POSTGRES_DB,
-            models: [User, Role, Employee, EmployeeRoles, EmployeesProjects, Client, Service, Status, RequestTable, Project, Stage, Chat, Message, ChatParticipant, Task, EmployeesTasks],
+            models: [User, Role, Employee, EmployeeRoles, EmployeesProjects, Client, Service, Status, RequestTable, Project, Stage, Chat, Message, ChatParticipant, Task, EmployeesTasks, Payment],
             autoLoadModels: true,
             synchronize: true
         }),
@@ -76,15 +77,11 @@ export class AppModule implements NestModule {
             .exclude(
                 // { path: 'cats', method: RequestMethod.GET },
                 // { path: 'cats', method: RequestMethod.POST },
-                'auth/(.*)',
+                { path: 'services', method: RequestMethod.ALL },
+                'auth/(.*)'
+
             )
             .forRoutes('*');
     }
 }
-// export class AppModule implements NestModule {
-//     configure(consumer: MiddlewareConsumer) {
-//         consumer
-//             .apply(AuthMiddleware)
-//             .forRoutes('*');
-//     }
-// }
+// export class AppModule {}

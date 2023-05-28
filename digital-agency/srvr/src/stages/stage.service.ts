@@ -7,11 +7,12 @@ import {Stage} from "./stage.model";
 import {CreateStageDto} from "./dto/create-stage.dto";
 import {UpdateStageDto} from "./dto/update-stage.dto";
 import {Project} from "../projects/projects.model";
+import {PaymentService} from "./payment.service";
 
 @Injectable()//провайдер для внедрения в controller
 export class StagesService {
 
-    constructor(@InjectModel(Stage) private readonly stageRepository: typeof Stage) {}
+    constructor(@InjectModel(Stage) private readonly stageRepository: typeof Stage, private readonly paymentService: PaymentService,) {}
 
     async createStage(dto: CreateStageDto){
         const stage = await this.stageRepository.create(dto);
@@ -22,11 +23,6 @@ export class StagesService {
         const stages = await this.stageRepository.findAll({include: {all: true}});
         return stages;
     }
-
-    // async getStageById(userId: number) {
-    //     const stage = await this.stageRepository.findOne({where: {userId}});
-    //     return stage;
-    // }
 
     async findOneById(id: number): Promise<Stage> {
         console.log('stage')
@@ -54,9 +50,40 @@ export class StagesService {
     async deleteStageById(id: number): Promise<{ message: string }> {
         const stage = await this.stageRepository.findByPk(id);
         if (!stage) {
-            throw new Error('Заявка не найдена');
+            throw new Error('Этап не найдена');
         }
         await stage.destroy();
-        return { message: `Заявка успешно удалена` };
+        return { message: `Этап успешно удален` };
+    }
+
+    async createPayment(stageId: number) {
+        const stage = await this.findOneById(stageId);
+        if (!stage) {
+            throw new Error('Этап не найден');
+        }
+        if (!stage.cost) {
+            throw new HttpException('Не задана стоимость этапа', HttpStatus.NOT_FOUND);
+        }
+        const payment = await this.paymentService.createPayment(stage);
+        await this.stageRepository.update({...stage, paymentId: payment.paymentId, paymentLink: payment.paymentLink}, {where: {id: stageId}})
+        return payment;
+    }
+
+    async capturePayment(paymentId: string): Promise<void> {
+        await this.paymentService.capturePayment(paymentId);
+    }
+
+    async cancelPayment(paymentId: string): Promise<void> {
+        await this.paymentService.cancelPayment(paymentId);
+    }
+
+    async processPaymentNotification(notification) {
+        console.log(notification)
+        const stage = await this.stageRepository.findOne({where: {paymentId: notification.object.id}, include: {all: true}});
+        if (!stage){
+            throw new HttpException('"Этап не найден"', HttpStatus.NOT_FOUND);
+            // throw new Error('Этап не найден');
+        }
+        await this.updateStage(stage.id, {...stage, paymentStatus: notification.object.status.toString()})
     }
 }

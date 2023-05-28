@@ -8,6 +8,7 @@ class UserStore{
 
     user = {}
     isAuth = false;
+    isClient = false;
     isLoading = false;
     constructor() {
 
@@ -15,6 +16,10 @@ class UserStore{
     }
 
     setIsAuth(bool){
+        this.isAuth = bool
+    }
+
+    setIsClient(bool){
         this.isAuth = bool
     }
 
@@ -39,6 +44,9 @@ class UserStore{
             Cookies.set('refreshToken', response.data.refreshToken, { expires: 30 * 24 * 60 * 60 * 1000 });
             localStorage.setItem('token', response.data.accessToken);
             this.setIsAuth(true);
+            if (response.data.user.client.id){
+                this.setIsClient(true)
+            }
             this.setUser(response.data.user);
     }
 
@@ -49,6 +57,9 @@ class UserStore{
             Cookies.set('refreshToken', response.data.refreshToken, { expires: 30 * 24 * 60 * 60 * 1000 });
             localStorage.setItem('token', response.data.accessToken);
             this.setIsAuth(true);
+            if (response.data.user.client.id){
+                this.setIsClient(true)
+            }
             this.setUser(response.data.user);
         } catch (e) {
             console.log(e.response?.data?.message);
@@ -62,6 +73,7 @@ class UserStore{
             Cookies.remove('userId');
             Cookies.remove('refreshToken');
             this.setIsAuth(false);
+            this.setIsClient(false)
             this.setUser({});
         } catch (e) {
             console.log(e.response?.data?.message);

@@ -26,6 +26,12 @@ export const createOneStage = async (stage) => {
     return data
 }
 
+export const createPaymentStage = async (newStagePayment) => {
+    await $host.put('stages/' + newStagePayment.stageId, {cost: newStagePayment.cost})
+    const {data} = await $host.post('stages/' + newStagePayment.stageId + '/payments')
+    return data
+}
+
 export const createOneTask = async (task) => {
     const {data} = await $host.post('tasks/', task)
     return data

@@ -39,13 +39,6 @@ export class AuthController {
         return this.authService.registrationClient(userClientDto)
     }
 
-    // @ApiOperation({summary: 'Выход'})
-    // @ApiResponse({status: 200})
-    // @UseGuards(AccessTokenGuard)
-    // @Post('/logout')
-    // loguot(@Body() userId: number) {
-    //     return this.authService.logout(userId)
-    // }
     @ApiOperation({summary: 'Выход'})
     @ApiResponse({status: 200})
     @UseGuards(AccessTokenGuard)

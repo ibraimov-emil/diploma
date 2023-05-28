@@ -17,17 +17,15 @@ export class ServicesController {
 
     @ApiOperation({summary: 'Добавление услуги'})
     @ApiResponse({status: 200, type: Service})
+    @Post()
     @Roles("ADMIN")
     @UseGuards(RolesGuard)
-    @Post()
     create(@Body() servicesDto: CreateServiceDto) {
         return this.servicesService.createService(servicesDto);
     }
 
     @ApiOperation({summary: 'Получить все услуги'})
     @ApiResponse({status: 200, type: [Service]})
-    @Roles("ADMIN", "Manager")
-    @UseGuards(RolesGuard)
     @Get()
     getAll() {
         return this.servicesService.getAllServices();

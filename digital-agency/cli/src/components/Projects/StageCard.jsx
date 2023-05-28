@@ -3,19 +3,18 @@ import {useMutation, useQuery, useQueryClient} from "react-query";
 import {
     completeOneTask,
     createOneStage,
-    createOneTask,
+    createOneTask, createPaymentStage,
     deleteOneProject, deleteOneTask,
     fetchProjects
 } from "../../services/ProjectService";
-import { Card, Checkbox, Row, Col, Input } from 'antd';
+import {Card, Checkbox, Row, Col, Input, Divider} from 'antd';
 import { Button } from "@mui/material";
 import TextArea from "antd/es/input/TextArea";
 import StageTasks from "./StageTasks";
 const StageCard = ({ project }) => {
     const queryClient = useQueryClient()
-    const [cards, setCards] = useState([]);
     const [newCardTitle, setNewCardTitle] = useState('');
-
+    const [newCardCost, setNewCardCost] = useState({});
     const crateStage = () => {
         const newStage = {
             projectId: project.id,
@@ -32,7 +31,26 @@ const StageCard = ({ project }) => {
         }
     }
 
+    const handleAddCost = (stageId) => {
+        const newStagePayment = {
+            stageId: stageId,
+            cost: Number(newCardCost[stageId]),
+        };
+        try {
+            // await ProjectService.deleteOneProject(id);
+            createStagePaymentMutation.mutate(newStagePayment)
+            setNewCardCost('')
+        } catch (e) {
+            alert(e)
+            console.log(e);
+        }
+    }
+
     const createStageMutation  = useMutation(newStage => createOneStage(newStage),
+        {onSuccess: () => queryClient.invalidateQueries(["project"])}
+    )
+
+    const createStagePaymentMutation  = useMutation(newStagePayment => createPaymentStage(newStagePayment),
         {onSuccess: () => queryClient.invalidateQueries(["project"])}
     )
 
@@ -48,19 +66,6 @@ const StageCard = ({ project }) => {
         {onSuccess: () => queryClient.invalidateQueries(["tasks"])}
     )
 
-    // const {data: tasks, isLoading} = useQuery('projects', fetchProjects)
-
-    // if (isLoading) {
-    //     return <div>Loading...</div>;
-    // }
-
-    const handleTaskToggle = (cardIndex, taskIndex) => {
-        const updatedCards = [...cards];
-        updatedCards[cardIndex].tasks[taskIndex].completed = !updatedCards[cardIndex].tasks[taskIndex]
-            .completed;
-        setCards(updatedCards);
-    };
-
 
 
     return (
@@ -68,13 +73,34 @@ const StageCard = ({ project }) => {
             <Row gutter={[16, 16]}>
                 {project.stages.map((stage) => (
                     <Col key={stage.id} xs={24} sm={12} md={6}>
-                        <Card title={stage.name}>
+
+                        <Card title={stage.name} extra={stage.cost ? `Стоимость: ${stage.cost} руб` : ''}>
                             <StageTasks
                                 stageId= {stage.id}
                                 createTaskMutation = {createTaskMutation}
                                 completeTaskMutation = {completeTaskMutation}
                                 deleteTaskMutation = {deleteTaskMutation}
                             />
+                            {(stage.paymentStatus != 'succeeded') && (
+                                <>
+                            <TextArea
+                                 rows={1}
+                                 value={newCardCost[stage.id] || ''}
+                                 onChange={(e) => setNewCardCost({ ...newCardCost, [stage.id]: e.target.value })}
+                                 className="mb-2"
+                             />
+                                <Button onClick={() => newCardCost ? handleAddCost(stage.id) : ''} type="primary" className="mt-4">
+                                    Выставить счёт
+                                </Button>
+                                </>
+                            )}
+
+                            {/*succeeded*/}
+                            {stage.cost && (
+                                <Button onClick={() => window.location.replace(stage.paymentLink)} type="primary" color="success" className="mt-4">
+                                    {stage.paymentStatus == 'succeeded' ? 'Оплачено' : 'Оплатить'}
+                                </Button>
+                            )}
                         </Card>
                     </Col>
                 ))}
@@ -91,18 +117,6 @@ const StageCard = ({ project }) => {
                 </Button>
             </div>
         </div>
-        // <Card title={'stage.name'}>
-        //     {tasks.map((task) => (
-        //         <div key={task.id}>
-        //             <CheckBoxComponent
-        //                 checked={true}
-        //                 onChange={() => handleTaskToggle(task.id)}
-        //                 label={task.name}
-        //             />
-        //         </div>
-        //     ))}
-        //     <ButtonComponent onClick={handleSaveChanges}>Сохранить изменения</ButtonComponent>
-        // </Card>
     );
 };
 

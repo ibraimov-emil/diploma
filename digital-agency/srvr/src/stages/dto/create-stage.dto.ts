@@ -13,7 +13,7 @@ export class CreateStageDto {
     readonly statusId: number;
 
     @ApiProperty({example: 'Формирование ТЗ', description: 'Описание'})
-    @IsString({message: 'Должно быть строкой'})
+    @IsString({message: 'name должно быть строкой'})
     readonly name: string;
 
     @ApiProperty({example: '25000', description: 'Стоимость выполнения этапа'})

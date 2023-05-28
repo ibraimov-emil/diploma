@@ -63,6 +63,10 @@ export class User extends Model<User, UserCreationAttrs> {
     @Column({type: DataType.STRING})
     refreshToken: any;
 
+    // @ApiProperty({example: 'file.jpg', description: 'Аватар пользователя'})
+    // @Column({type: DataType.STRING})
+    // avatar: string;
+
     @HasOne(() => Employee)
     employee: Employee;
 

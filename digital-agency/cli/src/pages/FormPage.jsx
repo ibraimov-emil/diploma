@@ -9,49 +9,54 @@ import {Context} from "../index";
 import {ContextProvider, useStateContext} from "../contexts/ContextProvider";
 import UserStore from "../store/UserStore";
 import {AuthContext} from "../contexts/authContext";
+import {useQuery} from "react-query";
+import {fetchServices} from "../services/RequestService";
+import { useForm } from "react-hook-form";
 
 const FormPage = observer(() => {
     const {user} = useContext(AuthContext)
-
+    const {data: services, isLoading, isError} = useQuery('services', fetchServices)
     const location = useLocation()
     const navigate = useNavigate()
     const isLogin = location.pathname == LOGIN_ROUTE
-    const [email, setEmail] = useState('')
-    const [name, setName] = useState('')
-    const [surname, setSurname] = useState('')
-    const [phone, setPhone] = useState('')
-    const [password, setPassword] = useState('')
-    const [description, setDescription] = useState('')
-    const [nameCompany, setNameCompany] = useState('')
+    const [selectedService, setSelectedService] = useState('');
 
-    const click = () => {
+    const { register, handleSubmit, errors } = useForm();
+
+    const onSubmit  = (data) => {
         try {
-            console.log('kjh')
-            let data
-            if(isLogin){
-                data = user.login(email, password)
+            if (isLogin) {
+                user.login(data.email, data.password);
             } else {
-                data = user.registration(email, password, phone, surname, name, description, nameCompany)
-                console.log(data)
-                navigate('/')
+                user.registration({
+                        email: data.email,
+                        password: data.password,
+                        phone: data.phone,
+                        surname: data.surname,
+                        name: data.name,
+                        description: data.description,
+                        nameCompany: data.nameCompany,
+                        serviceId: Number(selectedService)
+                    }
+                );
+                navigate('/');
             }
-
         } catch (e) {
-            alert(e.response.data.message)
+            alert(e.response.data.message);
         }
-
     }
 
+
     return (
-        <div className="flex min-h-full flex-1 flex-col justify-center px-6 py-12 lg:px-8">
+        <div id='clientForm' className="flex min-h-full flex-1 flex-col justify-center px-6 py-12 lg:px-8">
         <div className="sm:mx-auto sm:w-full sm:max-w-sm">
           <h2 className="mt-10 text-center text-2xl font-bold leading-9 tracking-tight text-gray-900">
-            Оставьте заявку
+            Станьте нашим клиентом
           </h2>
         </div>
 
         <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
-          <form className="space-y-6" >
+          <form className="space-y-6" onSubmit={handleSubmit(onSubmit)}>
             <div>
               <label htmlFor="name" className="block text-sm font-medium leading-6 text-gray-900">
                 Имя
@@ -62,8 +67,7 @@ const FormPage = observer(() => {
                   name="name"
                   type="name"
                   placeholder="Введите имя"
-                  value={name}
-                  onChange={e => setName(e.target.value)}
+                  {...register('name',{ required: true })}
                   autoComplete="name"
                   required
                   className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
@@ -83,8 +87,7 @@ const FormPage = observer(() => {
                   name="surname"
                   type="surname"
                   placeholder="Введите фамилию"
-                  value={surname}
-                  onChange={e => setSurname(e.target.value)}
+                  {...register('surname',{ required: true })}
                   autoComplete="surname"
                   required
                   className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
@@ -104,8 +107,7 @@ const FormPage = observer(() => {
                   name="phone"
                   type="phone"
                   placeholder="Введите телефон"
-                  value={phone}
-                  onChange={e => setPhone(e.target.value)}
+                  {...register('phone',{ required: true })}
                   autoComplete="phone"
                   required
                   className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
@@ -125,8 +127,7 @@ const FormPage = observer(() => {
                   name="email"
                   type="email"
                   placeholder="email"
-                  value={email}
-                  onChange={e => setEmail(e.target.value)}
+                  {...register('email',{ required: true })}
                   autoComplete="current-email"
                   required
                   className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
@@ -137,13 +138,8 @@ const FormPage = observer(() => {
             <div>
               <div className="flex items-center justify-between">
                 <label htmlFor="password" className="block text-sm font-medium leading-6 text-gray-900">
-                  Password
+                  Придумайте пароль
                 </label>
-                <div className="text-sm">
-                  <a href="#" className="font-semibold text-indigo-600 hover:text-indigo-500">
-                    Forgot password?
-                  </a>
-                </div>
               </div>
               <div className="mt-2">
                 <input
@@ -151,8 +147,7 @@ const FormPage = observer(() => {
                   name="password"
                   type="password"
                   placeholder="Password"
-                  value={password}
-                  onChange={e => setPassword(e.target.value)}
+                  {...register('password',{ required: true })}
                   autoComplete="current-password"
                   required
                   className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
@@ -160,10 +155,12 @@ const FormPage = observer(() => {
               </div>
             </div>
 
+
+
             <div>
               <div className="flex items-center justify-between">
                 <label htmlFor="nameCompany" className="block text-sm font-medium leading-6 text-gray-900">
-                Название компании
+                Название вашей компании
                 </label>
               </div>
               <div className="mt-2">
@@ -172,12 +169,33 @@ const FormPage = observer(() => {
                   name="nameCompany"
                   type="nameCompany"
                   placeholder="Введите название вашей компании"
-                  value={nameCompany}
-                  onChange={e => setNameCompany(e.target.value)}
+                  {...register('nameCompany',{ required: false })}
                   autoComplete="current-nameCompany"
-                  required
                   className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                 />
+              </div>
+            </div>
+              <div>
+              <div className="flex items-center justify-between">
+                <label htmlFor="nameCompany" className="block text-sm font-medium leading-6 text-gray-900">
+                Выберите услугу
+                </label>
+              </div>
+              <div className="mt-2">
+                  <select
+                      className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                      id="selectedService"
+                      name="selectedService"
+                      onChange={e => setSelectedService(e.target.value)}
+                  >
+                      <option value="" disabled selected>Выберите услугу</option>
+                      {services &&
+                          services.map((service) => (
+                              <option key={service.id} value={service.id}>
+                                  {service.name}
+                              </option>
+                          ))}
+                  </select>
               </div>
             </div>
 
@@ -188,13 +206,12 @@ const FormPage = observer(() => {
                 </label>
               </div>
               <div className="mt-2">
-                <input
+                <textarea
                   id="description"
                   name="description"
                   type="description"
                   placeholder="Введите описание"
-                  value={description}
-                  onChange={e => setDescription(e.target.value)}
+                  {...register('description',{ required: true })}
                   autoComplete="current-description"
                   required
                   className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
@@ -205,10 +222,9 @@ const FormPage = observer(() => {
             <div>
               <button
                 type="submit"
-                onClick={click}
                 className="flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
               >
-                {isLogin ? "Войти" : "Регистрация"}
+                {isLogin ? "Войти" : "Стать клиентом"}
               </button>
             </div>
           </form>
@@ -226,100 +242,6 @@ const FormPage = observer(() => {
           </p>
         </div>
       </div>
-        // <Container
-        //     className="d-flex justify-content-center align-items-center"
-        //     style={{height: window.innerHeight - 54}}
-        // >
-        //     <Card style={{width: "600px"}}>
-        //         <Form className="d-flex flex-column m-5">
-        //             <h2 className="m-auto">{isLogin ? "Вход" : "Оставить заявку"}</h2>
-        //             <Form.Group className="mb-3" controlId="validationFormik01">
-        //                 <Form.Label>Имя</Form.Label>
-        //                 <Form.Control
-        //                     type="text"
-        //                     placeholder="Enter name"
-        //                     value={name}
-        //                     onChange={e => setName(e.target.value)}
-        //                 />
-        //             </Form.Group>
-        //             <Form.Group className="mb-3" controlId="validationFormik02">
-        //                 <Form.Label>Фамилия</Form.Label>
-        //                 <Form.Control
-        //                     type="text"
-        //                     placeholder="Enter surname"
-        //                     value={surname}
-        //                     onChange={e => setSurname(e.target.value)}
-        //                 />
-        //             </Form.Group>
-                    
-        //             <Form.Group className="mb-3" controlId="validationFormik03">
-        //                 <Form.Label>Телефон</Form.Label>
-        //                 <Form.Control
-        //                     type="text"
-        //                     placeholder="Enter phone"
-        //                     value={phone}
-        //                     onChange={e => setPhone(e.target.value)}
-        //                 />
-        //             </Form.Group>
-
-        //             <Form.Group className="mb-3" controlId="formBasicEmail">
-        //                 <Form.Label>Email address</Form.Label>
-        //                 <Form.Control
-        //                     type="email"
-        //                     placeholder="Enter email"
-        //                     value={email}
-        //                     onChange={e => setEmail(e.target.value)}
-        //                 />
-        //             </Form.Group>
-                    
-        //             <Form.Group className="mb-3" controlId="formBasicPassword">
-        //                 <Form.Label>Password</Form.Label>
-        //                 <Form.Control
-        //                     type="password"
-        //                     placeholder="Password"
-        //                     value={password}
-        //                     onChange={e => setPassword(e.target.value)}
-        //                 />
-        //             </Form.Group>
-        //             <Form.Group className="mb-3" controlId="validationFormik04">
-        //                 <Form.Label>Название компании</Form.Label>
-        //                 <Form.Control
-        //                     type="text"
-        //                     placeholder="Введите название вашей компании"
-        //                     value={nameCompany}
-        //                     onChange={e => setNameCompany(e.target.value)}
-        //                 />
-        //             </Form.Group>
-        //             <Form.Group className="mb-3" controlId="validationFormik04">
-        //                 <Form.Label>Описание задачи</Form.Label>
-        //                 <Form.Control
-        //                     as="textarea"
-        //                     type="text"
-        //                     placeholder="Введите описание"
-        //                     value={description}
-        //                     onChange={e => setDescription(e.target.value)}
-        //                 />
-        //             </Form.Group>
-        //             <Button
-        //                 variant="primary"
-        //                 onClick={click}
-        //             >
-        //                 {isLogin ? "Войти" : "Оставить заявку"}
-        //             </Button>
-        //             <Row className="mt-3">
-        //                 {isLogin ?
-        //                     <div>
-        //                         Нет аккаунта? <NavLink to={FORM_ROUTE}>Оставьте заявку!</NavLink>
-        //                     </div>
-        //                     :
-        //                     <div>
-        //                         Есть аккаунт? <NavLink to={LOGIN_ROUTE}>Войдите!</NavLink>
-        //                     </div>
-        //                 }
-        //             </Row>
-        //         </Form>
-        //     </Card>
-        // </Container>
     );
 })
 

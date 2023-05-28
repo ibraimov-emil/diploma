@@ -65,4 +65,31 @@ export class StagesController {
         return this.stagesService.deleteStageById(id);
     }
 
+    @ApiOperation({ summary: 'Create a payment for a stage' })
+    @ApiResponse({ status: 200, type: String })
+    @Roles("ADMIN")
+    @UseGuards(RolesGuard)
+    @Post(':id/payments')
+    createPayment(@Param('id') id: number){
+        return this.stagesService.createPayment(id);
+    }
+
+    @ApiOperation({ summary: 'Capture a payment for a stage' })
+    @ApiResponse({ status: 200 })
+    @Roles("ADMIN")
+    @UseGuards(RolesGuard)
+    @Post(':id/payments/capture')
+    capturePayment(@Param('id') id: string): Promise<void> {
+        return this.stagesService.capturePayment(id);
+    }
+
+    @ApiOperation({ summary: 'Cancel a payment for a stage' })
+    @ApiResponse({ status: 200 })
+    @Roles("ADMIN")
+    @UseGuards(RolesGuard)
+    @Post(':id/payments/cancel')
+    cancelPayment(@Param('id') id: string): Promise<void> {
+        return this.stagesService.cancelPayment(id);
+    }
+
 }

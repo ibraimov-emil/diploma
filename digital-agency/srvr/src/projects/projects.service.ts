@@ -3,6 +3,8 @@ import {InjectModel} from "@nestjs/sequelize";
 import { Project } from './projects.model';
 import { CreateProjectDto } from './dto/create-project.dto';
 import {UpdateProjectDto} from "./dto/update-project.dto";
+import {ChatParticipant} from "../chats/chat-participants.model";
+import {Chat} from "../chats/chats.model";
 
 @Injectable()//провайдер для внедрения в controller
 export class ProjectsService {
@@ -17,6 +19,21 @@ export class ProjectsService {
     async getAllProjects() {
         const projects = await this.projectsRepository.findAll({include: {all: true}});
         return projects;
+    }
+
+    async getMyProjects(clientId: number){
+        if (clientId){
+            const projects =  this.projectsRepository.findAll({
+                where: { clientId },
+                include: {all: true}
+            });
+            console.log(projects)
+            if (!projects) {
+                throw new NotFoundException(`У пользователя нет проектов`);
+            }
+            return projects
+        }
+        throw new NotFoundException(`Пользователь не является клиентом`);
     }
 
     // async getProjectById(userId: number) {

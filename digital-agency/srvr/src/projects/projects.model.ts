@@ -64,8 +64,4 @@ export class Project extends Model<Project, ProjectCreationAttrs> {
 
     @BelongsToMany(() => Employee, () => EmployeesProjects)
     employees: Employee[];
-
-    //
-    // @BelongsToMany(() => Role, () => EmployeeRoles)
-    // roles: Role[];
 }

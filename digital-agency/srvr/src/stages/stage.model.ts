@@ -1,15 +1,24 @@
-import {BelongsTo, BelongsToMany, Column, DataType, ForeignKey, HasMany, Model, Table} from "sequelize-typescript";
+import {
+    BelongsTo,
+    Column,
+    DataType,
+    ForeignKey,
+    HasMany,
+    HasOne,
+    Model,
+    Table
+} from "sequelize-typescript";
 import {ApiProperty} from "@nestjs/swagger";
-import {Service} from "../services/services.model";
-import {Client} from "../clients/clients.model";
 import {Status} from "../statuses/statuses.model";
 import {Project} from "../projects/projects.model";
 import { Task } from "src/tasks/tasks.model";
+import {Payment} from "./payment.model";
 
 interface StageCreationAttrs {
     name: string;
     projectId: number;
     statusId: number;
+    paymentId: string;
 }
 
 @Table({tableName: 'stages'})
@@ -23,16 +32,26 @@ export class Stage extends Model<Stage, StageCreationAttrs> {
     name: string;
 
     @ApiProperty({example: '23000', description: 'Стоимость выполнения этапа'})
-    @Column({ type: DataType.STRING, allowNull: true})
+    @Column({ type: DataType.DECIMAL(10, 2), allowNull: true })
     cost: number;
 
+    @Column({ type: DataType.STRING, allowNull: true })
+    paymentLink: string;
+
+    @Column({ type: DataType.STRING, allowNull: true })
+    paymentStatus: string;
+
     @ForeignKey(() => Project)
-    @Column({type: DataType.INTEGER, allowNull: true})
+    @Column({type: DataType.INTEGER, allowNull: false})
     projectId: number;
 
     @ForeignKey(() => Status)
     @Column({type: DataType.INTEGER})
     statusId: number;
+
+    @ForeignKey(() => Payment)
+    @Column({ type: DataType.UUID, allowNull: true })
+    paymentId: string;
 
     @BelongsTo(() => Status)
     status: Status
@@ -42,4 +61,7 @@ export class Stage extends Model<Stage, StageCreationAttrs> {
 
     @HasMany(() => Task)
     tasks: Task[];
+
+    @HasOne(() => Payment)
+    payment: Payment;
 }

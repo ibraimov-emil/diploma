@@ -8,6 +8,8 @@ import {UpdateProjectDto} from "./dto/update-project.dto";
 import {Project} from "./projects.model";
 import {ProjectsService} from "./projects.service";
 import {CreateProjectDto} from "./dto/create-project.dto";
+import {AuthUser} from "../utils/decorators";
+import {User} from "../users/users.model";
 
 @ApiTags('Проекты')
 @Controller('projects')
@@ -33,6 +35,13 @@ export class ProjectsController {
     @Get()
     getAll() {
         return this.projectsService.getAllProjects();
+    }
+
+    @ApiOperation({summary: 'Получить клиенту его проекты'})
+    @ApiResponse({status: 200, type: [Project]})
+    @Get('/myProjects')
+    getMyProjects(@AuthUser() user: User) {
+        return this.projectsService.getMyProjects(user.client.id);
     }
 
     @ApiOperation({summary: 'Получить проект по id'})

@@ -21,12 +21,15 @@ import {Stage} from "./stage.model";
 import {Task} from "../tasks/tasks.model";
 import {EmployeesTasks} from "../tasks/employees-tasks.model";
 import {TasksModule} from "../tasks/tasks,.module";
+import {PaymentService} from "./payment.service";
+import {Payment} from "./payment.model";
+import {YooKassaController} from "./yooKassa.controller";
 
 @Module({
-  controllers: [StagesController],
-  providers: [StagesService],
+  controllers: [StagesController, YooKassaController],
+  providers: [StagesService, PaymentService],
   imports: [
-      SequelizeModule.forFeature([Status, Role, EmployeeRoles, User, Post, Client, Employee, Stage, Project, Task, EmployeesTasks]),
+      SequelizeModule.forFeature([Status, Role, EmployeeRoles, User, Post, Client, Employee, Stage, Project, Task, EmployeesTasks, Payment]),
       forwardRef(() => ServicesModule),
       forwardRef(() => StatusesModule),
       forwardRef(() => ClientsModule),
