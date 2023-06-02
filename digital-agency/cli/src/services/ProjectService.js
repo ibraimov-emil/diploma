@@ -1,4 +1,4 @@
-import $host from "../http";
+import $host from "./index";
 
 // export default class ProjectService {
 //     static fetchProjects(){

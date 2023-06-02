@@ -2,7 +2,7 @@ import {makeAutoObservable} from "mobx";
 import axios from "axios";
 import AuthService from "../services/AuthService";
 import Cookies from 'js-cookie';
-import $host from "../http";
+import $host from "../services";
 
 class UserStore{
 

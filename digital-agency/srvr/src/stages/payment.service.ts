@@ -10,8 +10,6 @@ export class PaymentService {
     private readonly yooKassa: YooKassa;
 
     constructor() {
-
-        // this.yooKassa = new YooCheckout({ shopId: '322548', secretKey: 'test_d1VUB7y1Ips8Rgc9chVzN73kgHqe79ay1xag9AXtO2M' })
         this.yooKassa = new YooCheckout({ shopId: process.env.SHOP_ID, secretKey: process.env.PAYMENT_SECRET })
     }
 

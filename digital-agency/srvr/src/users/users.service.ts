@@ -4,16 +4,13 @@ import {InjectModel} from "@nestjs/sequelize";
 import {CreateUserDto} from "./dto/create-user.dto";
 import {BanUserDto} from "./dto/ban-user.dto";
 import {UpdateUserDto} from "./dto/update-user.dto";
-import {Employee} from "../employees/employees.model";
 import * as bcrypt from "bcryptjs";
-import {Role} from "../roles/roles.model";
 import {FilesService} from "../files/files.service";
 
 @Injectable()//провайдер для внедрения в controller
 export class UsersService {
 
     constructor(@InjectModel(User) private userRepository: typeof User,
-                @InjectModel(Employee) private employeeService: typeof Employee,
                 private fileService: FilesService
                 ) {}
 

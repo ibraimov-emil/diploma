@@ -1,4 +1,4 @@
-import $host from "../http";
+import $host from "./index";
 export const fetchClients = async (id) => {
     const {data} = await $host.get('clients')
     return data

@@ -1,5 +1,5 @@
-import $host, {$authHost} from "../http";
-import {AxiosResponse} from 'axios';
+import $host from "./index";
+
 
 export default class AuthService {
     static async login(email, password) {

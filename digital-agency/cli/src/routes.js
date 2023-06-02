@@ -2,8 +2,6 @@ import {
   LOGIN_ROUTE,
   REGISTRATION_ROUTE,
   FORM_ROUTE,
-  PROJECT_ROUTE,
-  CLIENT_ROUTE,
 } from "./utils/consts";
 import Auth from "./pages/Auth";
 import FormPage from "./pages/FormPage";
@@ -30,7 +28,6 @@ import ProjectPage from "./components/Projects/ProjectPage";
 import Projects from "./pages/dasboard/Projects";
 import Clients from "./pages/dasboard/Clients";
 import Chat from "./pages/Chat/Chat";
-import { Messages } from "./pages/Messages";
 import MyProfile from "./pages/MyProfile";
 import Requests from "./pages/dasboard/Requests";
 import TestList from "./components/Dashboard/Requests/test";
@@ -60,7 +57,6 @@ export const clientRoutes = [
 
   { path: "/chats", Component: <Chat /> },
   { path: "/myProfile", Component: <MyProfile /> },
-  { path: "/messages", Component: <Messages /> },
   { path: "/orders", Component: <Orders /> },
   {
     path: "/employees",
@@ -101,7 +97,6 @@ export const employeeRoutes = [
 
   { path: "/chats", Component: <Chat /> },
   { path: "/myProfile", Component: <MyProfile /> },
-  { path: "/messages", Component: <Messages /> },
   { path: "/orders", Component: <Orders /> },
   {
     path: "/employees",

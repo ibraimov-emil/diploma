@@ -1,4 +1,4 @@
-import $host from "../http";
+import $host from "./index";
 
 export const createChat = async (data) => {
     const {res} = await $host.post('chats', data)
