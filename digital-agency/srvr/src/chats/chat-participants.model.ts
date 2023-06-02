@@ -16,5 +16,5 @@ export class ChatParticipant extends Model<ChatParticipant> {
     chat: Chat;
 
     @BelongsTo(() => User)
-    user: User;
+    participant : User;
 }

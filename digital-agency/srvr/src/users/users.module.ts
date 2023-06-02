@@ -7,6 +7,7 @@ import {RolesModule} from "../roles/roles.module";
 import {AuthModule} from "../auth/auth.module";
 import {Employee} from "../employees/employees.model";
 import {EmployeesModule} from "../employees/employees.module";
+import {FilesModule} from "../files/files.module";
 
 @Module({
   controllers: [UsersController],
@@ -16,6 +17,7 @@ import {EmployeesModule} from "../employees/employees.module";
       RolesModule,
       EmployeesModule,
       forwardRef(() => AuthModule),
+      FilesModule
   ],
     exports: [
         UsersService,

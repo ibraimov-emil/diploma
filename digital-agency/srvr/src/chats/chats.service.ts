@@ -65,7 +65,8 @@ export class ChatService {
     async getUserChats(userId: number): Promise<ChatParticipant[]> {
         return this.chatParticipantModel.findAll({
             where: { userId },
-            include: [Chat],
+            include: {all: true},
+            // include: [Chat],
         });
     }
 

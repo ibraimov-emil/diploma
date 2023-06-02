@@ -1,6 +1,8 @@
 import {BelongsTo, BelongsToMany, Column, DataType, ForeignKey, HasMany, Model, Table} from "sequelize-typescript";
 import {Employee} from "../employees/employees.model";
 import {Project} from "./projects.model";
+import {Chat} from "../chats/chats.model";
+import {User} from "../users/users.model";
 
 // interface EmployeesProjectsCreationAttrs {
 //     projectId: number;
@@ -20,7 +22,10 @@ export class EmployeesProjects extends Model<EmployeesProjects> {
     @ForeignKey(() => Employee)
     @Column({type: DataType.INTEGER, onDelete: 'CASCADE'})
     employeeId: number;
-    //
-    // @BelongsToMany(() => Role, () => EmployeeRoles)
-    // roles: Role[];
+
+    @BelongsTo(() => Project)
+    project: Project;
+
+    @BelongsTo(() => Employee)
+    employee : Employee;
 }

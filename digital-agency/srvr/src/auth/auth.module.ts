@@ -4,13 +4,13 @@ import { AuthService } from './auth.service';
 import {UsersModule} from "../users/users.module";
 import {JwtModule} from "@nestjs/jwt";
 import {EmployeesModule} from "../employees/employees.module";
-import {EmployeesService} from "../employees/employees.service";
 import {RolesModule} from "../roles/roles.module";
 import { ClientsModule } from 'src/clients/clients.module';
 import { RequestsModule } from 'src/requests/requests.module';
 import {AccessTokenStrategy} from "./strategies/accessToken.strategy";
 import {RefreshTokenStrategy} from "./strategies/refreshToken.strategy";
 import {ConfigModule} from "@nestjs/config";
+import {ChatsModule} from "../chats/chats.module";
 
 @Module({
   controllers: [AuthController],
@@ -22,10 +22,11 @@ import {ConfigModule} from "@nestjs/config";
       forwardRef(() => ClientsModule),
       forwardRef(() => RequestsModule),
       forwardRef(() => UsersModule),
+      forwardRef(() => ChatsModule),
       JwtModule.register({
           secret: process.env.JWT_ACCESS_SECRET || 'JWT_ACCESS_SECRET',
           signOptions: {
-              expiresIn: '30d'
+              expiresIn: '15m'
           }
       })
   ],

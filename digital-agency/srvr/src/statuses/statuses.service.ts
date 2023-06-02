@@ -22,11 +22,6 @@ export class StatusesService {
         return statuses;
     }
 
-    // async getStatusById(userId: number) {
-    //     const status = await this.statusRepository.findOne({where: {userId}});
-    //     return status;
-    // }
-
     async findOneById(id: number): Promise<Status> {
         console.log('status')
         const status = await this.statusRepository.findByPk(id);

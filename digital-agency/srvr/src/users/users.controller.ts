@@ -1,4 +1,4 @@
-import {Body, Controller, Get, Param, Patch, Post, Put, UseGuards} from '@nestjs/common';
+import {Body, Controller, Get, Param, Patch, Post, Put, UploadedFile, UseGuards, UseInterceptors} from '@nestjs/common';
 import {CreateUserDto} from "./dto/create-user.dto";
 import {UsersService} from "./users.service";
 import {ApiBearerAuth, ApiOperation, ApiResponse, ApiTags} from "@nestjs/swagger";
@@ -10,6 +10,7 @@ import {UpdateUserDto} from "./dto/update-user.dto";
 import {UserId} from "../decorators/user-id.decorator";
 import {RefreshTokenGuard} from "../common/guards/refreshToken.guard";
 import {AccessTokenGuard} from "../common/guards/accessToken.guard";
+import {FileInterceptor} from "@nestjs/platform-express";
 
 @ApiTags('Пользователи')
 @Controller('users')
@@ -61,6 +62,15 @@ export class UsersController {
     @Put(':id')
     update(@Param('id') id: number, @Body() updateUserDto: UpdateUserDto): Promise<UpdateUserDto> {
         return this.usersService.updateUser(+id, updateUserDto);
+    }
+
+    @ApiOperation({summary: 'Обновить аватар пользователя'})
+    @ApiResponse({status: 200, type: User})
+    @Put('/avatar/:id')
+    @UseInterceptors(FileInterceptor('image'))
+    updateAvatar(@Param('id') id: number,
+               @UploadedFile() image) {
+        return this.usersService.updateAvatar(id, image)
     }
 
     @ApiOperation({summary: 'Забанить пользователя'})

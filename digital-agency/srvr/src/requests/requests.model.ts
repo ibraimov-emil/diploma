@@ -45,8 +45,4 @@ export class RequestTable extends Model<RequestTable, RequestCreationAttrs> {
 
     @HasMany(() => Project)
     projects: Project[];
-
-    //
-    // @BelongsToMany(() => Role, () => EmployeeRoles)
-    // roles: Role[];
 }

@@ -6,9 +6,7 @@ import {Employee} from "./employees.model";
 import {Role} from "../roles/roles.model";
 import {EmployeeRoles} from "../roles/employee-roles.model";
 import {RolesModule} from "../roles/roles.module";
-import {AuthModule} from "../auth/auth.module";
-import {Post} from "../posts/posts.model";
-import {UsersModule} from "../users/users.module";
+import {AuthModule} from "../auth/auth.module";;
 import {User} from "../users/users.model";
 import {Client} from "../clients/clients.model";
 import {Project} from "../projects/projects.model";
@@ -18,7 +16,7 @@ import {ProjectsModule} from "../projects/projects,.module";
   controllers: [EmployeesController],
   providers: [EmployeesService],
   imports: [
-      SequelizeModule.forFeature([Employee, Role, EmployeeRoles, User, Post, Client, Project]),
+      SequelizeModule.forFeature([Employee, Role, EmployeeRoles, User, Client, Project]),
       forwardRef(() => RolesModule),
       forwardRef(() => AuthModule),
       forwardRef(() => ProjectsModule),

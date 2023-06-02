@@ -42,6 +42,7 @@ const FormPage = observer(() => {
                 navigate('/');
             }
         } catch (e) {
+            // console.log('показывает')
             alert(e.response.data.message);
         }
     }

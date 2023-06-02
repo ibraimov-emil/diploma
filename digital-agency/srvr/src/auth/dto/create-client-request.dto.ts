@@ -29,6 +29,6 @@ export class CreateClientRequestDto {
     @IsString({message: 'Должно быть строкой'})
     readonly description: string;
 
-    @ApiProperty({example: 'Рефреш', description: 'Токен'})
-    readonly refreshToken: any;
+    // @ApiProperty({example: 'Рефреш', description: 'Токен'})
+    // readonly refreshToken: any;
 }

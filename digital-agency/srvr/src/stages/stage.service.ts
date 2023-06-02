@@ -8,11 +8,12 @@ import {CreateStageDto} from "./dto/create-stage.dto";
 import {UpdateStageDto} from "./dto/update-stage.dto";
 import {Project} from "../projects/projects.model";
 import {PaymentService} from "./payment.service";
+import {ProjectsService} from "../projects/projects.service";
 
 @Injectable()//провайдер для внедрения в controller
 export class StagesService {
 
-    constructor(@InjectModel(Stage) private readonly stageRepository: typeof Stage, private readonly paymentService: PaymentService,) {}
+    constructor(@InjectModel(Stage) private readonly stageRepository: typeof Stage, private readonly paymentService: PaymentService, private readonly projectService: ProjectsService,) {}
 
     async createStage(dto: CreateStageDto){
         const stage = await this.stageRepository.create(dto);
@@ -30,6 +31,21 @@ export class StagesService {
 
         if (!stage) {
             throw new NotFoundException(`Stage with id ${id} not found`);
+        }
+        return stage;
+    }
+
+    async findOneMyById(id: number, clientId: number): Promise<Stage> {
+        console.log('project')
+
+        const stage = await this.stageRepository.findOne({where: {id}, include: {all: true}});
+
+        const project = await this.projectService.findOneMyById( stage.projectId, clientId);
+        if (!project) {
+            throw new NotFoundException(`Вы не являетесь участником проекта`);
+        }
+        if (!stage) {
+            throw new NotFoundException(`Вы не являетесь участником проекта`);
         }
         return stage;
     }
@@ -56,14 +72,21 @@ export class StagesService {
         return { message: `Этап успешно удален` };
     }
 
-    async createPayment(stageId: number) {
+    async createPayment(stageId: number, clientId: number) {
         const stage = await this.findOneById(stageId);
         if (!stage) {
             throw new Error('Этап не найден');
         }
+
         if (!stage.cost) {
             throw new HttpException('Не задана стоимость этапа', HttpStatus.NOT_FOUND);
         }
+
+        const project = await this.projectService.findOneMyById(stage.projectId, clientId);
+        if (!project) {
+            throw new NotFoundException(`Вы не являетесь участником проекта`);
+        }
+
         const payment = await this.paymentService.createPayment(stage);
         await this.stageRepository.update({...stage, paymentId: payment.paymentId, paymentLink: payment.paymentLink}, {where: {id: stageId}})
         return payment;

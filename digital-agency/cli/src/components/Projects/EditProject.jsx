@@ -1,48 +1,62 @@
 import React, { useState } from 'react';
-import {HashRouter, useNavigate} from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { Form, Input, message, Select } from 'antd';
 import { Button } from '@mui/material';
 import {useQuery, useMutation, useQueryClient} from 'react-query';
 import axios from 'axios';
-import {createOneRequest, fetchRequest, fetchServices, fetchStatuses} from "../../../services/RequestService";
-import {fetchClients} from "../../../services/ClientService";
-import {Header} from "../index";
-import RequestList from "./RequestList";
+
+import {fetchProject, updateProject} from "../../services/ProjectService";
+import {fetchRequests, fetchServices, fetchStatuses} from "../../services/RequestService";
+import {Header} from "../Dashboard";
+import {fetchClients} from "../../services/ClientService";
 
 const { Option } = Select;
 
-const AddRequest = () => {
+const EditProject = () => {
   const navigate = useNavigate();
   const queryClient = useQueryClient()
+  const { id } = useParams();
+
   const [loading, setLoading] = useState(false);
 
-  const {data: services, isLoading, isError} = useQuery('services', fetchServices)
+  const {data: request, isLoading, isError} = useQuery(['project', id], () => fetchProject(id))
+
+  const {data: requests, } = useQuery('requests', fetchRequests)
+  const {data: services} = useQuery('services', fetchServices)
   const {data: clients, isLoading: isLoadingClients, isError: isErrorClients} = useQuery('clients', fetchClients)
   const {data: statuses} = useQuery('statuses', fetchStatuses)
-  {console.log(clients)}
-  const createStageMutation  = useMutation(requestData => createOneRequest(requestData),
-      {onSuccess: () => queryClient.invalidateQueries(["requests"])}
+
+  const updateProjectMutation  = useMutation(data => updateProject(data),
+      {onSuccess: () => queryClient.invalidateQueries(["projects"])}
   )
+  // const updateRequest = useMutation((requestData) => axios.put(`/requests/${id}`, requestData));
 
   const onFinish = async (values) => {
     setLoading(true);
     try {
-      createStageMutation.mutate(values);
-      message.success('Request added successfully');
-      navigate('/requests');
+      console.log(values)
+      updateProjectMutation.mutate({id: id, requestData: values});
+      message.success('Проект успешно обновлён');
+      navigate('/projects');
     } catch (error) {
       console.error('Error:', error);
-      message.error('Failed to add request');
+      message.error('Ошбика обновления проекта');
     } finally {
       setLoading(false);
     }
   };
 
-  return (
-    <div className="m-2 md:m-10 mt-24 p-2 md:p-10 bg-white rounded-3xl">
-      <Header category="Страница" title="Добавить заявку" />
+  if (isLoading) {
+    return <>Loading</>
+  }
+  console.log(request)
 
-      <Form layout="vertical" onFinish={onFinish}>
+  return (
+      <div className="m-2 md:m-10 mt-24 p-2 md:p-10 bg-white rounded-3xl">
+        <Header category="Страница" title="Редактировать проект" />
+      <div className="flex justify-between items-center mb-4">
+      </div>
+      <Form layout="vertical" onFinish={onFinish} initialValues={request}>
         <Form.Item
           name="description"
           label="Description"
@@ -92,9 +106,23 @@ const AddRequest = () => {
               ))}
           </Select>
         </Form.Item>
+        <Form.Item
+            name="requestId"
+            label="Request"
+            rules={[{ required: false, message: 'Please select the request' }]}
+        >
+          <Select placeholder="Select a status">
+            {requests &&
+                requests.map((request) => (
+                    <Option key={request.id} value={request.id}>
+                      {request.id} {request.description}
+                    </Option>
+                ))}
+          </Select>
+        </Form.Item>
         <Form.Item>
           <Button type="primary" htmlType="submit" loading={loading}>
-            Создать
+            Обновить
           </Button>
         </Form.Item>
       </Form>
@@ -102,4 +130,4 @@ const AddRequest = () => {
   );
 };
 
-export default AddRequest;
+export default EditProject;

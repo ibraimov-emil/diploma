@@ -63,9 +63,9 @@ export class User extends Model<User, UserCreationAttrs> {
     @Column({type: DataType.STRING})
     refreshToken: any;
 
-    // @ApiProperty({example: 'file.jpg', description: 'Аватар пользователя'})
-    // @Column({type: DataType.STRING})
-    // avatar: string;
+    @ApiProperty({example: 'file.jpg', description: 'Аватар пользователя'})
+    @Column({type: DataType.STRING})
+    avatar: string;
 
     @HasOne(() => Employee)
     employee: Employee;
@@ -75,10 +75,4 @@ export class User extends Model<User, UserCreationAttrs> {
 
     @BelongsToMany(() => Chat, () => ChatParticipant)
     chats: Chat[];
-
-    // @Column
-    // employeeId: number;
-    //
-    // @BelongsTo(() => Client)
-    // client: Client;
 }

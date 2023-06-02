@@ -28,7 +28,7 @@ export class Project extends Model<Project, ProjectCreationAttrs> {
     name: string;
 
     @ApiProperty({example: 'Разработка веб-приложения на NestJS + React', description: 'Описание'})
-    @Column({ type: DataType.STRING, allowNull: true})
+    @Column({ type: DataType.TEXT, allowNull: true})
     description: string;
 
     @ForeignKey(() => Service)

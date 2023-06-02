@@ -17,7 +17,7 @@ export class Message extends Model<Message, MessageCreationAttrs> {
     @Column({type: DataType.INTEGER, unique: true, autoIncrement: true, primaryKey: true})
     id: number;
     @ApiProperty({example: 'Привет', description: 'Сообщение'})
-    @Column({type: DataType.STRING, allowNull: false})
+    @Column({type: DataType.TEXT, allowNull: false})
     content: string;
 
     @ForeignKey(() => Chat)

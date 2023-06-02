@@ -10,15 +10,14 @@ const Main = () => {
       <div className='max-w-[1240px] w-full h-full mx-auto p-2 flex justify-center items-center'>
         <div>
           <p className='uppercase text-sm tracking-widest text-gray-600'>
-            LET&#39;S BUILD SOMETHING TOGETHER
+            Добро пожаловать в наше инновационное веб-приложение!
           </p>
           <h1 className='py-4 text-gray-700'>
-            Hi, I&#39;m <span className='text-[#5651e5]'> Clint</span>
+          Мы предлагаем уникальные решения для управления вашими финансами, общения с нашей командой и оформления заявок на услуги. С нашим приложением вы можете легко и удобно осуществлять оплату, обмениваться сообщениями и следить за статусом ваших заявок. 
           </h1>
-          <h1 className='py-2 text-gray-700'>A Front-End Web Developer</h1>
+          <h1 className='py-2 text-gray-700'>Просто нажмите на кнопку "Стать клиентом", чтобы начать свое незабываемое путешествие в мир инновационных решений и первоклассного обслуживания. </h1>
           <p className='py-4 text-gray-600 sm:max-w-[70%] m-auto'>
-            I’m focused on building responsive front-end web applications
-            integrating back-end technologies.
+          Присоединяйтесь к нам уже сегодня!
           </p>
           <a
               href= '/#clientForm'

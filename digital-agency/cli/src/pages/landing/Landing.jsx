@@ -13,16 +13,6 @@ import ServicesBlock from "../../components/Landing/ServicesBlock";
 
 
 const Landing = () => {
-    // const { isLoading, error, data: user } = useQuery('myProfile', getMyProfile);
-    //
-    // if (isLoading) {
-    //     return <Spin />;
-    // }
-    //
-    // if (error) {
-    //     return <Text>Error: {error.message}</Text>;
-    // }
-
     return (
         <div>
             <Navbar />

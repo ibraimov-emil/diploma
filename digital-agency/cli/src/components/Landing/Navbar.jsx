@@ -62,22 +62,19 @@ const Navbar = () => {
         <div>
           <ul style={{ color: `${linkColor}` }} className='hidden md:flex'>
             <li className='ml-10 text-sm uppercase hover:border-b'>
-              <a href='/'>Home</a>
+              <a href='/'>Главная</a>
             </li>
             <li className='ml-10 text-sm uppercase hover:border-b'>
-              <a href='/#about'>About</a>
+              <a href='/#about'>О нас</a>
             </li>
             <li className='ml-10 text-sm uppercase hover:border-b'>
-              <a href='/#skills'>Skills</a>
+              <a href='/#skills'>Наши навыки</a>
             </li>
             <li className='ml-10 text-sm uppercase hover:border-b'>
-              <a href='/#projects'>Projects</a>
+              <a href='/#projects'>Проекты</a>
             </li>
             <li className='ml-10 text-sm uppercase hover:border-b'>
-              <a href='/resume'>Resume</a>
-            </li>
-            <li className='ml-10 text-sm uppercase hover:border-b'>
-              <a href='/#contact'>Contact</a>
+              <a href='/#contact'>Оставить заявку</a>
             </li>
             <li className='ml-10 text-sm uppercase hover:border-b'>
               <NavLink to='/login'>Войти</NavLink>
@@ -130,7 +127,7 @@ const Navbar = () => {
             </div>
             <div className='border-b border-gray-300 my-4'>
               <p className='w-[85%] md:w-[90%] py-4'>
-                Let&#39;s build something legendary together
+                Давайте вместе создавать лучшие веб-приложения
               </p>
             </div>
           </div>
@@ -138,32 +135,27 @@ const Navbar = () => {
             <ul className='uppercase'>
               <a href='/'>
                 <li onClick={() => setNav(false)} className='py-4 text-sm'>
-                  Home
+                  Главная
                 </li>
               </a>
               <a href='/#about'>
                 <li onClick={() => setNav(false)} className='py-4 text-sm'>
-                  About
+                  О нас
                 </li>
               </a>
               <a href='/#skills'>
                 <li onClick={() => setNav(false)} className='py-4 text-sm'>
-                  Skills
+                  Навыки
                 </li>
               </a>
               <a href='/#projects'>
                 <li onClick={() => setNav(false)} className='py-4 text-sm'>
-                  Projects
-                </li>
-              </a>
-              <a href='/resume'>
-                <li onClick={() => setNav(false)} className='py-4 text-sm'>
-                  Resume
+                  Проекты
                 </li>
               </a>
               <a href='/#contact'>
                 <li onClick={() => setNav(false)} className='py-4 text-sm'>
-                  Contact
+                  Контакт
                 </li>
               </a>
             </ul>

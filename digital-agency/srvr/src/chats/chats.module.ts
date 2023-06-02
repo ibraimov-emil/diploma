@@ -3,7 +3,6 @@ import {SequelizeModule} from "@nestjs/sequelize";
 import {Role} from "../roles/roles.model";
 import {EmployeeRoles} from "../roles/employee-roles.model";
 import {AuthModule} from "../auth/auth.module";
-import {Post} from "../posts/posts.model";
 import {User} from "../users/users.model";
 import {Client} from "../clients/clients.model";
 import {Employee} from "../employees/employees.model";
@@ -22,14 +21,13 @@ import {Message} from "./messages.model";
 import {ChatService} from "./chats.service";
 import {ChatController} from "./chats.controller";
 import {UsersModule} from "../users/users.module";
-import {ChatsGateway} from "./chats.gateway";
 import {ProjectsModule} from "../projects/projects,.module";
 
 @Module({
     controllers: [ChatController],
     providers: [ChatService],
     imports: [
-        SequelizeModule.forFeature([Status, Role, EmployeeRoles, User, Post, Client, Employee, RequestTable, Project, Chat, ChatParticipant, Message]),
+        SequelizeModule.forFeature([Status, Role, EmployeeRoles, User, Client, Employee, RequestTable, Project, Chat, ChatParticipant, Message]),
         forwardRef(() => RequestsModule),
         forwardRef(() => UsersModule),
         forwardRef(() => ServicesModule),

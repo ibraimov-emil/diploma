@@ -1,6 +1,5 @@
 import {BelongsTo, BelongsToMany, Column, DataType, ForeignKey, HasMany, Model, Table} from "sequelize-typescript";
 import {ApiProperty} from "@nestjs/swagger";
-import {Status} from "../statuses/statuses.model";
 import {Stage} from "../stages/stage.model";
 import {Employee} from "../employees/employees.model";
 import { EmployeesTasks } from "./employees-tasks.model";

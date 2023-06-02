@@ -22,11 +22,6 @@ export class ServicesService {
         return services;
     }
 
-    // async getServiceById(userId: number) {
-    //     const service = await this.serviceRepository.findOne({where: {userId}});
-    //     return service;
-    // }
-
     async findOneById(id: number): Promise<Service> {
         console.log('service')
         const service = await this.serviceRepository.findByPk(id);

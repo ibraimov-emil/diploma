@@ -1,7 +1,7 @@
-import React, { useState } from 'react';
+import React, {useContext, useState} from 'react';
 import {useMutation, useQuery, useQueryClient} from "react-query";
 import {
-    completeOneTask,
+    completeOneTask, createCostStage,
     createOneStage,
     createOneTask, createPaymentStage,
     deleteOneProject, deleteOneTask,
@@ -11,8 +11,13 @@ import {Card, Checkbox, Row, Col, Input, Divider} from 'antd';
 import { Button } from "@mui/material";
 import TextArea from "antd/es/input/TextArea";
 import StageTasks from "./StageTasks";
+import * as ProjectService from "../../services/ProjectService";
+import {Navigate} from "react-router-dom";
+import {observer} from "mobx-react-lite";
+import {AuthContext} from "../../contexts/authContext";
 const StageCard = ({ project }) => {
     const queryClient = useQueryClient()
+    const {user} = useContext(AuthContext)
     const [newCardTitle, setNewCardTitle] = useState('');
     const [newCardCost, setNewCardCost] = useState({});
     const crateStage = () => {
@@ -20,6 +25,7 @@ const StageCard = ({ project }) => {
             projectId: project.id,
             statusId: 3,
             name: newCardTitle,
+            cost: null
         };
         try {
             // await ProjectService.deleteOneProject(id);
@@ -38,8 +44,20 @@ const StageCard = ({ project }) => {
         };
         try {
             // await ProjectService.deleteOneProject(id);
-            createStagePaymentMutation.mutate(newStagePayment)
+            ccreateCostStageMutation.mutate(newStagePayment)
             setNewCardCost('')
+        } catch (e) {
+            alert(e)
+            console.log(e);
+        }
+    }
+
+    const handlePay = async  (stageId) => {
+        try {
+            const paymentLink = await ProjectService.createPaymentStage(stageId);
+            // createStagePaymentMutation.mutate(stageId)
+            setNewCardCost('')
+            window.location.replace(paymentLink)
         } catch (e) {
             alert(e)
             console.log(e);
@@ -50,7 +68,7 @@ const StageCard = ({ project }) => {
         {onSuccess: () => queryClient.invalidateQueries(["project"])}
     )
 
-    const createStagePaymentMutation  = useMutation(newStagePayment => createPaymentStage(newStagePayment),
+    const ccreateCostStageMutation  = useMutation(newStagePayment => createCostStage(newStagePayment),
         {onSuccess: () => queryClient.invalidateQueries(["project"])}
     )
 
@@ -81,7 +99,7 @@ const StageCard = ({ project }) => {
                                 completeTaskMutation = {completeTaskMutation}
                                 deleteTaskMutation = {deleteTaskMutation}
                             />
-                            {(stage.paymentStatus != 'succeeded') && (
+                            {(stage.paymentStatus != 'succeeded') && !user.isClient && (
                                 <>
                             <TextArea
                                  rows={1}
@@ -97,7 +115,7 @@ const StageCard = ({ project }) => {
 
                             {/*succeeded*/}
                             {stage.cost && (
-                                <Button onClick={() => window.location.replace(stage.paymentLink)} type="primary" color="success" className="mt-4">
+                                <Button onClick={() => stage.paymentStatus != 'succeeded' ? handlePay(stage.id) : window.location.replace(stage.paymentLink)} type="primary" color="success" className="mt-4">
                                     {stage.paymentStatus == 'succeeded' ? 'Оплачено' : 'Оплатить'}
                                 </Button>
                             )}
@@ -105,6 +123,7 @@ const StageCard = ({ project }) => {
                     </Col>
                 ))}
             </Row>
+            {!user.isClient &&
             <div className="mt-4">
                 <Input
                     rows={1}
@@ -116,8 +135,9 @@ const StageCard = ({ project }) => {
                     Добавить этап
                 </Button>
             </div>
+            }
         </div>
     );
 };
 
-export default StageCard;
+export default observer(StageCard);

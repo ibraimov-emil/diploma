@@ -6,6 +6,7 @@ import {observer} from "mobx-react-lite";
 import {ContextProvider, useStateContext} from "../contexts/ContextProvider";
 import {AuthContext} from "../contexts/authContext";
 import employees from "../pages/dasboard/Employees";
+import Projects from "../pages/dasboard/Projects";
 
 
 const AppRouter = observer(() => {
@@ -16,7 +17,7 @@ const AppRouter = observer(() => {
             {user.isAuth && user.isClient && clientRoutes.map(({path, Component}) =>
                 <Route key={path} path={path} element={Component} exact/>
             )}
-            {user.isAuth && employeeRoutes.map(({path, Component}) =>
+            {user.isAuth && !user.isClient && employeeRoutes.map(({path, Component}) =>
                 <Route key={path} path={path} element={Component} exact/>
             )}
 

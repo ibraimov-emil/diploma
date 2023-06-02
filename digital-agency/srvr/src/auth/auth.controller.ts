@@ -41,7 +41,6 @@ export class AuthController {
 
     @ApiOperation({summary: 'Выход'})
     @ApiResponse({status: 200})
-    @UseGuards(AccessTokenGuard)
     @Get('/logout')
     loguot(@Req() req: Request) {
         const { userId} = req.cookies;

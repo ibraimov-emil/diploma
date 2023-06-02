@@ -472,56 +472,99 @@ export const employeesGrid = [
 export const links = [
   {
     title: 'Dashboard',
+    client: false,
     links: [
       {
-        name: 'ecommerce',
+        link: 'ecommerce',
+        name: 'Статистика',
         icon: <FiShoppingBag />,
       },
     ],
   },
-
   {
     title: 'Страницы',
+    client: true,
     links: [
       {
-        name: 'requests',
+        link: 'requests',
+        name: 'Заявки',
         icon: <AiOutlineShoppingCart />,
       },
       {
-        name: 'projects',
+        link: 'projects',
+        name: 'Проекты',
         icon: <AiOutlineShoppingCart />,
       },
       {
-        name: 'clients',
+        link: 'chats',
+        name: 'Чат',
         icon: <AiOutlineShoppingCart />,
       },
       {
-        name: 'chats',
+        link: 'orders',
+        name: 'Платежи',
         icon: <AiOutlineShoppingCart />,
       },
       {
-        name: 'orders',
+        link: 'employees',
+        name: 'Сотрудники',
+        icon: <IoMdContacts />,
+      },
+    ],
+  },
+  {
+    title: 'Страницы',
+    client: false,
+    links: [
+      {
+        link: 'requests',
+        name: 'Заявки',
         icon: <AiOutlineShoppingCart />,
       },
       {
-        name: 'employees',
+        link: 'projects',
+        name: 'Проекты',
+        icon: <AiOutlineShoppingCart />,
+      },
+      {
+        link: 'clients',
+        name: 'Клиенты',
+        icon: <AiOutlineShoppingCart />,
+      },
+      {
+        link: 'chats',
+        name: 'Чат',
+        icon: <AiOutlineShoppingCart />,
+      },
+      {
+        link: 'orders',
+        name: 'Платежи',
+        icon: <AiOutlineShoppingCart />,
+      },
+      {
+        link: 'employees',
+        name: 'Сотрудники',
         icon: <IoMdContacts />,
       },
       {
-        name: 'customers',
+        link: 'customers',
+        name: 'Клиентыы',
         icon: <RiContactsLine />,
       },
     ],
   },
   {
     title: 'Apps',
+    client: false,
     links: [
       {
-        name: 'calendar',
+        link: 'calendar',
+        name: 'Календарь',
         icon: <AiOutlineCalendar />,
       },
       {
-        name: 'kanban',
+        link: 'kanban',
+        name: 'Канбан',
         icon: <BsKanban />,
       },
       // {
@@ -632,18 +675,18 @@ export const chatData = [
 export const earningData = [
   {
     icon: <MdOutlineSupervisorAccount />,
-    amount: '39,354',
+    amount: '210',
     percentage: '-4%',
-    title: 'Customers',
+    title: 'Клиенты',
     iconColor: '#03C9D7',
     iconBg: '#E5FAFB',
     pcColor: 'red-600',
   },
   {
     icon: <BsBoxSeam />,
-    amount: '4,396',
+    amount: '280',
     percentage: '+23%',
-    title: 'Products',
+    title: 'Проекты',
     iconColor: 'rgb(255, 244, 229)',
     iconBg: 'rgb(254, 201, 15)',
     pcColor: 'green-600',
@@ -652,7 +695,7 @@ export const earningData = [
     icon: <FiBarChart />,
     amount: '423,39',
     percentage: '+38%',
-    title: 'Sales',
+    title: 'Продажи',
     iconColor: 'rgb(228, 106, 118)',
     iconBg: 'rgb(255, 244, 229)',
 
@@ -662,7 +705,7 @@ export const earningData = [
     icon: <HiOutlineRefresh />,
     amount: '39,354',
     percentage: '-12%',
-    title: 'Refunds',
+    title: 'Возвраты',
     iconColor: 'rgb(0, 194, 146)',
     iconBg: 'rgb(235, 250, 242)',
     pcColor: 'red-600',
@@ -793,11 +836,11 @@ export const medicalproBranding = {
       desc: 'Oct 23, 2021',
     },
     {
-      title: 'Budget',
+      title: 'Бюджет',
       desc: '$98,500',
     },
     {
-      title: 'Expense',
+      title: 'Расход',
       desc: '$63,000',
     },
   ],
@@ -865,17 +908,17 @@ export const themeColors = [
 export const userProfileData = [
   {
     icon: <BsCurrencyDollar />,
-    title: 'My Profile',
-    desc: 'Account Settings',
+    title: 'Мой профиль',
+    desc: 'Настройки профиля',
     link: '/myProfile',
     iconColor: '#03C9D7',
     iconBg: '#E5FAFB',
   },
   {
     icon: <BsShield />,
-    title: 'My Inbox',
+    title: 'Мои сообщения',
     link: '/chats',
-    desc: 'Messages & Emails',
+    desc: 'Сообщения',
     iconColor: 'rgb(0, 194, 146)',
     iconBg: 'rgb(235, 250, 242)',
   },

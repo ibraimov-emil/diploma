@@ -50,6 +50,15 @@ export class ProjectsService {
         return project;
     }
 
+    async findOneMyById(id: number, clientId: number): Promise<Project> {
+        console.log('project')
+        const project = await this.projectsRepository.findOne({where: {id, clientId}, include: {all: true}});
+        if (!project) {
+            throw new NotFoundException(`Вы не являетесь участником проекта`);
+        }
+        return project;
+    }
+
     // async update(id: number, dto: UpdateProjectDto) {
     //     const project = await this.projectsRepository.findByPk(id);
     //     if (!project){

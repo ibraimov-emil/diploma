@@ -1,17 +1,21 @@
-import React from 'react';
+import React, {useContext} from 'react';
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
 import CardMedia from '@mui/material/CardMedia';
 import Typography from '@mui/material/Typography';
 import { Button, CardActionArea, CardActions } from '@mui/material';
-import {useNavigate} from "react-router-dom";
+import {Link, useNavigate} from "react-router-dom";
 import {PROJECT_ROUTE} from "../../utils/consts";
 import UserService from "../../services/UserService";
 import {deleteOneProject} from "../../services/ProjectService";
 import * as ProjectService from "../../services/ProjectService";
 import {useMutation, useQueryClient} from "react-query";
+import {EditOutlined} from "@ant-design/icons";
+import {observer} from "mobx-react-lite";
+import {AuthContext} from "../../contexts/authContext";
 
 const ProjectItem = ({project}) => {
+    const {user} = useContext(AuthContext)
     const queryClient = useQueryClient()
     const deleteProj = (projectId) => {
         try {
@@ -28,7 +32,7 @@ const ProjectItem = ({project}) => {
     const navigate = useNavigate()
     return (
         <Card className="mb-5" sx={{ maxWidth: 345 }}>
-            <CardActionArea onClick={() => navigate(PROJECT_ROUTE + '/' + project.id)}>
+            <CardActionArea onClick={() =>  navigate('/projects/' + project.id) }>
                 <CardContent>
                     <Typography gutterBottom variant="h5" component="div">
                         {project.name}
@@ -38,11 +42,18 @@ const ProjectItem = ({project}) => {
                     </Typography>
                 </CardContent>
             </CardActionArea>
+            {!user.isClient &&
             <CardActions>
+                <Link to={`/projects/edit/` + project.id}>
+                    <Button size="small" color="primary">
+                        Редактировать
+                    </Button>
+                </Link>
                 <Button onClick={() => deleteProj(project.id)} size="small" color="primary">
-                    Delete
+                    Удалить
                 </Button>
             </CardActions>
+            }
         </Card>
         // <Col md={3} className="mt-3" >
         //     <Card style={{ width: 'auto', cursor:'pointer' }}>
@@ -67,4 +78,4 @@ const ProjectItem = ({project}) => {
     );
 };
 
-export default ProjectItem;
+export default observer(ProjectItem);

@@ -19,7 +19,6 @@ export class RolesGuard implements CanActivate {
     }
 
     async canActivate(context: ExecutionContext): Promise<boolean> {
-        // async canActivate(context: ExecutionContext): boolean | Promise<boolean> | Observable<boolean> {
         try {
             const requiredRoles = this.reflector.getAllAndOverride<string[]>(ROLES_KEY, [
                 context.getHandler(),
@@ -44,8 +43,6 @@ export class RolesGuard implements CanActivate {
             // console.log(token)
             const user = this.jwtService.verify(token);
 
-            // console.log(token)
-            // console.log(user)
             req.user = user;
             const employeeId = user.employee.id
             if(!employeeId){

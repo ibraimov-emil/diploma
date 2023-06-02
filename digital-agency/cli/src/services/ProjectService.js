@@ -7,8 +7,22 @@ import $host from "../http";
 
 // }
 
-export const fetchProjects = async (id) => {
+export const createOneProject = async (request) => {
+    const {data} = await $host.post('projects/', request)
+    return data
+}
+
+export const fetchProjects = async () => {
     const {data} = await $host.get('projects')
+    return data
+}
+
+export const fetchProject = async (id) => {
+    const {data} = await $host.get('projects/' + id)
+    return data
+}
+export const fetchMyProjects = async () => {
+    const {data} = await $host.get('projects/myProjects')
     return data
 }
 
@@ -16,6 +30,17 @@ export const fetchOneProject = async (id) => {
     const {data} = await $host.get('projects/' + id)
     return data
 }
+
+export const fetchOneMyProject = async (id) => {
+    const {data} = await $host.get('projects/myProject/' + id)
+    return data
+}
+
+export const updateProject = async (projectUpd) => {
+    const {data} = await $host.put('projects/' + projectUpd.id, projectUpd.requestData)
+    return data
+}
+
 export const deleteOneProject = async (id) => {
     const {data} = await $host.delete('projects/' + id)
     return data
@@ -26,10 +51,15 @@ export const createOneStage = async (stage) => {
     return data
 }
 
-export const createPaymentStage = async (newStagePayment) => {
-    await $host.put('stages/' + newStagePayment.stageId, {cost: newStagePayment.cost})
-    const {data} = await $host.post('stages/' + newStagePayment.stageId + '/payments')
+export const createCostStage = async (newStagePayment) => {
+    const {data} = await $host.put('stages/' + newStagePayment.stageId, {cost: newStagePayment.cost})
+    await $host.post('stages/' + newStagePayment.stageId + '/payments')
     return data
+}
+
+export const createPaymentStage = async (stageId) => {
+    const {data} = await $host.post('stages/' + stageId + '/payments')
+    return data.paymentLink
 }
 
 export const createOneTask = async (task) => {
@@ -49,6 +79,11 @@ export const deleteOneTask = async (taskId) => {
 
 export const fetchTasksStage = async (id) => {
     const {data} = await $host.get('stages/' + id)
+    return data.tasks
+}
+
+export const fetchMyTasksStage = async (id) => {
+    const {data} = await $host.get('stages/myStages/' + id)
     return data.tasks
 }
 

@@ -2,9 +2,7 @@ import {forwardRef, Module} from '@nestjs/common';
 import {SequelizeModule} from "@nestjs/sequelize";
 import {Role} from "../roles/roles.model";
 import {EmployeeRoles} from "../roles/employee-roles.model";
-import {RolesModule} from "../roles/roles.module";
 import {AuthModule} from "../auth/auth.module";
-import {Post} from "../posts/posts.model";
 import {User} from "../users/users.model";
 import {Client} from "../clients/clients.model";
 import {Employee} from "../employees/employees.model";
@@ -29,7 +27,7 @@ import {YooKassaController} from "./yooKassa.controller";
   controllers: [StagesController, YooKassaController],
   providers: [StagesService, PaymentService],
   imports: [
-      SequelizeModule.forFeature([Status, Role, EmployeeRoles, User, Post, Client, Employee, Stage, Project, Task, EmployeesTasks, Payment]),
+      SequelizeModule.forFeature([Status, Role, EmployeeRoles, User, Client, Employee, Stage, Project, Task, EmployeesTasks, Payment]),
       forwardRef(() => ServicesModule),
       forwardRef(() => StatusesModule),
       forwardRef(() => ClientsModule),

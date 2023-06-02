@@ -1,5 +1,5 @@
 import {MiddlewareConsumer, Module, NestModule, RequestMethod} from "@nestjs/common";
-    import {SequelizeModule} from "@nestjs/sequelize";
+import {SequelizeModule} from "@nestjs/sequelize";
 import {ConfigModule} from "@nestjs/config";
 import {ServeStaticModule} from "@nestjs/serve-static";
 import * as path from 'path';
@@ -75,8 +75,6 @@ export class AppModule implements NestModule {
         consumer
             .apply(AuthMiddleware)
             .exclude(
-                // { path: 'cats', method: RequestMethod.GET },
-                // { path: 'cats', method: RequestMethod.POST },
                 { path: 'services', method: RequestMethod.ALL },
                 'auth/(.*)'
 

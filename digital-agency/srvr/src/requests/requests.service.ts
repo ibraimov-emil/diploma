@@ -4,6 +4,7 @@ import {InjectModel} from "@nestjs/sequelize";
 import {CreateRequestDto} from "./dto/create-request.dto";
 import {UpdateRequestDto} from "./dto/update-request.dto";
 import {UpdateServiceDto} from "../services/dto/update-service.dto";
+import {Project} from "../projects/projects.model";
 
 @Injectable()//провайдер для внедрения в controller
 export class RequestsService {
@@ -20,10 +21,20 @@ export class RequestsService {
         return requests;
     }
 
-    // async getRequestById(userId: number) {
-    //     const request = await this.requestRepository.findOne({where: {userId}});
-    //     return request;
-    // }
+    async getMyRequests(clientId: number){
+        if (clientId){
+            const projects =  this.requestRepository.findAll({
+                where: { clientId },
+                include: {all: true}
+            });
+            console.log(projects)
+            if (!projects) {
+                throw new NotFoundException(`У пользователя нет заявок`);
+            }
+            return projects
+        }
+        throw new NotFoundException(`Пользователь не является клиентом`);
+    }
 
     async findOneById(id: number): Promise<RequestTable> {
         console.log('request')
@@ -35,14 +46,15 @@ export class RequestsService {
         return request;
     }
 
-    // async update(id: number, dto: UpdateRequestDto) {
-    //     const request = await this.requestRepository.findByPk(id);
-    //     if (!request){
-    //         throw new HttpException('Заявка не найдена', HttpStatus.NOT_FOUND);
-    //     }
-    //     await this.requestRepository.update({ dto }, { where: { id } })
-    //     return this.getById(id);
-    // }
+    async findOneMyById(id: number, clientId: number): Promise<RequestTable> {
+        console.log('project')
+        const request = await this.requestRepository.findOne({where: {id, clientId}, include: {all: true}});
+        if (!request) {
+            throw new NotFoundException(`Вам не принадлежит данная заявка`);
+        }
+        return request;
+    }
+
 
     async updateRequest(id: number, dto: UpdateRequestDto) {
         const request = await this.requestRepository.findByPk(id);

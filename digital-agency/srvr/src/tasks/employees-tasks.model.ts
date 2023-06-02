@@ -2,11 +2,6 @@ import {BelongsTo, BelongsToMany, Column, DataType, ForeignKey, HasMany, Model, 
 import {Employee} from "../employees/employees.model";
 import { Task } from "./tasks.model";
 
-// interface EmployeesProjectsCreationAttrs {
-//     projectId: number;
-//     employeeId: number;
-// }
-
 @Table({tableName: 'employees_tasks'})
 export class EmployeesTasks extends Model<EmployeesTasks> {
 

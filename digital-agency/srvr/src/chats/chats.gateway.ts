@@ -12,7 +12,7 @@ interface AuthenticatedSocket extends Socket {
 
 @WebSocketGateway({
     cors: {
-        // origin: ['http://localhost:3000'],
+        origin: ['http://localhost:3000'],
         credentials: true,
     },
     pingInterval: 10000,
@@ -44,7 +44,7 @@ export class ChatsGateway implements OnGatewayConnection, OnGatewayDisconnect {
         this.server.emit('get-users', this.activeUsers);
     }
 
-    @UseGuards(AccessTokenGuard)
+    // @UseGuards(AccessTokenGuard)
     @SubscribeMessage('joinChat')
     async handleJoinChat(client: Socket, data: { chatId: number, userId: number }) {
         const { chatId, userId } = data;
@@ -55,7 +55,7 @@ export class ChatsGateway implements OnGatewayConnection, OnGatewayDisconnect {
         this.server.to(client.id).emit('chatParticipants', participants);
     }
 
-    @UseGuards(AccessTokenGuard)
+    // @UseGuards(AccessTokenGuard)
     @SubscribeMessage('leaveChat')
     async handleLeaveChat(client: Socket, data: { chatId: number }) {
         const { chatId } = data;

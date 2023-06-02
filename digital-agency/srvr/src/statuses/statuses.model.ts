@@ -20,9 +20,6 @@ export class Status extends Model<Status, StatusCreationAttrs> {
     @ApiProperty({example: 'Разработка веб-приложения', description: 'Название услуги'})
     @Column({ type: DataType.STRING, allowNull: true})
     name: string;
-    //
-    // @BelongsToMany(() => Role, () => EmployeeRoles)
-    // roles: Role[];
 
     @HasMany(() => RequestTable)
     requests: RequestTable[];

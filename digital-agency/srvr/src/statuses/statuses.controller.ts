@@ -27,8 +27,6 @@ export class StatusesController {
 
     @ApiOperation({summary: 'Получить все статусы'})
     @ApiResponse({status: 200, type: [Status]})
-    @Roles("ADMIN", "Manager")
-    @UseGuards(RolesGuard)
     @Get()
     getAll() {
         return this.statusesService.getAllStatuses();

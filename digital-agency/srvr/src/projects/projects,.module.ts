@@ -3,7 +3,6 @@ import {SequelizeModule} from "@nestjs/sequelize";
 import {Role} from "../roles/roles.model";
 import {EmployeeRoles} from "../roles/employee-roles.model";
 import {AuthModule} from "../auth/auth.module";
-import {Post} from "../posts/posts.model";
 import {User} from "../users/users.model";
 import {Client} from "../clients/clients.model";
 import {Employee} from "../employees/employees.model";
@@ -22,7 +21,7 @@ import {RequestsModule} from "../requests/requests.module";
   controllers: [ProjectsController],
   providers: [ProjectsService],
   imports: [
-      SequelizeModule.forFeature([Status, Role, EmployeeRoles, User, Post, Client, Employee, RequestTable, Project]),
+      SequelizeModule.forFeature([Status, Role, EmployeeRoles, User, Client, Employee, RequestTable, Project]),
       forwardRef(() => ServicesModule),
       forwardRef(() => StatusesModule),
       forwardRef(() => ClientsModule),

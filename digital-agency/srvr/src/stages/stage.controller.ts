@@ -9,6 +9,9 @@ import { Stage } from './stage.model';
 import {StagesService} from "./stage.service";
 import {CreateStageDto} from "./dto/create-stage.dto";
 import {UpdateStageDto} from "./dto/update-stage.dto";
+import {Project} from "../projects/projects.model";
+import {AuthUser} from "../utils/decorators";
+import {User} from "../users/users.model";
 
 @ApiTags('Этапы')
 @Controller('stages')
@@ -36,7 +39,7 @@ export class StagesController {
         return this.stagesService.getAllStages();
     }
 
-    @ApiOperation({summary: 'Получить заявку по id'})
+    @ApiOperation({summary: 'Получить этап по id'})
     @ApiResponse({status: 200, type: Stage})
     @Roles("ADMIN")
     @UseGuards(RolesGuard)
@@ -45,7 +48,12 @@ export class StagesController {
         return this.stagesService.findOneById(id);
     }
 
-
+    @ApiOperation({summary: 'Получить этапы по id клиенту'})
+    @ApiResponse({status: 200, type: Stage})
+    @Get('myStages/:id')
+    getByValueMy(@Param('id') id: number, @AuthUser() user: User) {
+        return this.stagesService.findOneMyById(id, user.client.id);
+    }
 
     @ApiOperation({summary: 'Обновить этап'})
     @ApiResponse({status: 200, type: Stage})
@@ -67,11 +75,9 @@ export class StagesController {
 
     @ApiOperation({ summary: 'Create a payment for a stage' })
     @ApiResponse({ status: 200, type: String })
-    @Roles("ADMIN")
-    @UseGuards(RolesGuard)
     @Post(':id/payments')
-    createPayment(@Param('id') id: number){
-        return this.stagesService.createPayment(id);
+    createPayment(@Param('id') id: number, @AuthUser() user: User){
+        return this.stagesService.createPayment(id, user.client.id);
     }
 
     @ApiOperation({ summary: 'Capture a payment for a stage' })

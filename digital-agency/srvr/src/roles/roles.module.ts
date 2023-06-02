@@ -6,8 +6,6 @@ import {Role} from "./roles.model";
 import {EmployeeRoles} from "./employee-roles.model";
 import {Employee} from "../employees/employees.model";
 import {AuthModule} from "../auth/auth.module";
-import {UsersModule} from "../users/users.module";
-import {EmployeesService} from "../employees/employees.service";
 import {EmployeesModule} from "../employees/employees.module";
 
 @Module({
@@ -15,7 +13,6 @@ import {EmployeesModule} from "../employees/employees.module";
   controllers: [RolesController],
   imports: [
     SequelizeModule.forFeature([Role, Employee, EmployeeRoles]),
-
     forwardRef(() => AuthModule),
     forwardRef(() => EmployeesModule),
   ],

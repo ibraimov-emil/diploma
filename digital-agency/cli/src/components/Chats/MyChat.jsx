@@ -47,7 +47,7 @@ export const MyChat = () => {
     <div className="mychat-cont">
       <div>
         <div className="notification">
-          <h2>Chats</h2>
+          <h2>Чаты</h2>
           {/* <NotificationsIcon /> */}
           <Badge badgeContent={notification} color="error">
             <Notificationcomp />

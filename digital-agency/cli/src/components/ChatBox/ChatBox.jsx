@@ -6,6 +6,7 @@ import InputEmoji from "react-input-emoji";
 import {addMessage, getMessages} from "../../services/ChatService";
 import {fetchOneUser} from "../../services/UserService";
 import {observer} from "mobx-react-lite";
+import { Form, Input, message, Select } from 'antd';
 import MessageItem from "./MessageItem";
 import {useMutation, useQueryClient} from "react-query";
 import {deleteOneProject} from "../../services/ProjectService";
@@ -16,6 +17,7 @@ const ChatBox = ({ chat, currentUser, setSendMessage,  receivedMessage }) => {
   const [newMessage, setNewMessage] = useState("");
 
   const handleChange = (newMessage)=> {
+    console.log(newMessage)
     setNewMessage(newMessage)
   }
 
@@ -56,7 +58,7 @@ const ChatBox = ({ chat, currentUser, setSendMessage,  receivedMessage }) => {
       try {
         const { data } = await getMessages(chat.chatId);
         console.log(data)
-        setMessages(data);
+        setMessages(data.reverse());
       } catch (error) {
         console.log(error);
       }
@@ -109,8 +111,6 @@ useEffect(()=> {
 
 },[receivedMessage])
 
-
-
   const scroll = useRef();
   const imageRef = useRef();
   return (
@@ -122,18 +122,18 @@ useEffect(()=> {
             <div className="chat-header">
               <div className="follower">
                 <div>
-                  <img
-                    src={
-                      userData?.profilePicture
-                        ? process.env.REACT_APP_PUBLIC_FOLDER +
-                          userData.profilePicture
-                        : process.env.REACT_APP_PUBLIC_FOLDER +
-                          "defaultProfile.png"
-                    }
-                    alt="Profile"
-                    className="followerImage"
-                    style={{ width: "50px", height: "50px" }}
-                  />
+                  {/*<img*/}
+                  {/*  src={*/}
+                  {/*    userData?.profilePicture*/}
+                  {/*      ? process.env.REACT_APP_PUBLIC_FOLDER +*/}
+                  {/*        userData.profilePicture*/}
+                  {/*      : process.env.REACT_APP_PUBLIC_FOLDER +*/}
+                  {/*        "defaultProfile.png"*/}
+                  {/*  }*/}
+                  {/*  alt="Profile"*/}
+                  {/*  className="followerImage"*/}
+                  {/*  style={{ width: "50px", height: "50px" }}*/}
+                  {/*/>*/}
                   <div className="name" style={{ fontSize: "0.9rem" }}>
                     <span>
                       {chat.chat.name}
@@ -163,9 +163,13 @@ useEffect(()=> {
             {/* chat-sender */}
             <div className="chat-sender">
               <div onClick={() => imageRef.current.click()}>+</div>
-              <InputEmoji
+              {/*<InputEmoji*/}
+              {/*  value={newMessage}*/}
+              {/*  onChange={handleChange}*/}
+              {/*/>              */}
+              <Input.TextArea
                 value={newMessage}
-                onChange={handleChange}
+                onChange={(e) => handleChange(e.target.value)}
               />
               <div className="send-button button" onClick = {newMessage ? handleSend : ''}>Send</div>
               <input

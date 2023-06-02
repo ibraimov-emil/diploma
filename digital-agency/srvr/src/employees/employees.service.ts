@@ -24,14 +24,11 @@ export class EmployeesService {
         if (client) {
             throw new NotFoundException('Пользователь является клиентом');
         }
-        const employee = await this.employeeRepository.create(dto);
-        // const role = await this.roleService.getRoleByValue("ADMIN")
-        // await employee.$set('roles', [role.id])
-        // employee.roles = [role]
-
         if (!user) {
             throw new NotFoundException('Пользователь не найден');
         }
+
+        const employee = await this.employeeRepository.create(dto);
 
         // Создаем сотрудника и возвращаем результат
         return employee;

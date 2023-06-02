@@ -65,11 +65,11 @@ const Chat = () => {
   // };
 
   if (isLoading){
-    return <div>Loading...</div>
+    return <div>Загрузка...</div>
   }
 
   if (isError){
-    return <div>Error...</div>
+    return <div>Ошибка...</div>
   }
 
   return (
@@ -78,7 +78,7 @@ const Chat = () => {
       <div className="Left-side-chat">
         {/*<LogoSearch />*/}
         <div className="Chat-container">
-          <h2>Chats</h2>
+          <h2>Чаты</h2>
           <div className="Chat-list">
             {chats.map((chat) => (
               <div key={chat.chat.id}

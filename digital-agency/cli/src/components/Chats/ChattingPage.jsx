@@ -5,7 +5,7 @@ import VideoCallIcon from "@mui/icons-material/VideoCall";
 import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
 import styled from "@emotion/styled";
 import SendIcon from "@mui/icons-material/Send";
-import InputEmoji from "react-input-emoji";
+import ReactEmojiTextArea from "react-input-emoji";
 import React, { createRef, useCallback, useEffect, useState } from "react";
 import { ChatlogicStyling, isSameSender } from "./ChatstyleLogic";
 import { useDispatch, useSelector } from "react-redux";
@@ -14,7 +14,7 @@ import { sendMessage } from "./Redux/Chatting/action";
 import { addUnseenmsg } from "./Redux/Notification/action";
 
 import io from "socket.io-client";
-const SERVER_POINT = "http://localhost:5001";
+const SERVER_POINT = "http://localhost:5000";
 var socket, currentChattingWith;
 
 export const ChattingPage = () => {
@@ -161,7 +161,7 @@ function InputContWithEmog({ id, token, socket }) {
   return (
     <>
       <div className="search-cont send-message">
-        <InputEmoji
+        <ReactEmojiTextArea
           value={text}
           onChange={setText}
           cleanOnEnter

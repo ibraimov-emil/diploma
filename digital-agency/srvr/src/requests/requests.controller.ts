@@ -7,6 +7,9 @@ import {CreateRequestDto} from "./dto/create-request.dto";
 import {RequestsService} from "./requests.service";
 import {Service} from "../services/services.model";
 import {UpdateRequestDto} from "./dto/update-request.dto";
+import {Project} from "../projects/projects.model";
+import {AuthUser} from "../utils/decorators";
+import {User} from "../users/users.model";
 
 @ApiTags('Заявки')
 @Controller('requests')
@@ -34,6 +37,13 @@ export class RequestsController {
         return this.requestsService.getAllRequests();
     }
 
+    @ApiOperation({summary: 'Получить клиенту его заявки'})
+    @ApiResponse({status: 200, type: [Project]})
+    @Get('/myRequests')
+    getMyProjects(@AuthUser() user: User) {
+        return this.requestsService.getMyRequests(user.client.id);
+    }
+
     @ApiOperation({summary: 'Получить заявку по id'})
     @ApiResponse({status: 200, type: RequestTable})
     @Roles("ADMIN")
@@ -41,6 +51,13 @@ export class RequestsController {
     @Get('/:id')
     getByValue(@Param('id') id: number) {
         return this.requestsService.findOneById(id);
+    }
+
+    @ApiOperation({summary: 'Получить заявку по id клиенту'})
+    @ApiResponse({status: 200, type: RequestTable})
+    @Get('myRequest/:id')
+    getByValueMy(@Param('id') id: number, @AuthUser() user: User) {
+        return this.requestsService.findOneMyById(id, user.client.id);
     }
 
     @ApiOperation({summary: 'Обновить заявку'})

@@ -20,7 +20,7 @@ class UserStore{
     }
 
     setIsClient(bool){
-        this.isAuth = bool
+        this.isClient = bool
     }
 
     setUser(user){
@@ -44,14 +44,14 @@ class UserStore{
             Cookies.set('refreshToken', response.data.refreshToken, { expires: 30 * 24 * 60 * 60 * 1000 });
             localStorage.setItem('token', response.data.accessToken);
             this.setIsAuth(true);
-            if (response.data.user.client.id){
+            this.setUser(response.data.user);
+            if (response.data.user.client){
                 this.setIsClient(true)
             }
-            this.setUser(response.data.user);
     }
 
     async registration(email, password, phone, surname, name, description, nameCompany) {
-        try {
+        // try {
             const response = await AuthService.registration(email, password, phone, surname, name, description, nameCompany);
             Cookies.set('userId', response.data.user.id, { expires: 30 * 24 * 60 * 60 * 1000 });
             Cookies.set('refreshToken', response.data.refreshToken, { expires: 30 * 24 * 60 * 60 * 1000 });
@@ -61,9 +61,9 @@ class UserStore{
                 this.setIsClient(true)
             }
             this.setUser(response.data.user);
-        } catch (e) {
-            console.log(e.response?.data?.message);
-        }
+        // } catch (e) {
+        //     console.log(e.response?.data?.message);
+        // }
     }
 
     async logout() {
@@ -88,6 +88,9 @@ class UserStore{
             Cookies.set('userId', response.data.user.id, { expires: 30 * 24 * 60 * 60 * 1000 });
             Cookies.set('refreshToken', response.data.refreshToken, { expires: 30 * 24 * 60 * 60 * 1000 });
             localStorage.setItem('token', response.data.accessToken);
+            if (response.data.user.client){
+                this.setIsClient(true)
+            }
             this.setIsAuth(true);
             this.setUser(response.data.user);
         } catch (e) {

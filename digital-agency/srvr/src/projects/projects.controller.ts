@@ -53,6 +53,13 @@ export class ProjectsController {
         return this.projectsService.findOneById(id);
     }
 
+    @ApiOperation({summary: 'Получить проект по id клиенту'})
+    @ApiResponse({status: 200, type: Project})
+    @Get('myProject/:id')
+    getByValueMy(@Param('id') id: number, @AuthUser() user: User) {
+        return this.projectsService.findOneMyById(id, user.client.id);
+    }
+
     @ApiOperation({summary: 'Обновить проект'})
     @ApiResponse({status: 200, type: Service})
     @Roles("ADMIN")

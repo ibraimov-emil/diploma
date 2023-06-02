@@ -4,6 +4,18 @@ export const fetchRequests = async () => {
     const {data} = await $host.get('requests')
     return data
 }
+export const fetchRequest = async (id) => {
+    const {data} = await $host.get('requests/' + id)
+    return data
+}
+export const fetchOneMyRequest = async (id) => {
+    const {data} = await $host.get('requests/myRequest/' + id)
+    return data
+}
+export const fetchMyRequests = async () => {
+    const {data} = await $host.get('requests/myRequests')
+    return data
+}
 
 export const fetchServices = async () => {
     const {data} = await $host.get('services')
@@ -44,7 +56,3 @@ export const updateRequest = async (requestsUpd) => {
 //     return data
 // }
 //
-export const fetchRequest = async (id) => {
-    const {data} = await $host.get('requests/' + id)
-    return data
-}

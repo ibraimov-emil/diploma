@@ -7,10 +7,7 @@ import {
     Param,
     Body,
     UseGuards,
-    BadRequestException,
-    UnauthorizedException
 } from '@nestjs/common';
-
 import { CreateChatDto } from './dto/create-chat.dto';
 import { AddUserToChatDto } from './dto/add-user-to-chat.dto';
 import { SendMessageDto } from './dto/send-message.dto';
@@ -25,7 +22,6 @@ import {Message} from "./messages.model";
 import {AccessTokenGuard} from "../common/guards/accessToken.guard";
 import {Roles} from "../auth/roles-auth.decorator";
 import {RolesGuard} from "../auth/roles.guard";
-import {LoginUserDto} from "../users/dto/login-user.dto";
 
 @ApiTags('Чат')
 @Controller('chats')
@@ -56,13 +52,6 @@ export class ChatController {
     getChatParticipants(@AuthUser() user: User,@Param('chatId') chatId: number) {
         return this.chatService.getChatParticipants(chatId, user.id);
     }
-
-    // @ApiOperation({summary: 'Получить участников чата'})
-    // @ApiResponse({status: 200, type: User})
-    // @Get(':chatId/participants')
-    // async getUserChats(@Param('userId') userId: number) {
-    //     return this.chatService.getChatParticipants(userId);
-    // }
 
     @ApiOperation({summary: 'Получить чаты пользователя'})
     @ApiResponse({status: 200, type: [Chat]})
@@ -114,8 +103,5 @@ export class ChatController {
     deleteChat(@Param('chatId') chatId: number) {
         return this.chatService.deleteChat(chatId);
     }
-
-
-
 }
 

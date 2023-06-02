@@ -30,15 +30,6 @@ export class ServicesController {
     getAll() {
         return this.servicesService.getAllServices();
     }
-    
-    // @ApiOperation({summary: 'Выдать роль'})
-    // @ApiResponse({status: 200})
-    // // @Roles("ADMIN")
-    // // @UseGuards(RolesGuard)
-    // @Post('/role')
-    // addRole(@Body() dto: AddRoleDto) {
-    //     return this.servicesService.addRole(dto);
-    // }
 
     @ApiOperation({summary: 'Получить услугу по id'})
     @ApiResponse({status: 200, type: Service})

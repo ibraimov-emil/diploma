@@ -72,7 +72,7 @@ const Navbar = () => {
               alt="user-profile"
             />
             <p>
-              <span className="text-gray-400 text-14">Hi,</span>{' '}
+              <span className="text-gray-400 text-14">Здравсвтуйте,</span>{' '}
               <span className="text-gray-400 font-bold ml-1 text-14">
                 {user.User.name}
               </span>

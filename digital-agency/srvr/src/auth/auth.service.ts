@@ -1,14 +1,10 @@
 import {
   BadRequestException,
-  Body,
-  ExecutionContext,
   ForbiddenException,
   HttpException,
   HttpStatus,
   Injectable,
-  Res,
   UnauthorizedException,
-  UseGuards,
 } from "@nestjs/common";
 import { CreateUserDto } from "../users/dto/create-user.dto";
 import { UsersService } from "../users/users.service";
@@ -16,14 +12,12 @@ import { JwtService } from "@nestjs/jwt";
 import * as bcrypt from "bcryptjs";
 import { User } from "../users/users.model";
 import { LoginUserDto } from "../users/dto/login-user.dto";
-import { JwtAuthGuard } from "./jwt-auth.guard";
-import { Employee } from "../employees/employees.model";
 import { ClientsService } from "src/clients/clients.service";
 import { RequestsService } from "src/requests/requests.service";
 import { CreateClientRequestDto } from "./dto/create-client-request.dto";
 import { ConfigService } from "@nestjs/config";
-import { Response } from "express";
 import * as argon2 from "argon2";
+import {ChatService} from "../chats/chats.service";
 
 @Injectable()
 export class AuthService {
@@ -32,7 +26,8 @@ export class AuthService {
     private clientService: ClientsService,
     private requestService: RequestsService,
     private jwtService: JwtService,
-    private configService: ConfigService
+    private configService: ConfigService,
+    private chatService: ChatService
   ) {}
 
   async login(userDto: LoginUserDto) {
@@ -57,7 +52,7 @@ export class AuthService {
     const hashPassword = await bcrypt.hash(userDto.password, 5);
     const user = await this.userService.createUser({
       ...userDto,
-      password: hashPassword,
+      // password: hashPassword,
     });
     return this.generateToken(user);
   }
@@ -75,18 +70,34 @@ export class AuthService {
     const hashPassword = await bcrypt.hash(userClientDto.password, 5);
     const user = await this.userService.createUser({
       ...userClientDto,
-      password: hashPassword,
+      // password: hashPassword,
     });
     const client = await this.clientService.createClient({
       ...userClientDto,
       userId: user.id,
     });
-    // console.log({ ...userClientDto });
-    await this.requestService.createRequest({
+
+    const request = await this.requestService.createRequest({
       ...userClientDto,
       clientId: client.id,
       statusId: 1,
     });
+
+    const chat = await this.chatService.createChat(
+        'Заявка №' + request.id,
+        user.id
+    )
+
+    await this.chatService.addUserToChat(
+        7,
+        chat.id
+    )
+    // chatId: number, senderId: number, content: string
+    await this.chatService.sendMessage(
+        chat.id,
+        7,
+        'Добрый день, вы оставили заявку: ' + userClientDto.description + '. В ближайшее время вам ответит первый освободившийся менеджер'
+    )
 
     const tokens = await this.getTokens(user.id, user);
     await this.updateRefreshToken(user.id, tokens.refreshToken);
@@ -113,11 +124,13 @@ export class AuthService {
 
   private async validateUser(userDto: LoginUserDto) {
     const user = await this.userService.getUserByEmail(userDto.email);
-    if (!user) throw new BadRequestException("Пользователя не существует");
+    if (!user) throw new BadRequestException("Некорректный email или пароль");
+
     const passwordEquals = await bcrypt.compare(
       userDto.password,
       user.password
     );
+    console.log(passwordEquals)
     if (user && passwordEquals) {
       return user;
     }
@@ -184,10 +197,6 @@ export class AuthService {
       refreshToken
     );
 
-    // console.log("user.refreshToken");
-    // console.log(user.refreshToken);
-    // console.log(refreshToken);
-    // console.log(refreshTokenMatches);
     if (!refreshTokenMatches) throw new ForbiddenException("Access Denied");
     const tokens = await this.getTokens(user.id, user);
     // console.log(user)
