@@ -4,12 +4,8 @@ import {CreateUserDto} from "../users/dto/create-user.dto";
 import {LoginUserDto} from "../users/dto/login-user.dto";
 import {AuthService} from "./auth.service";
 import {Request, Response} from 'express';
-import {Role} from "../roles/roles.model";
-import {JwtAuthGuard} from "./jwt-auth.guard";
-import { CreateRequestDto } from 'src/requests/dto/create-request.dto';
 import { CreateClientRequestDto } from './dto/create-client-request.dto';
-import {AccessTokenGuard} from "../common/guards/accessToken.guard";
-import {RefreshTokenGuard} from "../common/guards/refreshToken.guard";
+
 
 @ApiTags('Авторизация')
 @Controller('auth')

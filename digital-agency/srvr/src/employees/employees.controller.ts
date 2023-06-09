@@ -8,7 +8,6 @@ import {RolesGuard} from "../auth/roles.guard";
 import {AddRoleDto} from "./dto/add-role.dto";
 import {Role} from "../roles/roles.model";
 import {User} from "../users/users.model";
-import {UpdateUserDto} from "../users/dto/update-user.dto";
 import {UpdateEmployeeDto} from "./dto/update-employee.dto";
 import {AddProjectDto} from "./dto/add-project.dto";
 

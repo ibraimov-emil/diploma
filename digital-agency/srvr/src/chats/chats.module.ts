@@ -11,7 +11,6 @@ import {Status} from "../statuses/statuses.model";
 import {ServicesModule} from "../services/services.module";
 import {StatusesModule} from "../statuses/statuses.module";
 import {ClientsModule} from "../clients/clients.module";
-
 import {RequestTable} from "../requests/requests.model";
 import {RequestsModule} from "../requests/requests.module";
 import {Project} from "../projects/projects.model";

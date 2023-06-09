@@ -72,17 +72,22 @@ export class StagesService {
         return { message: `Этап успешно удален` };
     }
 
-    async createPayment(stageId: number, clientId: number) {
+    async createPayment(stageId: number, client) {
+        console.log(client)
+        if (!client) {
+            throw new NotFoundException(`Оплачивать может только клиент`);
+        }
+
         const stage = await this.findOneById(stageId);
         if (!stage) {
-            throw new Error('Этап не найден');
+            throw new NotFoundException(`Этап не найден`);
         }
 
         if (!stage.cost) {
             throw new HttpException('Не задана стоимость этапа', HttpStatus.NOT_FOUND);
         }
 
-        const project = await this.projectService.findOneMyById(stage.projectId, clientId);
+        const project = await this.projectService.findOneMyById(stage.projectId, client.id);
         if (!project) {
             throw new NotFoundException(`Вы не являетесь участником проекта`);
         }

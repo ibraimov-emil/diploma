@@ -2,12 +2,12 @@ import { useParams, Link } from 'react-router-dom';
 import { Descriptions, Spin } from 'antd';
 import { Button } from '@mui/material';
 import { useQuery } from 'react-query';
-import {fetchOneMyRequest, fetchRequest} from "../../../services/RequestService";
-import {Header} from "../index";
+import {fetchOneMyRequest, fetchRequest} from "../../services/RequestService";
+import {Header} from "../Dashboard";
 import React, {useContext, useEffect, useState} from "react";
-import {fetchOneUser, getMyProfile} from "../../../services/UserService";
+import {fetchOneUser, getMyProfile} from "../../services/UserService";
 import {observer} from "mobx-react-lite";
-import {AuthContext} from "../../../contexts/authContext";
+import {AuthContext} from "../../contexts/authContext";
 
 const ViewRequest = () => {
   const { id } = useParams();

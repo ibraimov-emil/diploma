@@ -3,25 +3,16 @@ import {
   REGISTRATION_ROUTE,
   FORM_ROUTE,
 } from "./utils/consts";
-import Auth from "./pages/Auth";
-import FormPage from "./pages/FormPage";
+import Auth from "./pages/landing/Auth";
+import FormPage from "./pages/landing/FormPage";
 
 import {
-  Area,
-  Bar,
   Calendar,
-  ColorMapping,
   Customers,
   Ecommerce,
-  Editor,
   Employees,
-  Financial,
   Kanban,
-  Line,
   Orders,
-  Pie,
-  Pyramid,
-  Stacked,
 } from "./pages/dasboard";
 import React from "react";
 import ProjectPage from "./components/Projects/ProjectPage";
@@ -30,10 +21,10 @@ import Clients from "./pages/dasboard/Clients";
 import Chat from "./pages/Chat/Chat";
 import MyProfile from "./pages/MyProfile";
 import Requests from "./pages/dasboard/Requests";
-import TestList from "./components/Dashboard/Requests/test";
-import AddRequest from "./components/Dashboard/Requests/AddRequest";
-import ViewRequest from "./components/Dashboard/Requests/ViewRequest";
-import EditRequest from "./components/Dashboard/Requests/EditRequest";
+import TestList from "./components/Requests/test";
+import AddRequest from "./components/Requests/AddRequest";
+import ViewRequest from "./components/Requests/ViewRequest";
+import EditRequest from "./components/Requests/EditRequest";
 import Landing from "./pages/landing/Landing";
 import AddProject from "./components/Projects/AddProject";
 import EditProject from "./components/Projects/EditProject";
@@ -53,7 +44,6 @@ export const clientRoutes = [
 
   { path: "/requests", Component: <Requests /> },
   { path: "/requests/view/:id", Component: <ViewRequest /> },
-  { path: "/test", Component: <TestList /> },
 
   { path: "/chats", Component: <Chat /> },
   { path: "/myProfile", Component: <MyProfile /> },
@@ -66,7 +56,6 @@ export const clientRoutes = [
 
   // apps
   { path: "/kanban", Component: <Kanban /> },
-  { path: "/editor", Component: <Editor /> },
   { path: "/calendar", Component: <Calendar /> },
 
   {
@@ -106,18 +95,8 @@ export const employeeRoutes = [
 
   // apps
   { path: "/kanban", Component: <Kanban /> },
-  { path: "/editor", Component: <Editor /> },
   { path: "/calendar", Component: <Calendar /> },
 
-  // charts
-  { path: "/line", Component: <Line /> },
-  { path: "/area", Component: <Area /> },
-  { path: "/bar", Component: <Bar /> },
-  { path: "/pie", Component: <Pie /> },
-  { path: "/financial", Component: <Financial /> },
-  { path: "/color-mapping", Component: <ColorMapping /> },
-  { path: "/pyramid", Component: <Pyramid /> },
-  { path: "/stacked", Component: <Stacked /> },
   {
     path: "/client/:id",
     Component: <ProjectPage />,

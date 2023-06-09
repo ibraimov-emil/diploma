@@ -4,9 +4,9 @@ import { Form, Input, message, Select } from 'antd';
 import { Button } from '@mui/material';
 import {useQuery, useMutation, useQueryClient} from 'react-query';
 import axios from 'axios';
-import {createOneRequest, fetchRequest, fetchServices, fetchStatuses} from "../../../services/RequestService";
-import {fetchClients} from "../../../services/ClientService";
-import {Header} from "../index";
+import {createOneRequest, fetchRequest, fetchServices, fetchStatuses} from "../../services/RequestService";
+import {fetchClients} from "../../services/ClientService";
+import {Header} from "../Dashboard";
 import RequestList from "./RequestList";
 
 const { Option } = Select;

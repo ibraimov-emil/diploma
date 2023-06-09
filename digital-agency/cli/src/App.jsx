@@ -9,28 +9,20 @@ import { Navbar, Sidebar, ThemeSettings} from "./components/Dashboard";
 import './App.css';
 import {AuthContext} from "./contexts/authContext";
 
-function Employees() {
-    return null;
-}
 
 const App = observer(() => {
     const {user} = useContext(AuthContext)
     const {setCurrentColor, setCurrentMode, currentMode, activeMenu, currentColor, themeSettings, setThemeSettings } = useStateContext();
     const [loading, setLoading] = useState(true)
 
-    // useEffect(() => {
-    //     console.log('das')
-    //         check().then(data => {
-    //             console.log('das')
-    //             user.setUser(data)
-    //             user.setIsAuth(true)
-    //         }).finally(() => setLoading(false))
-    // }, [])
 
     useEffect(() => {
         if (localStorage.getItem('token')) {
-            user.checkAuth()
+            user.checkAuth().finally(() => setLoading(false))
+        }else{
+            setLoading(false)
         }
+        
     }, [])
 
     useEffect(() => {
@@ -42,7 +34,7 @@ const App = observer(() => {
         }
     }, []);
 
-    if(user.isLoading){
+    if(loading){
         return  <Spinner animation = {'grow'}/>
     }
 

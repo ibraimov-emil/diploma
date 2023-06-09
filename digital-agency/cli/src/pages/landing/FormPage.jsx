@@ -1,11 +1,11 @@
 import React, {useContext, useState} from 'react';
 import {Button, Container, Form, Card, Row} from "react-bootstrap";
 import {NavLink, useLocation, useNavigate} from "react-router-dom";
-import {LOGIN_ROUTE, REGISTRATION_ROUTE, SHOP_ROUTE, FORM_ROUTE} from "../utils/consts";
+import {LOGIN_ROUTE, REGISTRATION_ROUTE, SHOP_ROUTE, FORM_ROUTE} from "../../utils/consts";
 import {observer} from "mobx-react-lite";
-import {AuthContext} from "../contexts/authContext";
+import {AuthContext} from "../../contexts/authContext";
 import {useQuery} from "react-query";
-import {fetchServices} from "../services/RequestService";
+import {fetchServices} from "../../services/RequestService";
 import { useForm } from "react-hook-form";
 
 const FormPage = observer(() => {

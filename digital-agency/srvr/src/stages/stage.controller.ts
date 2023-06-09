@@ -77,7 +77,7 @@ export class StagesController {
     @ApiResponse({ status: 200, type: String })
     @Post(':id/payments')
     createPayment(@Param('id') id: number, @AuthUser() user: User){
-        return this.stagesService.createPayment(id, user.client.id);
+        return this.stagesService.createPayment(id, user.client);
     }
 
     @ApiOperation({ summary: 'Capture a payment for a stage' })

@@ -6,7 +6,6 @@ import {Roles} from "../auth/roles-auth.decorator";
 import {RolesGuard} from "../auth/roles.guard";
 import {Role} from "./roles.model";
 import {User} from "../users/users.model";
-import {UpdateEmployeeDto} from "../employees/dto/update-employee.dto";
 import {UpdateRoleDto} from "./dto/update-employee.dto";
 
 @ApiTags('Роли')

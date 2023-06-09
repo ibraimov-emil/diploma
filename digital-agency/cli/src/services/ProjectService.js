@@ -1,12 +1,5 @@
 import $host from "./index";
 
-// export default class ProjectService {
-//     static fetchProjects(){
-//     return $host.get('/projects')
-// }
-
-// }
-
 export const createOneProject = async (request) => {
     const {data} = await $host.post('projects/', request)
     return data

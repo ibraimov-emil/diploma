@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import { Header } from '../../components/Dashboard';
-import RequestList from "../../components/Dashboard/Requests/RequestList";
+import RequestList from "../../components/Requests/RequestList";
 
 
 const Requests = () => {

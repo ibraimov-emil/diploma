@@ -7,7 +7,7 @@ import Skills from "../../components/Landing/Skills";
 import Contact from "../../components/Landing/Contact";
 import Case from "../../components/Landing/Case";
 import Navbar from "../../components/Landing/Navbar";
-import FormPage from "../FormPage";
+import FormPage from "./FormPage";
 import ServicesBlock from "../../components/Landing/ServicesBlock";
 
 
@@ -26,7 +26,6 @@ const Landing = () => {
             <ServicesBlock />
             <Skills />
             <Case />
-            {/*<Contact />*/}
             <FormPage />
         </div>
     )

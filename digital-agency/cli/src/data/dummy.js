@@ -1,7 +1,22 @@
 import React from 'react';
-import { AiOutlineCalendar, AiOutlineShoppingCart, AiOutlineAreaChart, AiOutlineBarChart, AiOutlineStock } from 'react-icons/ai';
+import {
+  AiOutlineCalendar,
+  AiOutlineShoppingCart,
+  AiOutlineAreaChart,
+  AiOutlineBarChart,
+  AiOutlineStock,
+  AiFillProject
+} from 'react-icons/ai';
 import { FiShoppingBag, FiEdit, FiPieChart, FiBarChart, FiCreditCard, FiStar, FiShoppingCart } from 'react-icons/fi';
-import { BsKanban, BsBarChart, BsBoxSeam, BsCurrencyDollar, BsShield, BsChatLeft } from 'react-icons/bs';
+import {
+  BsKanban,
+  BsBarChart,
+  BsBoxSeam,
+  BsCurrencyDollar,
+  BsShield,
+  BsChatLeft,
+  BsFillChatDotsFill
+} from 'react-icons/bs';
 import { BiColorFill } from 'react-icons/bi';
 import { IoMdContacts } from 'react-icons/io';
 import { RiContactsLine, RiStockLine } from 'react-icons/ri';
@@ -22,6 +37,7 @@ import product5 from './product5.jpg';
 import product6 from './product6.jpg';
 import product7 from './product7.jpg';
 import product8 from './product8.jpg';
+import {SlLayers, SlPeople} from "react-icons/sl";
 
 export const gridOrderImage = (props) => (
   <div>
@@ -488,17 +504,17 @@ export const links = [
       {
         link: 'requests',
         name: 'Заявки',
-        icon: <AiOutlineShoppingCart />,
+        icon: <SlLayers />,
       },
       {
         link: 'projects',
         name: 'Проекты',
-        icon: <AiOutlineShoppingCart />,
+        icon: <AiFillProject />,
       },
       {
         link: 'chats',
         name: 'Чат',
-        icon: <AiOutlineShoppingCart />,
+        icon: <BsFillChatDotsFill />,
       },
       {
         link: 'orders',
@@ -519,22 +535,22 @@ export const links = [
       {
         link: 'requests',
         name: 'Заявки',
-        icon: <AiOutlineShoppingCart />,
+        icon: <SlLayers />,
       },
       {
         link: 'projects',
         name: 'Проекты',
-        icon: <AiOutlineShoppingCart />,
+        icon: <AiFillProject />,
       },
       {
         link: 'clients',
         name: 'Клиенты',
-        icon: <AiOutlineShoppingCart />,
+        icon: <SlPeople />,
       },
       {
         link: 'chats',
         name: 'Чат',
-        icon: <AiOutlineShoppingCart />,
+        icon: <BsFillChatDotsFill />,
       },
       {
         link: 'orders',
@@ -546,11 +562,11 @@ export const links = [
         name: 'Сотрудники',
         icon: <IoMdContacts />,
       },
-      {
-        link: 'customers',
-        name: 'Клиентыы',
-        icon: <RiContactsLine />,
-      },
+      // {
+      //   link: 'customers',
+      //   name: 'Клиентыы',
+      //   icon: <RiContactsLine />,
+      // },
     ],
   },
   {

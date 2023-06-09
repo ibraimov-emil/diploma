@@ -6,10 +6,10 @@ import { PlusOutlined, EditOutlined, DeleteOutlined } from '@ant-design/icons';
 import { EyeOutlined } from '@ant-design/icons';
 import {Row} from "react-bootstrap";
 import {useMutation, useQuery, useQueryClient} from "react-query";
-import {deleteOneRequest, fetchMyRequests, fetchRequest, fetchRequests} from "../../../services/RequestService";
+import {deleteOneRequest, fetchMyRequests, fetchRequest, fetchRequests} from "../../services/RequestService";
 import {Link} from "react-router-dom";
-import {AuthContext} from "../../../contexts/authContext";
-import {fetchMyProjects, fetchProjects} from "../../../services/ProjectService";
+import {AuthContext} from "../../contexts/authContext";
+import {fetchMyProjects, fetchProjects} from "../../services/ProjectService";
 
 const RequestList = observer(() => {
     const {user} = useContext(AuthContext)

@@ -8,7 +8,7 @@ import {useQuery} from "react-query";
 
 import {IconButton, List, ListItem, ListItemSecondaryAction, ListItemText} from "@mui/material";
 import CommentIcon from '@mui/icons-material/Comment';
-import {fetchRequest} from "../../../services/RequestService";
+import {fetchRequest} from "../../services/RequestService";
 import {Link} from "react-router-dom";
 
 const TestList = observer(() => {

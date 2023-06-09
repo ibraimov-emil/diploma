@@ -14,14 +14,10 @@ import {SocketContext} from "../../contexts/SocketContext";
 
 const Chat = () => {
   const socket = useContext(SocketContext);
-  // const socket = useRef();
   const {user} = useContext(AuthContext)
   console.log(user.User.id)
 
   // const [chats, setChat] = useState([])
-
-
-  const [onlineUsers, setOnlineUsers] = useState([]);
   const [currentChat, setCurrentChat] = useState(null);
   const [sendMessage, setSendMessage] = useState(null);
   const [receivedMessage, setReceivedMessage] = useState(null);
@@ -31,13 +27,10 @@ const Chat = () => {
 
   console.log(chats)
   // Connect to Socket.io
-  // useEffect(() => {
-  //   // socket.current = io("ws://localhost:5000");
-  //   socket.emit("new-user-add", user.id);
-  //   socket.on("get-users", (users) => {
-  //     setOnlineUsers(users);
-  //   });
-  // }, [user]);
+  useEffect(() => {
+    socket.current = io("ws://localhost:5000");
+    socket.emit("new-user-add", user.id);
+  }, [user]);
 
   // Send Message to socket server
   useEffect(() => {
@@ -48,21 +41,15 @@ const Chat = () => {
 
 
   // Get the message from socket server
-  // useEffect(() => {
-  //   socket.current.on("recieve-message", (data) => {
-  //     console.log(data)
-  //     setReceivedMessage(data);
-  //   }
-  //
-  //   );
-  // }, []);
+  useEffect(() => {
+    socket.current.on("recieve-message", (data) => {
+      console.log(data)
+      setReceivedMessage(data);
+    }
+  
+    );
+  }, []);
 
-
-  // const checkOnlineStatus = (chat) => {
-  //   const chatMember = chat.members.find((member) => member !== user._id);
-  //   const online = onlineUsers.find((user) => user.userId === chatMember);
-  //   return online ? true : false;
-  // };
 
   if (isLoading){
     return <div>Загрузка...</div>
@@ -89,8 +76,6 @@ const Chat = () => {
                 <Conversation key={chat.chat.id}
                   data={chat}
                   currentChat={chat.chat.name}
-                  // online={checkOnlineStatus(chat)}
-                  online={true}
                 />
               </div>
             ))}

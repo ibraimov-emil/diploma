@@ -3,16 +3,13 @@ import {useMutation, useQuery, useQueryClient} from "react-query";
 import {
     completeOneTask, createCostStage,
     createOneStage,
-    createOneTask, createPaymentStage,
-    deleteOneProject, deleteOneTask,
-    fetchProjects
+    createOneTask,deleteOneTask,
 } from "../../services/ProjectService";
 import {Card, Checkbox, Row, Col, Input, Divider} from 'antd';
 import { Button } from "@mui/material";
 import TextArea from "antd/es/input/TextArea";
 import StageTasks from "./StageTasks";
 import * as ProjectService from "../../services/ProjectService";
-import {Navigate} from "react-router-dom";
 import {observer} from "mobx-react-lite";
 import {AuthContext} from "../../contexts/authContext";
 const StageCard = ({ project }) => {

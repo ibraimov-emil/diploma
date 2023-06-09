@@ -1,12 +1,8 @@
 import React, {useContext} from 'react';
 import {Routes, Route, Navigate} from "react-router-dom";
-import {authRoutes, clientRoutes, employeeRoutes, publicRoutes} from "../routes";
-import {SHOP_ROUTE, FORM_ROUTE} from "../utils/consts";
+import {clientRoutes, employeeRoutes, publicRoutes} from "../routes";
 import {observer} from "mobx-react-lite";
-import {ContextProvider, useStateContext} from "../contexts/ContextProvider";
 import {AuthContext} from "../contexts/authContext";
-import employees from "../pages/dasboard/Employees";
-import Projects from "../pages/dasboard/Projects";
 
 
 const AppRouter = observer(() => {

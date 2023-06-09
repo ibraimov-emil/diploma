@@ -6,12 +6,11 @@ import $host from "../services";
 
 class UserStore{
 
-    user = {}
-    isAuth = false;
-    isClient = false;
-    isLoading = false;
-    constructor() {
 
+    constructor() {
+        this.user = {}
+        this.isAuth = false;
+        this.isClient = false;
         makeAutoObservable(this)
     }
 
@@ -25,10 +24,6 @@ class UserStore{
 
     setUser(user){
         this.user = user
-    }
-
-    setLoading(bool) {
-        this.isLoading = bool;
     }
 
     // get isAuth(){
@@ -81,7 +76,6 @@ class UserStore{
     }
 
     async checkAuth() {
-        this.setLoading(true);
         try {
             const response = await $host.get(`${process.env.REACT_APP_API_URL}auth/refresh`, {withCredentials: true})
             console.log(response.data)
@@ -95,8 +89,6 @@ class UserStore{
             this.setUser(response.data.user);
         } catch (e) {
             console.log(e.response?.data?.message);
-        } finally {
-            this.setLoading(false);
         }
     }
 }

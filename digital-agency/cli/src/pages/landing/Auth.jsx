@@ -1,11 +1,11 @@
 import React, {useContext, useState} from 'react';
 import {Button, Container, Form, Card, Row} from "react-bootstrap";
 import {NavLink, useLocation, useNavigate} from "react-router-dom";
-import {LOGIN_ROUTE, REGISTRATION_ROUTE, SHOP_ROUTE, FORM_ROUTE} from "../utils/consts";
+import {LOGIN_ROUTE, REGISTRATION_ROUTE, SHOP_ROUTE, FORM_ROUTE} from "../../utils/consts";
 import {observer} from "mobx-react-lite";
-import {ContextProvider, useStateContext} from "../contexts/ContextProvider";
-import {AuthContext} from "../contexts/authContext";
-import UserStore from "../store/UserStore";
+import {ContextProvider, useStateContext} from "../../contexts/ContextProvider";
+import {AuthContext} from "../../contexts/authContext";
+import UserStore from "../../store/UserStore";
 
 const Auth = observer(() => {
     const {user} = useContext(AuthContext)

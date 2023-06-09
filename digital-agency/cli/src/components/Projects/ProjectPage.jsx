@@ -1,14 +1,12 @@
 import React, {useContext, useEffect, useState} from 'react';
 import {Link, useParams} from "react-router-dom";
-import {fetchOneMyProject, fetchOneProject, fetchProjects} from "../../services/ProjectService";
+import {fetchOneMyProject, fetchOneProject} from "../../services/ProjectService";
 import {Descriptions} from "antd";
 import {Header} from "../Dashboard";
-import ProjectList from "./ProjectList";
 import {fetchOneUser} from "../../services/UserService";
 import {useQuery} from "react-query";
 import StageCard from "./StageCard";
 import {Button} from "@mui/material";
-import {fetchMyRequests, fetchRequests} from "../../services/RequestService";
 import {AuthContext} from "../../contexts/authContext";
 import {observer} from "mobx-react-lite";
 
