@@ -1,15 +1,12 @@
 import React, { useContext } from "react";
 import { MdOutlineCancel } from "react-icons/md";
-
 import { Button } from ".";
 import { userProfileData } from "../../data/dummy";
 import { useStateContext } from "../../contexts/ContextProvider";
-import avatar from "../../data/avatar.jpg";
+import avatar from "../../data/avatar123.jpg";
 import { observer } from "mobx-react-lite";
-import UserService from "../../services/UserService";
-import authService from "../../services/UserService";
 import { AuthContext } from "../../contexts/authContext";
-import { Link, NavLink, useNavigate } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 
 const UserProfile = () => {
   const navigate = useNavigate();

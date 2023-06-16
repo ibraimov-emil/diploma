@@ -39,6 +39,11 @@ export const deleteOneProject = async (id) => {
     return data
 }
 
+export const fetchPayedStages = async () => {
+    const {data} = await $host.get('stages')
+    return data
+}
+
 export const createOneStage = async (stage) => {
     const {data} = await $host.post('stages/', stage)
     return data

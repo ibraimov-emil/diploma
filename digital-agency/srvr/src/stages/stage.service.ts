@@ -6,7 +6,6 @@ import {UpdateServiceDto} from "../services/dto/update-service.dto";
 import {Stage} from "./stage.model";
 import {CreateStageDto} from "./dto/create-stage.dto";
 import {UpdateStageDto} from "./dto/update-stage.dto";
-import {Project} from "../projects/projects.model";
 import {PaymentService} from "./payment.service";
 import {ProjectsService} from "../projects/projects.service";
 
@@ -23,6 +22,10 @@ export class StagesService {
     async getAllStages(){
         const stages = await this.stageRepository.findAll({include: {all: true}});
         return stages;
+    }
+
+    async getPayedStages(){
+        return  await this.stageRepository.findAll({where: {paymentStatus: 'succeeded'}, include: {all: true}});
     }
 
     async findOneById(id: number): Promise<Stage> {
@@ -59,10 +62,6 @@ export class StagesService {
         return dto;
     }
 
-    async getById(id: number) {
-        return this.stageRepository.findByPk(id);
-    }
-
     async deleteStageById(id: number): Promise<{ message: string }> {
         const stage = await this.stageRepository.findByPk(id);
         if (!stage) {
@@ -73,7 +72,6 @@ export class StagesService {
     }
 
     async createPayment(stageId: number, client) {
-        console.log(client)
         if (!client) {
             throw new NotFoundException(`Оплачивать может только клиент`);
         }
@@ -94,7 +92,7 @@ export class StagesService {
 
         const payment = await this.paymentService.createPayment(stage);
         await this.stageRepository.update({...stage, paymentId: payment.paymentId, paymentLink: payment.paymentLink}, {where: {id: stageId}})
-        return payment;
+            return payment;
     }
 
     async capturePayment(paymentId: string): Promise<void> {
@@ -110,7 +108,6 @@ export class StagesService {
         const stage = await this.stageRepository.findOne({where: {paymentId: notification.object.id}, include: {all: true}});
         if (!stage){
             throw new HttpException('"Этап не найден"', HttpStatus.NOT_FOUND);
-            // throw new Error('Этап не найден');
         }
         await this.updateStage(stage.id, {...stage, paymentStatus: notification.object.status.toString()})
     }

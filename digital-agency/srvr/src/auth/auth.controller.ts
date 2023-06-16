@@ -52,12 +52,4 @@ export class AuthController {
         // console.log(refreshToken)
         return this.authService.refreshTokens(userId, refreshToken);
     }
-
-    // @ApiOperation({summary: 'Проверка'})
-    // @ApiResponse({status: 200})
-    //     @UseGuards(JwtAuthGuard)
-    // @Get('/check')
-    // check(@Body() context: ExecutionContext) {
-    //     return this.authService.check()
-    // }
 }

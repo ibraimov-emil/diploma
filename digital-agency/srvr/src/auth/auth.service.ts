@@ -203,9 +203,4 @@ export class AuthService {
     await this.updateRefreshToken(user.id, tokens.refreshToken);
     return { ...tokens, user };
   }
-
-  // async check() {
-  //     // const user = await this.validateUser(userDto)
-  //     // return this.generateToken(user)
-  // }
 }

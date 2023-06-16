@@ -71,6 +71,7 @@ export class RequestsService {
 
     async deleteRequestById(id: number): Promise<{ message: string }> {
         const request = await this.requestRepository.findByPk(id);
+        console.log(request)
         if (!request) {
             throw new Error('Заявка не найдена');
         }
