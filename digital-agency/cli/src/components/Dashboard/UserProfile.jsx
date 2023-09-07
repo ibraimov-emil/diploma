@@ -7,7 +7,7 @@ import avatar from "../../data/avatar123.jpg";
 import { observer } from "mobx-react-lite";
 import { AuthContext } from "../../contexts/authContext";
 import { NavLink, useNavigate } from "react-router-dom";
-
+  
 const UserProfile = () => {
   const navigate = useNavigate();
   const { user } = useContext(AuthContext);
