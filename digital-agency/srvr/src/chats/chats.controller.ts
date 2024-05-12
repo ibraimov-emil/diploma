@@ -58,7 +58,6 @@ export class ChatController {
     @UseGuards(AccessTokenGuard)
     @Get()
     getUserChats(@AuthUser() user: User) {
-        console.log(user)
         return this.chatService.getUserChats(user.id);
     }
 

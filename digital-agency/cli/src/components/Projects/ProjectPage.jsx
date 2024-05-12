@@ -19,8 +19,10 @@ const ProjectPage = () => {
     const [userData, setUser] = useState({info: []})
 
     useEffect(() => {
-        if (projectData && projectData.client) {
+        if (projectData && projectData.client && !user.isClient) {
             fetchOneUser(projectData.client.userId).then(data => setUser(data))
+        } else {
+            setUser(user.user)
         }
     }, [projectData]);
 
@@ -33,29 +35,32 @@ const ProjectPage = () => {
     }
 
     return (
-    <div className="m-2 md:m-10 mt-24 p-2 md:p-10 bg-white rounded-3xl">
-        <Header category="Страница" title={projectData.name} />
-        {!user.isClient &&
-        <Link to={`/projects/edit/` + id}>
-            <Button className='bottom-4' size="small" color="primary">
-                Редактировать
-            </Button>
-        </Link>
-        }
-        <Descriptions className='max-w-[1240px]' title='Описание проекта'>
-            <Descriptions.Item label="Клиент">{user.User.name} {user.User.surname}</Descriptions.Item>
-            <Descriptions.Item label="Телефон">{user.User.phone}</Descriptions.Item>
-            <Descriptions.Item label="Статус">{projectData.status.name}</Descriptions.Item>
-            <Descriptions.Item label="Email">{user.User.email}</Descriptions.Item>
-            <Descriptions.Item label="Услуга">
-                {projectData.service.name}
-            </Descriptions.Item>
-            <Descriptions.Item label="Описание">
-                {projectData.description}
-            </Descriptions.Item>
-        </Descriptions>
-        <StageCard project={projectData} />
-    </div>
+        <div className="m-2 md:m-10 mt-24 p-2 md:p-10 bg-white rounded-3xl">
+
+            <div className="flex justify-between items-center mb-4">
+                <Header title={projectData.name}/>
+                {!user.isClient &&
+                    <Link to={`/projects/edit/` + id}>
+                        <Button className='bottom-4' size="small" color="primary">
+                            Редактировать
+                        </Button>
+                    </Link>
+                }
+            </div>
+            <Descriptions className='max-w-[1240px]' title='Описание проекта'>
+                <Descriptions.Item label="Клиент">{userData.name} {userData.surname}</Descriptions.Item>
+                <Descriptions.Item label="Телефон">{userData.phone}</Descriptions.Item>
+                <Descriptions.Item label="Статус">{projectData.status.name}</Descriptions.Item>
+                <Descriptions.Item label="Email">{userData.email}</Descriptions.Item>
+                <Descriptions.Item label="Услуга">
+                    {projectData.service.name}
+                </Descriptions.Item>
+                <Descriptions.Item label="Описание">
+                    {projectData.description}
+                </Descriptions.Item>
+            </Descriptions>
+            <StageCard project={projectData}/>
+        </div>
     );
 };
 

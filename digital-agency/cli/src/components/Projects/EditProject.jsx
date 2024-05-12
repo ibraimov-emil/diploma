@@ -34,13 +34,11 @@ const EditProject = () => {
   const onFinish = async (values) => {
     setLoading(true);
     try {
-      console.log(values)
       updateProjectMutation.mutate({id: id, requestData: values});
       message.success('Проект успешно обновлён');
-      navigate('/projects');
+      navigate(`/projects/${request.id}`);
     } catch (error) {
-      console.error('Error:', error);
-      message.error('Ошбика обновления проекта');
+      message.error('Ошибка обновления проекта');
     } finally {
       setLoading(false);
     }
@@ -49,14 +47,20 @@ const EditProject = () => {
   if (isLoading) {
     return <>Loading</>
   }
-  console.log(request)
 
   return (
       <div className="m-2 md:m-10 mt-24 p-2 md:p-10 bg-white rounded-3xl">
-        <Header category="Страница" title="Редактировать проект" />
+        <Header title="Редактировать проект" />
       <div className="flex justify-between items-center mb-4">
       </div>
       <Form layout="vertical" onFinish={onFinish} initialValues={request}>
+        <Form.Item
+          name="name"
+          label="name"
+          rules={[{ required: true, message: 'Please enter the description' }]}
+        >
+          <Input rows={4} />
+        </Form.Item>
         <Form.Item
           name="description"
           label="Description"

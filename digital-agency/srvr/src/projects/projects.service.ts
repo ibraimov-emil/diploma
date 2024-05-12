@@ -1,7 +1,7 @@
 import {HttpException, HttpStatus, Injectable, NotFoundException} from '@nestjs/common';
 import {InjectModel} from "@nestjs/sequelize";
-import { Project } from './projects.model';
-import { CreateProjectDto } from './dto/create-project.dto';
+import {Project} from './projects.model';
+import {CreateProjectDto} from './dto/create-project.dto';
 import {UpdateProjectDto} from "./dto/update-project.dto";
 import {ChatParticipant} from "../chats/chat-participants.model";
 import {Chat} from "../chats/chats.model";
@@ -9,7 +9,8 @@ import {Chat} from "../chats/chats.model";
 @Injectable()//провайдер для внедрения в controller
 export class ProjectsService {
 
-    constructor(@InjectModel(Project) private readonly projectsRepository: typeof Project) {}
+    constructor(@InjectModel(Project) private readonly projectsRepository: typeof Project) {
+    }
 
     async createProject(dto: CreateProjectDto) {
         const project = await this.projectsRepository.create(dto);
@@ -17,14 +18,17 @@ export class ProjectsService {
     }
 
     async getAllProjects() {
-        const projects = await this.projectsRepository.findAll({include: {all: true}});
+        const projects = await this.projectsRepository.findAll({
+            include: {all: true},
+            order: [['createdAt', 'DESC']] // Сортировка по полю createdAt в порядке убывания
+        });
         return projects;
     }
 
-    async getMyProjects(clientId: number){
-        if (clientId){
-            const projects =  this.projectsRepository.findAll({
-                where: { clientId },
+    async getMyProjects(clientId: number) {
+        if (clientId) {
+            const projects = this.projectsRepository.findAll({
+                where: {clientId},
                 include: {all: true}
             });
             console.log(projects)
@@ -70,7 +74,7 @@ export class ProjectsService {
 
     async updateProject(id: number, dto: UpdateProjectDto) {
         const project = await this.projectsRepository.findByPk(id);
-        if (!project){
+        if (!project) {
             throw new HttpException('Проект не найден', HttpStatus.NOT_FOUND);
         }
         await this.projectsRepository.update(dto, {where: {id}})
@@ -87,6 +91,6 @@ export class ProjectsService {
             throw new Error('Проект не найден');
         }
         await project.destroy();
-        return { message: `Проект успешно удален` };
+        return {message: `Проект успешно удален`};
     }
 }

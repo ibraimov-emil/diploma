@@ -3,11 +3,7 @@ import {observer} from "mobx-react-lite";
 import { Table, Modal } from 'antd';
 import { Button } from '@mui/material';
 import { PlusOutlined, EditOutlined, DeleteOutlined } from '@ant-design/icons';
-import {Row} from "react-bootstrap";
 import {useQuery} from "react-query";
-
-import {IconButton, List, ListItem, ListItemSecondaryAction, ListItemText} from "@mui/material";
-import CommentIcon from '@mui/icons-material/Comment';
 import {fetchRequest} from "../../services/RequestService";
 import {Link} from "react-router-dom";
 

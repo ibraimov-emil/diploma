@@ -20,11 +20,6 @@ const ProjectList = observer(() => {
     // const {device} = useContext(ContextProvider)
     return (
         <>
-        {!user.isClient &&
-        <Link to={`/projects/add`}>
-            <Button>Создать проект</Button>
-        </Link>
-        }
         <Row className="lg:flex md:flex-wrap gap-24">
             {data && data.map(project =>
                 <ProjectItem key={project.id} project={project} />

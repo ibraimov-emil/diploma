@@ -6,7 +6,6 @@ import $host from "../services";
 
 class UserStore{
 
-
     constructor() {
         this.user = {}
         this.isAuth = false;

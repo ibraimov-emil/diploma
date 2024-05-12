@@ -17,7 +17,10 @@ export class RequestsService {
     }
 
     async getAllRequests() {
-        const requests = await this.requestRepository.findAll({include: {all: true}});
+        const requests = await this.requestRepository.findAll({
+            include: {all: true},
+            order: [['createdAt', 'DESC']] // Сортировка по полю createdAt в порядке убывания
+        });
         return requests;
     }
 

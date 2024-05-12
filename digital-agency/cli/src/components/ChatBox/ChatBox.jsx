@@ -5,6 +5,8 @@ import {addMessage, getMessages} from "../../services/ChatService";
 import {observer} from "mobx-react-lite";
 import { Input, } from 'antd';
 import MessageItem from "./MessageItem";
+import { SendOutlined } from '@ant-design/icons';
+import {Button} from "@mui/material";
 
 const ChatBox = ({ chat, currentUser, receivedMessage }) => {
   const [messages, setMessages] = useState([]);
@@ -20,7 +22,6 @@ const ChatBox = ({ chat, currentUser, receivedMessage }) => {
     const fetchMessages = async () => {
       try {
         const { data } = await getMessages(chat.chatId);
-        console.log(data)
         setMessages(data);
       } catch (error) {
         console.log(error);
@@ -107,21 +108,17 @@ useEffect(()=> {
               ))}
             </div>
             {/* chat-sender */}
-            <div className="chat-sender">
-              <div onClick={() => imageRef.current.click()}>+</div>
+            <div className="flex h-auto">
+              {/*<div onClick={() => imageRef.current.click()}>+</div>*/}
               <Input.TextArea
                 value={newMessage}
+                rows={1}
+                size={'small'}
                 onChange={(e) => handleChange(e.target.value)}
               />
-              <div className="send-button button" onClick = {newMessage ? handleSend : ''}>Send</div>
-              <input
-                type="file"
-                name=""
-                id=""
-                style={{ display: "none" }}
-                ref={imageRef}
-              />
-            </div>{" "}
+              <Button className="" onClick = {newMessage ? handleSend : ''}><SendOutlined /></Button>
+
+            </div>
           </>
         ) : (
           <span className="chatbox-empty-message">
