@@ -32,4 +32,9 @@ export class ClientsService {
         const clients = await this.clientRepository.findAll({include: {all: true}});
         return clients;
     }
+
+    async getClientsCount(): Promise<number> {
+        const count = await this.clientRepository.count();
+        return count;
+    }
 }

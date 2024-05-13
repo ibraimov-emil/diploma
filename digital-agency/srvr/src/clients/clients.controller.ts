@@ -40,4 +40,14 @@ export class ClientsController {
     update() {
         return this.ClientsService.getAllClients();
     }
+
+    @ApiOperation({summary: 'Получить количество клиентов'})
+    @ApiResponse({status: 200, type: Number})
+    @Roles("ADMIN")
+    @UseGuards(RolesGuard)
+    @Get('count')
+    async getCount() {
+        const count = await this.ClientsService.getClientsCount();
+        return { count };
+    }
 }

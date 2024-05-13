@@ -34,6 +34,7 @@ import {TasksModule} from "./tasks/tasks,.module";
 import {Task} from "./tasks/tasks.model";
 import {EmployeesTasks} from "./tasks/employees-tasks.model";
 import {Payment} from "./stages/payment.model";
+import {StatsModule} from "./stats/stats,.module";
 
 @Module({
     controllers: [],
@@ -67,6 +68,7 @@ import {Payment} from "./stages/payment.model";
         ProjectsModule,
         StagesModule,
         ChatsModule,
+        StatsModule,
         TasksModule
     ]
 })
@@ -77,7 +79,6 @@ export class AppModule implements NestModule {
             .exclude(
                 { path: 'services', method: RequestMethod.ALL },
                 'auth/(.*)'
-
             )
             .forRoutes('*');
     }
