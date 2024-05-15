@@ -9,7 +9,7 @@ const { Meta } = Card;
 
 const EmployeesProject = () => {
     const { data: employees, isLoading, isError } = useQuery('employees', async () => {
-        const response = await axios.get('/api/employees'); // Замените на ваш эндпоинт для получения данных сотрудников
+        const response = await axios.get('employees/'); // Замените на ваш эндпоинт для получения данных сотрудников
         return response.data;
     });
 

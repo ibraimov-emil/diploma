@@ -1,5 +1,5 @@
 import {ApiProperty} from "@nestjs/swagger";
-import {IsEmail, IsNumber, IsOptional, IsString, Length} from "class-validator";
+import {IsArray, IsEmail, IsNumber, IsOptional, IsString, Length} from "class-validator";
 
 export class CreateProjectDto {
 
@@ -28,4 +28,9 @@ export class CreateProjectDto {
     @ApiProperty({example: 'Разработка веб-приложения на NestJS + React', description: 'Описание'})
     @IsString({message: 'Должно быть строкой'})
     readonly description: string;
+
+    @ApiProperty({ example: [1, 2, 3], description: 'Массив ID сотрудников' })
+    @IsArray()
+    @IsNumber({}, { each: true, message: 'Каждый элемент массива должен быть числом' })
+    readonly employeesIds: number[];
 }

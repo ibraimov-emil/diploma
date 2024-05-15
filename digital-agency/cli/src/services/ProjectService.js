@@ -65,6 +65,17 @@ export const createOneTask = async (task) => {
     return data
 }
 
+export const fetchTask = async (id) => {
+    const {data} = await $host.get(`tasks/${id}`)
+    return data
+}
+
+export const updateTask = async (id, updateTaskArgs) => {
+    console.log(updateTaskArgs)
+    const {data} = await $host.put('tasks/' + id, updateTaskArgs)
+    return data
+}
+
 export const completeOneTask = async (check) => {
     const {data} = await $host.put('tasks/' + check.taskId, {complete: check.complete})
     return data

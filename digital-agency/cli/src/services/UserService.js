@@ -6,6 +6,11 @@ export default class UserService {
 }
 }
 
+export const fetchEmployees = async (id) => {
+    const {data} = await $host.get('employees/')
+    return data
+}
+
 export const fetchOneUser = async (id) => {
     const {data} = await $host.get('users/' + id)
     return data

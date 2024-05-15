@@ -1,5 +1,5 @@
-import {ApiProperty} from "@nestjs/swagger";
-import {IsDate, IsEmail, IsNumber, IsString, Length} from "class-validator";
+import {ApiProperty, ApiPropertyOptional} from "@nestjs/swagger";
+import {IsArray, IsDate, IsEmail, IsNumber, IsOptional, IsString, Length} from "class-validator";
 
 export class CreateTaskDto {
 
@@ -15,7 +15,18 @@ export class CreateTaskDto {
     @IsString({message: 'Должно быть строкой'})
     readonly description: string;
 
-    // @ApiProperty({example: '05.06.2023', description: 'Описание'})
-    // @IsDate({message: 'Должно быть датой'})
-    // readonly deadline: Date;
+    @ApiPropertyOptional({description: 'Дедлайн'})
+    @IsOptional()
+    @IsString({message: 'Должно быть датой'})
+    readonly deadline: string;
+
+    @ApiProperty({example: '1', description: 'ID статуса'})
+    @IsOptional()
+    @IsNumber({}, { message: 'statusId должен быть числом' })
+    readonly statusId?: number;
+
+    @ApiProperty({ example: [1, 2, 3], description: 'Массив ID сотрудников' })
+    @IsArray()
+    @IsNumber({}, { each: true, message: 'Каждый элемент массива должен быть числом' })
+    readonly employeesIds: number[];
 }

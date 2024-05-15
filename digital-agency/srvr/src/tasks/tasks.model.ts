@@ -3,12 +3,13 @@ import {ApiProperty} from "@nestjs/swagger";
 import {Stage} from "../stages/stage.model";
 import {Employee} from "../employees/employees.model";
 import { EmployeesTasks } from "./employees-tasks.model";
+import {Status} from "../statuses/statuses.model";
 
 interface TaskCreationAttrs {
     name: string;
     description: string;
     stageId: number;
-    deadline: Date;
+    deadline: string;
 }
 
 @Table({tableName: 'tasks'})
@@ -29,9 +30,9 @@ export class Task extends Model<Task, TaskCreationAttrs> {
     @Column({ type: DataType.BOOLEAN, defaultValue: false})
     complete: boolean;
 
-    @ApiProperty({example: '05.06.2023', description: 'Крайний срок'})
-    @Column({ type: DataType.DATE, allowNull: true})
-    deadline: Date;
+    @ForeignKey(() => Status)
+    @Column({type: DataType.INTEGER})
+    statusId: number;
 
     @ForeignKey(() => Stage)
     @Column({type: DataType.INTEGER})
