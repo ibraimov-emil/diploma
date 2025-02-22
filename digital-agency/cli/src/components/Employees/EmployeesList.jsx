@@ -2,16 +2,14 @@ import React, {useContext} from 'react';
 import {observer} from "mobx-react-lite";
 import {Row} from "react-bootstrap";
 import {useQuery} from "react-query";
-import {fetchClients} from "../../services/ClientService";
-import {Button, IconButton, List, ListItem, ListItemSecondaryAction, ListItemText} from "@mui/material";
-import CommentIcon from '@mui/icons-material/Comment';
 import {Space, Table} from "antd";
 import {Link} from "react-router-dom";
 import {DeleteOutlined, EditOutlined, EyeOutlined} from "@ant-design/icons";
 import {AuthContext} from "../../contexts/authContext";
+import {fetchEmployees} from "../../services/EmployeeService";
 
-const ClientsList = observer(() => {
-    const {data: clients, isLoading, isError} = useQuery('clients', fetchClients)
+const EmployeesList = observer(() => {
+    const {data: employees, isLoading, isError} = useQuery('employees', fetchEmployees)
     const {user} = useContext(AuthContext)
     // console.log(data)
     // const {device} = useContext(ContextProvider)
@@ -53,7 +51,7 @@ const ClientsList = observer(() => {
         },
         {
             key: "5",
-            title: "Заявки клиента",
+            title: "Задачи",
             render: (record) => {
                 return (
                     <Space size="middle">
@@ -66,7 +64,7 @@ const ClientsList = observer(() => {
         },
         {
             key: "5",
-            title: "Проекты клиента",
+            title: "Проекты",
             render: (record) => {
                 return (
                     <Space size="middle">
@@ -96,7 +94,7 @@ const ClientsList = observer(() => {
                                 {/*/>*/}
                             </>
                         }
-                        <Link to={`/requests/view/` + record.id}>
+                        <Link to={`/profile/` + record.userId}>
                             <EyeOutlined />
                         </Link>
                     </Space>
@@ -138,7 +136,7 @@ const ClientsList = observer(() => {
             <div className="App">
                 <header className="App-header">
                     <Table columns={columns}
-                           dataSource={clients}
+                           dataSource={employees}
                            loading={isLoading}
                            rowKey="id"
                            scroll={{ x: true }}
@@ -149,4 +147,4 @@ const ClientsList = observer(() => {
     );
 });
 
-export default ClientsList;
+export default EmployeesList;

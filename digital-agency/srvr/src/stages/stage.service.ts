@@ -8,6 +8,8 @@ import {CreateStageDto} from "./dto/create-stage.dto";
 import {UpdateStageDto} from "./dto/update-stage.dto";
 import {PaymentService} from "./payment.service";
 import {ProjectsService} from "../projects/projects.service";
+import {Task} from "../tasks/tasks.model";
+import {Status} from "../statuses/statuses.model";
 
 @Injectable()//провайдер для внедрения в controller
 export class StagesService {
@@ -28,14 +30,38 @@ export class StagesService {
         return  await this.stageRepository.findAll({where: {paymentStatus: 'succeeded'}, include: {all: true}});
     }
 
-    async findOneById(id: number): Promise<Stage> {
-        console.log('stage')
-        const stage = await this.stageRepository.findOne({where: {id}, include: {all: true}});
+    async findOneById(id: number): Promise<any> {
+        console.log('stage');
+        const stage = await this.stageRepository.findOne({
+            where: { id },
+            include: [
+                {
+                    model: Task,
+                    include: [{ model: Status, attributes: ['name'] }],
+                },
+            ],
+        });
+
+        const colors = {
+            'В процессе': 'blue',
+            'Завершён': 'green',
+            'На рассмотрении': 'yellow',
+        };
 
         if (!stage) {
             throw new NotFoundException(`Stage with id ${id} not found`);
         }
-        return stage;
+
+        // Преобразование данных для добавления statusValue и statusColor
+        const transformedStage = {
+            ...stage.toJSON(),
+            tasks: stage.tasks.map(task => ({
+                ...task.toJSON(),
+                statusColor: task.status ? colors[task.status.name] : null,
+            })),
+        };
+
+        return transformedStage;
     }
 
     async findOneMyById(id: number, clientId: number): Promise<Stage> {

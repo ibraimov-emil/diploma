@@ -26,13 +26,16 @@ export class Task extends Model<Task, TaskCreationAttrs> {
     @Column({ type: DataType.STRING, allowNull: true})
     description: string;
 
-    @ApiProperty({example: 'Необходимо сделать ТЗ', description: 'Описание'})
-    @Column({ type: DataType.BOOLEAN, defaultValue: false})
-    complete: boolean;
+    @ApiProperty({example: '2024-05-15T20:44:53.973Z', description: 'Дедлайн'})
+    @Column({ type: DataType.STRING, allowNull: true})
+    deadline: string;
 
     @ForeignKey(() => Status)
     @Column({type: DataType.INTEGER})
     statusId: number;
+
+    @BelongsTo(() => Status)
+    status: Status;
 
     @ForeignKey(() => Stage)
     @Column({type: DataType.INTEGER})

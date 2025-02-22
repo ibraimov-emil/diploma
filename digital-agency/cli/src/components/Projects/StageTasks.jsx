@@ -8,7 +8,7 @@ import {
     fetchMyTasksStage,
     fetchTasksStage,
 } from "../../services/ProjectService";
-import {Checkbox} from "antd";
+import {Checkbox, List, Skeleton} from "antd";
 import {Button} from "@mui/material";
 import TextArea from "antd/es/input/TextArea";
 import {AiFillDelete} from "react-icons/ai";
@@ -17,6 +17,8 @@ import {observer} from "mobx-react-lite";
 import TaskForm from "./TaskForm";
 import CustomModal from "../Commons/CustomModal";
 import {EyeOutlined} from "@ant-design/icons";
+import InfiniteScroll from "react-infinite-scroll-component";
+import { Badge } from 'antd';
 // import {Col} from "react-bootstrap";
 const StageTasks = ({
                         stageId,
@@ -60,39 +62,6 @@ const StageTasks = ({
 
     return (
         <>
-            {tasks.map((task) => (
-                <div key={task.id} className="flex w-full justify-beetwen mb-2">
-                    <div>
-                        <Checkbox
-                            checked={task.complete}
-                            onChange={() =>
-                                handleTaskToggle({taskId: task.id, complete: !task.complete})
-                            }
-                            className="mr-2"
-                        />
-                        <span>{task.name}</span>
-                    </div>
-                    <div className={`flex gap-[10px] ml-auto items-center`}>
-                        <CustomModal
-                            className={`cursor-pointer`}
-                            title={'Добавить задачу'}
-                            content={<TaskForm stageId={stageId} id={task.id}/>}
-                        >
-                            <EyeOutlined
-                                className={`cursor-pointer`}
-                            />
-                        </CustomModal>
-                        {!user.isClient &&
-                            <AiFillDelete
-                                className={`cursor-pointer`}
-                                onClick={() => handleDeleteTask(task.id)}
-                                type="link"
-                                danger
-                            />
-                        }
-                    </div>
-                </div>
-            ))}
             {!user.isClient && (
                 <>
                     <CustomModal
@@ -108,6 +77,73 @@ const StageTasks = ({
                     </CustomModal>
                 </>
             )}
+            <InfiniteScroll
+                className={`!overflow-visible`}
+                dataLength={tasks.length}
+                loader={<Skeleton avatar paragraph={{rows: 1}} active/>}
+                // endMessage={<Divider plain>It is all, nothing more 🤐</Divider>}
+                scrollableTarget="scrollableDiv"
+            >
+                <List
+                    dataSource={tasks}
+                    renderItem={(item) => (
+                        <Badge.Ribbon className={`-m-1`} text={item.status?.name} color={item.statusColor}>
+                            <List.Item divider={false} key={item.email}>
+                                <List.Item.Meta
+                                    // avatar={<Avatar src={item.picture.large}/>}
+                                    title={<a href="https://ant.design">{item.name}</a>}
+                                    description={item.description}
+                                />
+                                <div className={`flex gap-[10px] items-center`}>
+                                    <CustomModal
+                                        className={`cursor-pointer`}
+                                        title={'Редактировать задачу'}
+                                        content={<TaskForm stageId={stageId} id={item.id}/>}
+                                    >
+                                        <EyeOutlined
+                                            className={`cursor-pointer`}
+                                        />
+                                    </CustomModal>
+                                    {!user.isClient &&
+                                        <AiFillDelete
+                                            className={`cursor-pointer`}
+                                            onClick={() => handleDeleteTask(item.id)}
+                                            type="link"
+                                            danger
+                                        />
+                                    }
+                                </div>
+                            </List.Item>
+                        </Badge.Ribbon>
+                    )}
+                />
+            </InfiniteScroll>
+            {/*{tasks.map((task) => (*/}
+            {/*    <button key={task.id} className="flex w-full justify-beetwen text-start mb-2 border rounded-[10px] p-4 cursor-pointer hover:bg-light-gray active:bg-main-bg">*/}
+            {/*        <div>*/}
+            {/*            <span>{task.name}</span>*/}
+            {/*        </div>*/}
+            {/*        <div className={`flex gap-[10px] ml-auto items-center`}>*/}
+            {/*            <CustomModal*/}
+            {/*                className={`cursor-pointer`}*/}
+            {/*                title={'Редактировать задачу'}*/}
+            {/*                content={<TaskForm stageId={stageId} id={task.id}/>}*/}
+            {/*            >*/}
+            {/*                <EyeOutlined*/}
+            {/*                    className={`cursor-pointer`}*/}
+            {/*                />*/}
+            {/*            </CustomModal>*/}
+            {/*            {!user.isClient &&*/}
+            {/*                <AiFillDelete*/}
+            {/*                    className={`cursor-pointer`}*/}
+            {/*                    onClick={() => handleDeleteTask(task.id)}*/}
+            {/*                    type="link"*/}
+            {/*                    danger*/}
+            {/*                />*/}
+            {/*            }*/}
+            {/*        </div>*/}
+            {/*    </button>*/}
+            {/*))}*/}
         </>
 
         // <Card title={'stage.name'}>

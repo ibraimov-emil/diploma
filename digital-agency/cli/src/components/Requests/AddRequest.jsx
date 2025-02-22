@@ -40,7 +40,7 @@ const AddRequest = () => {
 
   return (
     <div className="m-2 md:m-10 mt-24 p-2 md:p-10 bg-white rounded-3xl">
-      <Header category="Страница" title="Добавить заявку" />
+      <Header title="Добавить заявку" />
 
       <Form layout="vertical" onFinish={onFinish}>
         <Form.Item

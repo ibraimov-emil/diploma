@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ChangeListManager">
+    <list default="true" id="1cdb8042-1c59-4129-b567-204f402987ec" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/cli/src/components/Employees/ClientItem.jsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/cli/src/components/Employees/EmployeesList.jsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/cli/src/components/Projects/ProfilePage.jsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/cli/src/services/EmployeeService.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/cli/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/cli/package-lock.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/cli/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/cli/package.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/cli/src/components/Clients/ClientsList.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/cli/src/components/Clients/ClientsList.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/cli/src/components/Commons/CustomModal.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/cli/src/components/Commons/CustomModal.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/cli/src/components/Dashboard/Charts/Stacked.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/cli/src/components/Dashboard/Charts/Stacked.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/cli/src/components/Projects/EditProject.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/cli/src/components/Projects/EditProject.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/cli/src/components/Projects/ProjectPage.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/cli/src/components/Projects/ProjectPage.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/cli/src/components/Projects/StageCard.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/cli/src/components/Projects/StageCard.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/cli/src/components/Projects/StageTasks.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/cli/src/components/Projects/StageTasks.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/cli/src/components/Projects/TaskForm.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/cli/src/components/Projects/TaskForm.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/cli/src/components/Requests/AddRequest.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/cli/src/components/Requests/AddRequest.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/cli/src/components/Requests/EditRequest.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/cli/src/components/Requests/EditRequest.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/cli/src/pages/Chat/Chat.css" beforeDir="false" afterPath="$PROJECT_DIR$/cli/src/pages/Chat/Chat.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/cli/src/pages/Chat/Chat.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/cli/src/pages/Chat/Chat.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/cli/src/pages/dasboard/Clients.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/cli/src/pages/dasboard/Clients.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/cli/src/pages/dasboard/Ecommerce.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/cli/src/pages/dasboard/Ecommerce.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/cli/src/pages/dasboard/Employees.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/cli/src/pages/dasboard/Employees.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/cli/src/pages/dasboard/Orders.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/cli/src/pages/dasboard/Orders.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/cli/src/pages/dasboard/Requests.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/cli/src/pages/dasboard/Requests.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/cli/src/routes.js" beforeDir="false" afterPath="$PROJECT_DIR$/cli/src/routes.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/cli/src/services/UserService.js" beforeDir="false" afterPath="$PROJECT_DIR$/cli/src/services/UserService.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/srvr/src/employees/employees.service.ts" beforeDir="false" afterPath="$PROJECT_DIR$/srvr/src/employees/employees.service.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/srvr/src/stages/stage.service.ts" beforeDir="false" afterPath="$PROJECT_DIR$/srvr/src/stages/stage.service.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/srvr/src/stats/stats,.module.ts" beforeDir="false" afterPath="$PROJECT_DIR$/srvr/src/stats/stats,.module.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/srvr/src/stats/stats.d.ts" beforeDir="false" afterPath="$PROJECT_DIR$/srvr/src/stats/stats.d.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/srvr/src/stats/stats.service.ts" beforeDir="false" afterPath="$PROJECT_DIR$/srvr/src/stats/stats.service.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/srvr/src/tasks/tasks.model.ts" beforeDir="false" afterPath="$PROJECT_DIR$/srvr/src/tasks/tasks.model.ts" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/.." />
+  </component>
+  <component name="ProjectColorInfo"><![CDATA[{
+  "associatedIndex": 8
+}]]></component>
+  <component name="ProjectId" id="2tOK3pECUFGqt3ivO7L68x7QrlD" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "git-widget-placeholder": "main",
+    "nodejs_package_manager_path": "npm",
+    "vue.rearranger.settings.migration": "true"
+  }
+}]]></component>
+  <component name="SharedIndexes">
+    <attachedChunks>
+      <set>
+        <option value="bundled-js-predefined-1d06a55b98c1-2e7d6887c066-JavaScript-WS-241.15989.47" />
+      </set>
+    </attachedChunks>
+  </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="1cdb8042-1c59-4129-b567-204f402987ec" name="Changes" comment="" />
+      <created>1740217486270</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1740217486270</updated>
+      <workItem from="1740217487249" duration="9000" />
+    </task>
+    <servers />
+  </component>
+</project>

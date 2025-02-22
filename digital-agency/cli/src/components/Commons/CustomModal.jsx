@@ -15,7 +15,6 @@ const CustomModal = ({children, content, title}) => {
                 title={title}
                 centered
                 open={open}
-                onOk={() => setOpen(false)}
                 onCancel={() => setOpen(false)}
             >
                 {content}

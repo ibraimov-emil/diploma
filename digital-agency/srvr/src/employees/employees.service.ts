@@ -38,7 +38,6 @@ export class EmployeesService {
         const employees = await this.employeeRepository.findAll({
             include: {
                 model: User,
-                attributes: ['name', 'surname'], // Выбираем только атрибут "name" пользователя
             },
         });
         return employees;

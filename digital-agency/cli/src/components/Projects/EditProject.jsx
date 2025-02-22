@@ -29,7 +29,7 @@ const EditProject = () => {
     const {data: employees, isEmployeesLoading, isError: isEmployeesError} = useQuery('employees', fetchEmployees)
 
     const updateProjectMutation = useMutation(data => updateProject(data),
-        {onSuccess: () => queryClient.invalidateQueries(["projects"])}
+        {onSuccess: () => queryClient.invalidateQueries(["project", id])}
     )
     // const updateRequest = useMutation((requestData) => axios.put(`/requests/${id}`, requestData));
 

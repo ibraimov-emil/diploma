@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react'
+import React, {useContext, useEffect, useState} from 'react'
 import {DatePicker, Form, Input, message, Modal, Select} from "antd";
 import {useNavigate} from "react-router-dom";
 import {useMutation, useQuery, useQueryClient} from "react-query";
@@ -8,11 +8,12 @@ import {createOneTask, fetchProject, fetchTask, updateProject, updateTask} from 
 import {Button} from "@mui/material";
 import {fetchEmployees} from "../../services/UserService";
 import dayjs from "dayjs";
+import {AuthContext} from "../../contexts/authContext";
 
 const {Option} = Select;
 
 const TaskForm = ({stageId, id, onClose}) => {
-    const navigate = useNavigate();
+    const {user} = useContext(AuthContext)
     const queryClient = useQueryClient()
     const [loading, setLoading] = useState(false);
     const [form] = Form.useForm();
@@ -43,7 +44,7 @@ const TaskForm = ({stageId, id, onClose}) => {
                 description: task.description,
                 employeesIds: task.employeesIds,
                 // employeesIds: task.employees.map(e => e.id),
-                // statusId: task.status.id,
+                statusId: task.statusId,
                 deadline: task.deadline ? dayjs(task.deadline) : null, // Преобразование строки в объект dayjs
             });
         }
@@ -66,7 +67,7 @@ const TaskForm = ({stageId, id, onClose}) => {
 
     return (
         <div className="m-2 p-2 bg-white rounded-3xl">
-            <Form layout="vertical" onFinish={onFinish} form={form}>
+            <Form disabled={user.isClient} layout="vertical" onFinish={onFinish} form={form}>
                 <Form.Item
                     name="name"
                     label="Название"
@@ -116,7 +117,7 @@ const TaskForm = ({stageId, id, onClose}) => {
                 </Form.Item>
                 <Form.Item>
                     <Button type="primary" htmlType="submit" loading={loading}>
-                        {id ? `Редактировать` : 'Создать'}
+                        Сохранить
                     </Button>
                 </Form.Item>
             </Form>

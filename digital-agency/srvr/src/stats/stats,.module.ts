@@ -18,12 +18,14 @@ import {RequestsModule} from "../requests/requests.module";
 import {Project} from "../projects/projects.model";
 import {StagesModule} from "../stages/stage.module";
 import {Stage} from "../stages/stage.model";
+import {TasksModule} from "../tasks/tasks,.module";
+import {Task} from "../tasks/tasks.model";
 
 @Module({
   controllers: [StatsController],
   providers: [StatsService],
   imports: [
-      SequelizeModule.forFeature([Status, Role, EmployeeRoles, User, Client, Employee, RequestTable, Project, Stage]),
+      SequelizeModule.forFeature([Status, Role, EmployeeRoles, User, Client, Employee, RequestTable, Project, Stage, Task]),
       forwardRef(() => ServicesModule),
       forwardRef(() => StatusesModule),
       forwardRef(() => ClientsModule),
@@ -31,6 +33,7 @@ import {Stage} from "../stages/stage.model";
       forwardRef(() => EmployeesModule),
       forwardRef(() => RequestsModule),
       forwardRef(() => StagesModule),
+      forwardRef(() => TasksModule),
   ],
     exports: [
         StatsService,

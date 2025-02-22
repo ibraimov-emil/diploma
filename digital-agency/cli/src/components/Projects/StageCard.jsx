@@ -100,7 +100,7 @@ const StageCard = ({project}) => {
                 </div>}
             <Row gutter={[16, 16]}>
                 {project.stages.map((stage) => (
-                    <Col key={stage.id} xs={24} sm={12} md={6}>
+                    <Col key={stage.id} xs={24} md={12} xxl={8}>
                         <Card className={`h-full rounded-[30px]`} title={stage.name}
                               extra={stage.cost ? `Стоимость: ${stage.cost} руб` : ''}>
                             <StageTasks

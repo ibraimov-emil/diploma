@@ -113,15 +113,17 @@
   border-radius: 1rem;
   padding: 1rem;
   height: auto;
-  min-height: 80vh;
-  overflow: scroll;
+  min-height: 65vh;
 }
 
 .Chat-list {
   display: flex;
   flex-direction: column;
   gap: 1rem;
+  height: calc(100vh - 200px); /* Adjust the height as needed */
+  overflow-y: auto; /* Enable vertical scrolling */
 }
+
 
 .Right-side-chat {
   display: flex;

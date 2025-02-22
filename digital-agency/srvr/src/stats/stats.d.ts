@@ -4,4 +4,7 @@ export type GetCounts = {
     project: number,
     payment: number,
     budget: number,
+    tasksProcessed: number,
+    tasksCompleted: number,
+    tasksСons: number,
 }

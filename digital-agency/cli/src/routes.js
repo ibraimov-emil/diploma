@@ -21,7 +21,6 @@ import Clients from "./pages/dasboard/Clients";
 import Chat from "./pages/Chat/Chat";
 import MyProfile from "./pages/MyProfile";
 import Requests from "./pages/dasboard/Requests";
-import TestList from "./components/Requests/test";
 import AddRequest from "./components/Requests/AddRequest";
 import ViewRequest from "./components/Requests/ViewRequest";
 import EditRequest from "./components/Requests/EditRequest";
@@ -29,6 +28,7 @@ import Landing from "./pages/landing/Landing";
 import AddProject from "./components/Projects/AddProject";
 import EditProject from "./components/Projects/EditProject";
 import EmployeesProject from "./components/Projects/EmployeesProject";
+import ProfilePage from "./components/Projects/ProfilePage";
 
 export const clientRoutes = [
   // dashboard
@@ -59,8 +59,8 @@ export const clientRoutes = [
   { path: "/calendar", Component: <Calendar /> },
 
   {
-    path: "client/:id",
-    Component: <ProjectPage />,
+    path: "/profile/:id",
+    Component: <ProfilePage />,
   },
 ];
 
@@ -98,8 +98,8 @@ export const employeeRoutes = [
   { path: "/calendar", Component: <Calendar /> },
 
   {
-    path: "/client/:id",
-    Component: <ProjectPage />,
+    path: "/profile/:id",
+    Component: <ProfilePage />,
   },
 ];
 

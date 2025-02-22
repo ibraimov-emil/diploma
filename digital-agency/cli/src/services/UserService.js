@@ -12,7 +12,7 @@ export const fetchEmployees = async (id) => {
 }
 
 export const fetchOneUser = async (id) => {
-    const {data} = await $host.get('users/' + id)
+    const {data} = await $host.get(`users/${id}`)
     return data
 }
 
