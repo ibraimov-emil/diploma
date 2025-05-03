@@ -31,6 +31,9 @@ export class Message extends Model<Message, MessageCreationAttrs> {
     @BelongsTo(() => Chat)
     chat: Chat;
 
-    @BelongsTo(() => User)
+    @BelongsTo(() => User, {
+        foreignKey: 'senderId',
+        as: 'user'
+    })
     user: User;
 }

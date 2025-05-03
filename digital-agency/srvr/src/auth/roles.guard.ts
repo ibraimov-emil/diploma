@@ -44,9 +44,15 @@ export class RolesGuard implements CanActivate {
             const user = this.jwtService.verify(token);
 
             req.user = user;
-            const employeeId = user.employee.id
+            
+            // Check if user has employee property and it's not null
+            if (!user.employee) {
+                return false;
+            }
+            
+            const employeeId = user.employee.id;
             if(!employeeId){
-                return false
+                return false;
             }
 
             const employee = await this.employeeService.findOneById(user.employee.id);

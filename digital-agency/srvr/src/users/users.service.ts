@@ -36,12 +36,20 @@ export class UsersService {
     }
 
     async getUserByEmail(email: string) {
-        const user = await this.userRepository.findOne({where: {email}, include: {all: true}})
+        const user = await this.userRepository.findOne({
+            where: {email},
+            attributes: ['id', 'name', 'surname', 'email', 'phone', 'banned', 'banReason', 'password', 'refreshToken'],
+            include: ['employee', 'client']
+        });
         return user;
     }
 
     async findById(id: number): Promise<User> {
-        const user = await this.userRepository.findOne({where: {id}, include: {all: true}});
+        const user = await this.userRepository.findOne({
+            where: {id},
+            attributes: ['id', 'name', 'surname', 'email', 'phone', 'banned', 'banReason', 'password', 'refreshToken'],
+            include: ['employee', 'client']
+        });
         if (!user) {
             throw new NotFoundException(`User with id ${id} not found`);
         }

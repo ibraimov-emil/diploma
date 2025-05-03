@@ -29,6 +29,7 @@ import AddProject from "./components/Projects/AddProject";
 import EditProject from "./components/Projects/EditProject";
 import EmployeesProject from "./components/Projects/EmployeesProject";
 import ProfilePage from "./components/Projects/ProfilePage";
+import ItsmDashboard from "./components/admin/itsm-dashboard/itsm-dashboard";
 
 export const clientRoutes = [
   // dashboard
@@ -101,6 +102,9 @@ export const employeeRoutes = [
     path: "/profile/:id",
     Component: <ProfilePage />,
   },
+
+  // ITSM Dashboard
+  { path: "/itsm", Component: <ItsmDashboard /> },
 ];
 
 export const publicRoutes = [

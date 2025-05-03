@@ -45,8 +45,17 @@ export class ChatService {
         if (!user) {
             throw new NotFoundException(`User with id ${userId} not found`);
         }
-        const chatParticipan = await this.chatParticipantModel.findOne({where: {chatId, userId}, include: {all: true}})
-        if (chatParticipan) {
+        const chatParticipant = await this.chatParticipantModel.findOne({
+            where: {chatId, userId}, 
+            include: [{
+                model: Chat,
+                as: 'chat'
+            }, {
+                model: User,
+                as: 'user'
+            }]
+        });
+        if (chatParticipant) {
             throw new HttpException('Уже является участником чата', HttpStatus.NOT_FOUND);
         }
         return this.chatParticipantModel.create({
@@ -59,30 +68,53 @@ export class ChatService {
         await this.validateChatUser(chatId, userId);
         return this.chatParticipantModel.findAll({
             where: {chatId},
-            include: [User],
+            include: [{
+                model: User,
+                as: 'user'
+            }],
         });
     }
 
     async getUserChats(userId: number): Promise<ChatParticipant[]> {
         return this.chatParticipantModel.findAll({
             where: {userId},
-            include: {all: true},
-            // include: [Chat],
+            include: [{
+                model: Chat,
+                as: 'chat'
+            }, {
+                model: User,
+                as: 'user'
+            }],
         });
     }
 
     async sendMessage(chatId: number, senderId: number, content: string): Promise<Message> {
         await this.validateChatUser(chatId, senderId);
-        const message = await this.messageModel.create({chatId, senderId, content}); // Создание экземпляра модели
-        return this.messageModel.findOne({where: {id: message.id}, include: {all: true}})
+        const message = await this.messageModel.create({chatId, senderId, content});
+        return this.messageModel.findOne({
+            where: {id: message.id},
+            include: [{
+                model: Chat,
+                as: 'chat'
+            }, {
+                model: User,
+                as: 'user'
+            }]
+        });
     }
 
     async getChatMessages(chatId: number, userId): Promise<Message[]> {
         await this.validateChatUser(chatId, userId);
         return this.messageModel.findAll({
             where: {chatId},
-            include: {all: true},
-            order: [['createdAt', 'ASC']] // Сортировка по полю createdAt в порядке убывания
+            include: [{
+                model: Chat,
+                as: 'chat'
+            }, {
+                model: User,
+                as: 'user'
+            }],
+            order: [['createdAt', 'ASC']]
         });
     }
 
@@ -103,11 +135,17 @@ export class ChatService {
         if (!chat) {
             throw new HttpException('Чат не найден', HttpStatus.NOT_FOUND);
         }
-        const chatParticipan = await this.chatParticipantModel.findOne({
-            where: {chatId, userId: userId},
-            include: {all: true}
+        const chatParticipant = await this.chatParticipantModel.findOne({
+            where: {chatId, userId},
+            include: [{
+                model: Chat,
+                as: 'chat'
+            }, {
+                model: User,
+                as: 'user'
+            }]
         })
-        if (!chatParticipan) {
+        if (!chatParticipant) {
             throw new HttpException('Не является участником чата', HttpStatus.NOT_FOUND);
         }
     }

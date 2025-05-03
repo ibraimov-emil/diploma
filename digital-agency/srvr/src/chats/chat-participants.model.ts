@@ -15,6 +15,9 @@ export class ChatParticipant extends Model<ChatParticipant> {
     @BelongsTo(() => Chat)
     chat: Chat;
 
-    @BelongsTo(() => User)
-    participant : User;
+    @BelongsTo(() => User, {
+        foreignKey: 'userId',
+        as: 'user'
+    })
+    user: User;
 }

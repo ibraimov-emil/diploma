@@ -35,6 +35,13 @@ import {Task} from "./tasks/tasks.model";
 import {EmployeesTasks} from "./tasks/employees-tasks.model";
 import {Payment} from "./stages/payment.model";
 import {StatsModule} from "./stats/stats,.module";
+import {QualityModule} from "./quality/quality.module";
+import {QualityMetric} from "./quality/models/quality-metric.model";
+import {ExperimentalResearch} from "./quality/models/experimental-research.model";
+import {ServerMetrics} from "./quality/models/server-metrics.model";
+import {Incident} from "./quality/models/incident.model";
+import {AuditLog} from "./quality/models/audit-log.model";
+import {ServiceMetrics} from "./quality/models/service-metrics.model";
 
 @Module({
     controllers: [],
@@ -53,7 +60,7 @@ import {StatsModule} from "./stats/stats,.module";
             username: process.env.POSTGRES_USER,
             password: process.env.POSTGRESS_PASSWORD,
             database: process.env.POSTGRES_DB,
-            models: [User, Role, Employee, EmployeeRoles, EmployeesProjects, Client, Service, Status, RequestTable, Project, Stage, Chat, Message, ChatParticipant, Task, EmployeesTasks, Payment],
+            models: [User, Role, Employee, EmployeeRoles, EmployeesProjects, Client, Service, Status, RequestTable, Project, Stage, Chat, Message, ChatParticipant, Task, EmployeesTasks, Payment, QualityMetric, ExperimentalResearch, ServerMetrics, Incident, AuditLog, ServiceMetrics],
             autoLoadModels: true,
             synchronize: true
         }),
@@ -69,7 +76,8 @@ import {StatsModule} from "./stats/stats,.module";
         StagesModule,
         ChatsModule,
         StatsModule,
-        TasksModule
+        TasksModule,
+        QualityModule
     ]
 })
 export class AppModule implements NestModule {
@@ -78,6 +86,7 @@ export class AppModule implements NestModule {
             .apply(AuthMiddleware)
             .exclude(
                 { path: 'services', method: RequestMethod.ALL },
+                { path: 'quality-seed', method: RequestMethod.ALL },
                 'auth/(.*)'
             )
             .forRoutes('*');

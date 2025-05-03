@@ -1,4 +1,5 @@
 import axios from 'axios'
+import QualityService from './QualityService'
 
 export const API_URL = `http://localhost:5000/`
 
@@ -42,5 +43,6 @@ export default $host;
 
 export {
     $host,
-    $authHost
+    $authHost,
+    QualityService
 }

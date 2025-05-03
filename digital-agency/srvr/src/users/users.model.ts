@@ -71,6 +71,6 @@ export class User extends Model<User, UserCreationAttrs> {
     @HasOne(() => Client)
     client: Client;
 
-    @BelongsToMany(() => Chat, () => ChatParticipant)
+    @BelongsToMany(() => Chat, () => ChatParticipant, 'userId', 'chatId')
     chats: Chat[];
 }
