@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ru">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -22,13 +22,56 @@
             padding: 20px;
             margin-top: 20px;
         }
+        .api-link {
+            display: block;
+            margin: 10px 0;
+            padding: 10px;
+            background-color: #eee;
+            border-radius: 3px;
+            text-decoration: none;
+            color: #333;
+        }
+        .api-link:hover {
+            background-color: #ddd;
+        }
+        .status {
+            padding: 8px;
+            border-radius: 4px;
+            font-weight: bold;
+            display: inline-block;
+            margin: 0 10px;
+        }
+        .online {
+            background-color: #d4edda;
+            color: #155724;
+        }
     </style>
 </head>
 <body>
     <h1>Digital Agency API</h1>
     <div class="container">
-        <p>Welcome to the Digital Agency API server. This is a backend service for the Digital Agency application.</p>
-        <p>To explore the API endpoints, please use the Swagger documentation at <a href="/api">/api</a>.</p>
+        <p>Добро пожаловать в API сервер Digital Agency. Это backend-сервис для приложения Digital Agency.</p>
+        <p>Статус сервера: <span class="status online">Онлайн</span></p>
+        
+        <h2>API Endpoints</h2>
+        <a href="/health" class="api-link">/health - Проверка состояния системы</a>
+        <a href="/metrics" class="api-link">/metrics - Метрики Prometheus</a>
+        <a href="/metrics/uptime" class="api-link">/metrics/uptime - Процент доступности системы</a>
+        
+        <h2>Мониторинг системы</h2>
+        <p>Система мониторинга отслеживает следующие параметры:</p>
+        <ul>
+            <li>Подключение к базе данных</li>
+            <li>Использование памяти</li>
+            <li>Дисковое пространство</li>
+            <li>Время отклика API</li>
+        </ul>
+        
+        <p>Для просмотра панели мониторинга, войдите в систему как администратор и перейдите в раздел "Мониторинг".</p>
     </div>
+    
+    <footer style="text-align: center; margin-top: 40px; color: #777;">
+        <p>Digital Agency API © 2023-2025</p>
+    </footer>
 </body>
 </html> 

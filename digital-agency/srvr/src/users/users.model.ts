@@ -19,6 +19,7 @@ interface UserCreationAttrs {
     email: string;
     password: string;
     phone: string;
+    role?: string;
 }
 
 @Table({tableName: 'users'})
@@ -56,6 +57,10 @@ export class User extends Model<User, UserCreationAttrs> {
     @ApiProperty({example: 'За хулиганство', description: 'Причина блокировки'})
     @Column({type: DataType.STRING, allowNull: true})
     banReason: string;
+
+    @ApiProperty({example: 'user', description: 'Роль пользователя'})
+    @Column({type: DataType.STRING, defaultValue: 'user'})
+    role: string;
 
     @ApiProperty({example: 'Токен', description: 'Рефреш'})
     @Column({type: DataType.STRING})

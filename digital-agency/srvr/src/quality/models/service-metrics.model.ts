@@ -11,7 +11,7 @@ export interface ServiceMetricsCreationAttrs {
     timestamp?: Date;
 }
 
-@Table({ tableName: 'service_metrics' })
+@Table({ tableName: 'quality_service_metrics' })
 export class ServiceMetrics extends Model<ServiceMetrics, ServiceMetricsCreationAttrs> {
     @ApiProperty({ example: 1, description: 'Unique identifier' })
     @Column({ type: DataType.INTEGER, unique: true, autoIncrement: true, primaryKey: true })

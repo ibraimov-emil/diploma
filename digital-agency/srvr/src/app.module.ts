@@ -41,7 +41,9 @@ import {ExperimentalResearch} from "./quality/models/experimental-research.model
 import {ServerMetrics} from "./quality/models/server-metrics.model";
 import {Incident} from "./quality/models/incident.model";
 import {AuditLog} from "./quality/models/audit-log.model";
-import {ServiceMetrics} from "./quality/models/service-metrics.model";
+import {ServiceMetrics as QualityServiceMetrics} from "./quality/models/service-metrics.model";
+import {MonitoringModule} from "./monitoring/monitoring.module";
+import {ServiceMetrics} from "./monitoring/models/service-metrics.model";
 
 @Module({
     controllers: [],
@@ -60,7 +62,7 @@ import {ServiceMetrics} from "./quality/models/service-metrics.model";
             username: process.env.POSTGRES_USER,
             password: process.env.POSTGRESS_PASSWORD,
             database: process.env.POSTGRES_DB,
-            models: [User, Role, Employee, EmployeeRoles, EmployeesProjects, Client, Service, Status, RequestTable, Project, Stage, Chat, Message, ChatParticipant, Task, EmployeesTasks, Payment, QualityMetric, ExperimentalResearch, ServerMetrics, Incident, AuditLog, ServiceMetrics],
+            models: [User, Role, Employee, EmployeeRoles, EmployeesProjects, Client, Service, Status, RequestTable, Project, Stage, Chat, Message, ChatParticipant, Task, EmployeesTasks, Payment, QualityMetric, ExperimentalResearch, ServerMetrics, Incident, AuditLog, QualityServiceMetrics, ServiceMetrics],
             autoLoadModels: true,
             synchronize: true
         }),
@@ -77,7 +79,8 @@ import {ServiceMetrics} from "./quality/models/service-metrics.model";
         ChatsModule,
         StatsModule,
         TasksModule,
-        QualityModule
+        QualityModule,
+        MonitoringModule
     ]
 })
 export class AppModule implements NestModule {
@@ -87,6 +90,8 @@ export class AppModule implements NestModule {
             .exclude(
                 { path: 'services', method: RequestMethod.ALL },
                 { path: 'quality-seed', method: RequestMethod.ALL },
+                { path: 'health', method: RequestMethod.ALL },
+                { path: 'metrics', method: RequestMethod.ALL },
                 'auth/(.*)'
             )
             .forRoutes('*');
