@@ -1,0 +1,9 @@
+{
+  "name": "monitoring-scripts",
+  "version": "1.0.0",
+  "description": "Scripts for Digital Agency monitoring",
+  "private": true,
+  "dependencies": {
+    "node-fetch": "^2.6.7"
+  }
+} 

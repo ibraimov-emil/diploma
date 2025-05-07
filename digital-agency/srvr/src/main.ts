@@ -7,6 +7,9 @@ import * as cookieParser from 'cookie-parser';
 import {AuthMiddleware} from "./auth/auth.middleware";
 import {ChatsGateway} from "./chats/chats.gateway";
 import { WsAdapter } from '@nestjs/platform-ws'
+import * as fs from 'fs';
+import * as path from 'path';
+import * as client from 'prom-client';
 
 
 async function start() {
@@ -24,7 +27,7 @@ async function start() {
     
     // Configure CORS
     app.enableCors({
-        origin: ['http://localhost:3000', 'http://127.0.0.1:3000'],
+        origin: ['http://localhost:3000', 'http://localhost:3001', 'http://127.0.0.1:3000'],
         methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS', 'PATCH'],
         credentials: true,
         allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With'],
@@ -55,6 +58,42 @@ async function start() {
         transform: true,
         whitelist: true
     }));
+
+    // Prometheus metrics setup
+    // Create a Registry which registers the metrics
+    const register = new client.Registry();
+    // Add a default label which is added to all metrics
+    register.setDefaultLabels({
+        app: 'digital-agency-api'
+    });
+    // Enable the collection of default metrics
+    client.collectDefaultMetrics({ register });
+
+    // Get HTTP adapter (Express) for direct route handling
+    const httpAdapter = app.getHttpAdapter();
+
+    // Expose metrics endpoint
+    httpAdapter.get('/metrics', async (req, res) => {
+        res.set('Content-Type', register.contentType);
+        res.end(await register.metrics());
+    });
+
+    // Health check endpoint
+    httpAdapter.get('/health', (req, res) => {
+        res.status(200).send({
+            status: 'ok',
+            uptime: process.uptime(),
+            timestamp: Date.now()
+        });
+    });
+
+    // Uptime endpoint
+    httpAdapter.get('/metrics/uptime', (req, res) => {
+        res.status(200).send({
+            uptime: process.uptime(),
+            unit: 'seconds'
+        });
+    });
 
     await app.listen(PORT, () => logger.log(`Server started on port = ${PORT}`));
 }

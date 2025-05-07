@@ -155,7 +155,7 @@ const MonitoringDashboard: React.FC = () => {
             <CardContent>
               <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', flexDirection: 'column' }}>
                 <Typography variant="h3" component="div" color={uptime > 99 ? 'success.main' : uptime > 95 ? 'warning.main' : 'error.main'}>
-                  {uptime.toFixed(2)}%
+                  {uptime.toFixed(2)} S
                 </Typography>
                 <Typography variant="body2" color="text.secondary">
                   За последние 24 часа

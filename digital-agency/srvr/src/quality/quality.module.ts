@@ -21,6 +21,14 @@ import { AuditLogsService } from './audit-logs.service';
 import { AuditLogsController } from './audit-logs.controller';
 import { SeedController } from './seed.controller';
 import { User } from '../auth/models/user.model';
+import * as client from 'prom-client';
+
+// Create a Registry which registers the metrics
+const register = new client.Registry();
+// Add a default label which is added to all metrics
+register.setDefaultLabels({
+  app: 'digital-agency-quality'
+});
 
 @Module({
   imports: [
@@ -50,7 +58,11 @@ import { User } from '../auth/models/user.model';
     QualitySeedService,
     IncidentsService,
     ServiceMetricsService,
-    AuditLogsService
+    AuditLogsService,
+    {
+      provide: 'PROMETHEUS_REGISTRY',
+      useValue: register
+    }
   ],
   exports: [
     QualityMetricsService, 
