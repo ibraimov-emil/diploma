@@ -203,7 +203,7 @@ export class MonitoringService {
 
   async getMetrics(): Promise<string> {
     try {
-      return client.register.metrics();
+      return await client.register.metrics();
     } catch (error) {
       this.logger.error('Failed to get metrics', error);
       return 'Error fetching metrics';

@@ -1,5 +1,6 @@
 import {ApiProperty} from "@nestjs/swagger";
-import {IsArray, IsEmail, IsNumber, IsOptional, IsString, Length} from "class-validator";
+import {IsArray, IsDate, IsEmail, IsNumber, IsOptional, IsString, Length} from "class-validator";
+import {Type} from "class-transformer";
 
 export class CreateProjectDto {
 
@@ -7,6 +8,12 @@ export class CreateProjectDto {
     @IsOptional()
     @IsNumber({}, { message: 'requestId должен быть числом' })
     readonly requestId?: number;
+
+    @ApiProperty({example: '2024-03-18T12:00:00Z', description: 'Дата создания заявки'})
+    @IsOptional()
+    @IsDate()
+    @Type(() => Date)
+    readonly requestCreatedAt?: Date;
 
     @ApiProperty({example: '2', description: 'ID услуги'})
     @IsNumber({}, { message: 'serviceId должен быть числом' })

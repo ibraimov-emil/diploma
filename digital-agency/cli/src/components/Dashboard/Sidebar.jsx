@@ -5,6 +5,7 @@ import { MdOutlineCancel } from 'react-icons/md';
 import { TooltipComponent } from '@syncfusion/ej2-react-popups';
 import { AiOutlineAreaChart } from 'react-icons/ai';
 import { BsShield } from 'react-icons/bs';
+import { FiActivity } from 'react-icons/fi';
 
 import { links } from '../../data/dummy';
 import { useStateContext } from '../../contexts/ContextProvider';
@@ -25,6 +26,11 @@ const adminLinks = {
       link: 'monitoring',
       name: 'Мониторинг',
       icon: <AiOutlineAreaChart />,
+    },
+    {
+      link: 'process-metrics',
+      name: 'Метрики процессов',
+      icon: <FiActivity />,
     },
   ],
 };

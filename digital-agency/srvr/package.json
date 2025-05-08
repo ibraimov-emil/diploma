@@ -22,7 +22,9 @@
     "migration:generate": "sequelize-cli migration:generate --name",
     "migration:run": "sequelize-cli db:migrate",
     "migration:revert": "sequelize-cli db:migrate:undo",
-    "migration:revert:all": "sequelize-cli db:migrate:undo:all"
+    "migration:revert:all": "sequelize-cli db:migrate:undo:all",
+    "typeorm": "ts-node ./node_modules/typeorm/cli.js",
+    "typeorm:run": "npm run typeorm migration:run -- -d src/config/typeorm.config.ts"
   },
   "dependencies": {
     "@a2seven/yoo-checkout": "^1.1.4",
@@ -43,6 +45,7 @@
     "@nestjs/serve-static": "^3.0.1",
     "@nestjs/swagger": "^6.3.0",
     "@nestjs/terminus": "^9.2.0",
+    "@nestjs/typeorm": "^9.0.1",
     "@nestjs/websockets": "^9.4.1",
     "@tensorflow/tfjs": "^4.22.0",
     "@willsoto/nestjs-prometheus": "^6.0.2",
@@ -70,6 +73,7 @@
     "socket.io": "^4.6.1",
     "socket.io-client": "^4.6.1",
     "swagger-ui-express": "^4.1.6",
+    "typeorm": "^0.3.17",
     "uuid": "^8.3.2",
     "winston": "^3.17.0",
     "yookassa": "^0.1.1"

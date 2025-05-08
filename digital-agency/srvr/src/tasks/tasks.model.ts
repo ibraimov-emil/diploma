@@ -4,12 +4,14 @@ import {Stage} from "../stages/stage.model";
 import {Employee} from "../employees/employees.model";
 import { EmployeesTasks } from "./employees-tasks.model";
 import {Status} from "../statuses/statuses.model";
+import {Project} from "../projects/projects.model";
 
 interface TaskCreationAttrs {
     name: string;
     description: string;
     stageId: number;
     deadline: string;
+    projectId: number;
 }
 
 @Table({tableName: 'tasks'})
@@ -43,6 +45,13 @@ export class Task extends Model<Task, TaskCreationAttrs> {
 
     @BelongsTo(() => Stage)
     stage: Stage;
+
+    @ForeignKey(() => Project)
+    @Column({type: DataType.INTEGER})
+    projectId: number;
+
+    @BelongsTo(() => Project)
+    project: Project;
 
     @BelongsToMany(() => Employee, () => EmployeesTasks)
     employees: Employee[];

@@ -9,7 +9,7 @@ import {Employee} from "../employees/employees.model";
 import {EmployeesModule} from "../employees/employees.module";
 import {RequestTable} from "../requests/requests.model";
 import {RequestsModule} from "../requests/requests.module";
-import {ProjectsModule} from "../projects/projects,.module";
+import {ProjectsModule} from "../projects/projects.module";
 import {Project} from "../projects/projects.model";
 
 @Module({

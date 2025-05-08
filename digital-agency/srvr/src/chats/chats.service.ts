@@ -12,7 +12,7 @@ import {User} from "../users/users.model";
 import {Message} from "./messages.model";
 import {ChatParticipant} from "./chat-participants.model";
 import {UpdateChatDto} from "./dto/update-chat.dto";
-
+import {ProcessMetricsService} from "../monitoring/process-metrics.service";
 
 @Injectable()
 export class ChatService {
@@ -25,6 +25,7 @@ export class ChatService {
         private chatParticipantModel: typeof ChatParticipant,
         @InjectModel(Message)
         private messageModel: typeof Message,
+        private readonly processMetricsService: ProcessMetricsService
     ) {
     }
 
@@ -90,7 +91,31 @@ export class ChatService {
 
     async sendMessage(chatId: number, senderId: number, content: string): Promise<Message> {
         await this.validateChatUser(chatId, senderId);
+        
+        // Получаем последнее сообщение в чате
+        const lastMessage = await this.messageModel.findOne({
+            where: { chatId },
+            order: [['createdAt', 'DESC']]
+        });
+
         const message = await this.messageModel.create({chatId, senderId, content});
+
+        // Если есть предыдущее сообщение и текущий отправитель - сотрудник,
+        // отслеживаем время ответа
+        if (lastMessage && lastMessage.senderId !== senderId) {
+            const user = await this.userModel.findByPk(senderId);
+            if (user && user.role === 'employee') {
+                await this.processMetricsService.trackChatResponse(
+                    chatId,
+                    message.id,
+                    lastMessage.senderId,
+                    senderId,
+                    lastMessage.createdAt,
+                    message.createdAt
+                );
+            }
+        }
+
         return this.messageModel.findOne({
             where: {id: message.id},
             include: [{

@@ -13,10 +13,11 @@ import {EmployeesService} from "../employees/employees.service";
 
 @Injectable()
 export class RolesGuard implements CanActivate {
-    constructor(private jwtService: JwtService,
-                private readonly employeeService: EmployeesService,
-                private reflector: Reflector) {
-    }
+    constructor(
+        private jwtService: JwtService,
+        private readonly employeeService: EmployeesService,
+        private reflector: Reflector
+    ) {}
 
     async canActivate(context: ExecutionContext): Promise<boolean> {
         try {

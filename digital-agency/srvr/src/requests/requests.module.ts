@@ -15,7 +15,7 @@ import {RequestTable} from "./requests.model";
 import {ServicesModule} from "../services/services.module";
 import {StatusesModule} from "../statuses/statuses.module";
 import {ClientsModule} from "../clients/clients.module";
-import {ProjectsModule} from "../projects/projects,.module";
+import {ProjectsModule} from "../projects/projects.module";
 import {Project} from "../projects/projects.model";
 
 @Module({

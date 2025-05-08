@@ -31,6 +31,7 @@ import EmployeesProject from "./components/Projects/EmployeesProject";
 import ProfilePage from "./components/Projects/ProfilePage";
 import ItsmDashboard from "./components/admin/itsm-dashboard";
 import MonitoringDashboard from "./components/admin/monitoring-dashboard";
+import ProcessMetrics from "./components/admin/process-metrics/process-metrics.jsx";
 
 export const clientRoutes = [
   // dashboard
@@ -109,6 +110,9 @@ export const employeeRoutes = [
   
   // Monitoring Dashboard
   { path: "/monitoring", Component: <MonitoringDashboard /> },
+
+  // Process Metrics Dashboard
+  { path: "/process-metrics", Component: <ProcessMetrics /> },
 ];
 
 export const publicRoutes = [

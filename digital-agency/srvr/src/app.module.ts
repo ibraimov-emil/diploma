@@ -22,7 +22,7 @@ import {ClientsModule} from "./clients/clients.module";
 import {ServicesModule} from "./services/services.module";
 import {StatusesModule} from "./statuses/statuses.module";
 import {RequestsModule} from "./requests/requests.module";
-import {ProjectsModule} from "./projects/projects,.module";
+import {ProjectsModule} from "./projects/projects.module";
 import {StagesModule} from "./stages/stage.module";
 import {ChatsModule} from "./chats/chats.module";
 import {Chat} from "./chats/chats.model";
@@ -30,11 +30,11 @@ import {Message} from "./chats/messages.model";
 import {ChatParticipant} from "./chats/chat-participants.model";
 import {AuthMiddleware} from "./auth/auth.middleware";
 import {ChatsGateway} from "./chats/chats.gateway";
-import {TasksModule} from "./tasks/tasks,.module";
+import {TasksModule} from "./tasks/tasks.module";
 import {Task} from "./tasks/tasks.model";
 import {EmployeesTasks} from "./tasks/employees-tasks.model";
 import {Payment} from "./stages/payment.model";
-import {StatsModule} from "./stats/stats,.module";
+import {StatsModule} from "./stats/stats.module";
 import {QualityModule} from "./quality/quality.module";
 import {QualityMetric} from "./quality/models/quality-metric.model";
 import {ExperimentalResearch} from "./quality/models/experimental-research.model";
@@ -44,6 +44,13 @@ import {AuditLog} from "./quality/models/audit-log.model";
 import {ServiceMetrics as QualityServiceMetrics} from "./quality/models/service-metrics.model";
 import {MonitoringModule} from "./monitoring/monitoring.module";
 import {ServiceMetrics} from "./monitoring/models/service-metrics.model";
+import {ProcessMetricsModule} from "./monitoring/process-metrics.module";
+import {TypeOrmModule} from "@nestjs/typeorm";
+import {RequestToProjectTracking} from "./monitoring/entities/request-to-project-tracking.entity";
+import {ChatResponseTracking} from "./monitoring/entities/chat-response-tracking.entity";
+import {InvoicePaymentTracking} from "./monitoring/entities/invoice-payment-tracking.entity";
+import {TaskCompletionTracking} from "./monitoring/entities/task-completion-tracking.entity";
+import {SLADefinitions} from "./monitoring/entities/sla-definitions.entity";
 
 @Module({
     controllers: [],
@@ -58,13 +65,32 @@ import {ServiceMetrics} from "./monitoring/models/service-metrics.model";
         SequelizeModule.forRoot({
             dialect: 'postgres',
             host: process.env.POSTGRES_HOST,
-            port: Number(process.env.POSTGRESS_PORT),
+            port: Number(process.env.POSTGRES_PORT),
             username: process.env.POSTGRES_USER,
-            password: process.env.POSTGRESS_PASSWORD,
+            password: process.env.POSTGRES_PASSWORD,
             database: process.env.POSTGRES_DB,
             models: [User, Role, Employee, EmployeeRoles, EmployeesProjects, Client, Service, Status, RequestTable, Project, Stage, Chat, Message, ChatParticipant, Task, EmployeesTasks, Payment, QualityMetric, ExperimentalResearch, ServerMetrics, Incident, AuditLog, QualityServiceMetrics, ServiceMetrics],
             autoLoadModels: true,
             synchronize: true
+        }),
+        TypeOrmModule.forRoot({
+            type: 'postgres',
+            host: process.env.POSTGRES_HOST || 'localhost',
+            port: parseInt(process.env.POSTGRES_PORT) || 5432,
+            username: process.env.POSTGRES_USER || 'postgres',
+            password: process.env.POSTGRES_PASSWORD || 'admin',
+            database: process.env.POSTGRES_DB || 'digital-agency',
+            entities: [
+                RequestToProjectTracking,
+                ChatResponseTracking,
+                InvoicePaymentTracking,
+                TaskCompletionTracking,
+                SLADefinitions
+            ],
+            synchronize: false,
+            migrations: ['dist/monitoring/migrations/*.js'],
+            migrationsRun: false,
+            migrationsTableName: 'migrations'
         }),
         UsersModule,
         EmployeesModule,
@@ -80,7 +106,8 @@ import {ServiceMetrics} from "./monitoring/models/service-metrics.model";
         StatsModule,
         TasksModule,
         QualityModule,
-        MonitoringModule
+        MonitoringModule,
+        ProcessMetricsModule
     ]
 })
 export class AppModule implements NestModule {
@@ -92,6 +119,7 @@ export class AppModule implements NestModule {
                 { path: 'quality-seed', method: RequestMethod.ALL },
                 { path: 'health', method: RequestMethod.ALL },
                 { path: 'metrics', method: RequestMethod.ALL },
+                { path: 'metrics/process', method: RequestMethod.ALL },
                 'auth/(.*)'
             )
             .forRoutes('*');

@@ -11,7 +11,7 @@ import {Status} from "../statuses/statuses.model";
 import {ServicesModule} from "../services/services.module";
 import {StatusesModule} from "../statuses/statuses.module";
 import {ClientsModule} from "../clients/clients.module";
-import {ProjectsModule} from "../projects/projects,.module";
+import {ProjectsModule} from "../projects/projects.module";
 import {Project} from "../projects/projects.model";
 import {StagesController} from "./stage.controller";
 import {StagesService} from "./stage.service";

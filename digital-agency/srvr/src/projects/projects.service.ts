@@ -6,18 +6,26 @@ import {UpdateProjectDto} from "./dto/update-project.dto";
 import {ChatParticipant} from "../chats/chat-participants.model";
 import {Chat} from "../chats/chats.model";
 import {EmployeesProjects} from "./employees-projects.model";
+import {ProcessMetricsService} from "../monitoring/process-metrics.service";
+import {ProjectStatus} from "./project-status.enum";
+import {Task} from "../tasks/tasks.model";
+import {Op} from "sequelize";
+import {Status} from "../statuses/statuses.model";
+import {TasksService} from "../tasks/tasks.service";
 
 @Injectable()//провайдер для внедрения в controller
 export class ProjectsService {
 
     constructor(
         @InjectModel(Project) private readonly projectsRepository: typeof Project,
-        @InjectModel(EmployeesProjects) private readonly employeesProjectsRepository: typeof EmployeesProjects
+        @InjectModel(EmployeesProjects) private readonly employeesProjectsRepository: typeof EmployeesProjects,
+        private readonly tasksService: TasksService,
+        private readonly processMetricsService: ProcessMetricsService
     ) {
     }
 
     async createProject(dto: CreateProjectDto) {
-        const { employeesIds, ...projectData } = dto;
+        const { employeesIds, requestId, requestCreatedAt, ...projectData } = dto;
 
         // Создание проекта
         const project = await this.projectsRepository.create(projectData);
@@ -29,6 +37,16 @@ export class ProjectsService {
                 employeeId,
             }));
             await this.employeesProjectsRepository.bulkCreate(employeesProjectsData);
+        }
+
+        // Отслеживание метрики преобразования запроса в проект
+        if (requestId && requestCreatedAt) {
+            await this.processMetricsService.trackRequestToProject(
+                requestId,
+                project.id,
+                new Date(requestCreatedAt),
+                new Date()
+            );
         }
 
         return project;
@@ -116,14 +134,24 @@ export class ProjectsService {
         }
 
         // Обновление проекта
-        await project.update(dto);
+        const updateData: any = { ...dto };
+        if (dto.status) {
+            // Map ProjectStatus enum to statusId
+            const statusMap = {
+                [ProjectStatus.IN_PROGRESS]: 1,
+                [ProjectStatus.COMPLETED]: 2,
+                [ProjectStatus.ON_HOLD]: 3,
+                [ProjectStatus.CANCELLED]: 4
+            };
+            updateData.statusId = statusMap[dto.status];
+            delete updateData.status; // Remove status from update data
+            delete updateData.employeesIds; // Remove employeesIds as it's handled separately
+        }
+        await project.update(updateData);
 
-        // Обновление связанных записей в таблице EmployeesProjects, если переданы новые идентификаторы сотрудников
+        // Обновление связанных записей в таблице EmployeesProjects
         if (dto.employeesIds && dto.employeesIds.length > 0) {
-            // Удаление связей сотрудников для текущего проекта
             await this.employeesProjectsRepository.destroy({ where: { projectId: id } });
-
-            // Создание новых связей сотрудников для проекта
             const employeesProjectsData = dto.employeesIds.map(employeeId => ({
                 projectId: id,
                 employeeId,
@@ -131,7 +159,27 @@ export class ProjectsService {
             await this.employeesProjectsRepository.bulkCreate(employeesProjectsData);
         }
 
-        // Возвращаем обновленный проект
+        // Отслеживание завершения задач, если проект завершен
+        if (dto.status === ProjectStatus.COMPLETED) {
+            // Get all stages for the project
+            const stages = await project.$get('stages');
+            // Get all tasks for these stages
+            const tasks = await this.tasksService.getAll();
+            const projectTasks = tasks.filter(task => 
+                stages.some(stage => stage.id === task.stageId)
+            );
+            
+            // Track completion for each task
+            for (const task of projectTasks) {
+                await this.processMetricsService.trackTaskCompletion(
+                    task.id,
+                    project.id,
+                    new Date(task.deadline),
+                    new Date()
+                );
+            }
+        }
+
         return project;
     }
 

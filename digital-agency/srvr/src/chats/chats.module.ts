@@ -20,7 +20,8 @@ import {Message} from "./messages.model";
 import {ChatService} from "./chats.service";
 import {ChatController} from "./chats.controller";
 import {UsersModule} from "../users/users.module";
-import {ProjectsModule} from "../projects/projects,.module";
+import {ProjectsModule} from "../projects/projects.module";
+import {ProcessMetricsModule} from "../monitoring/process-metrics.module";
 
 @Module({
     controllers: [ChatController],
@@ -35,6 +36,7 @@ import {ProjectsModule} from "../projects/projects,.module";
         forwardRef(() => AuthModule),
         forwardRef(() => EmployeesModule),
         forwardRef(() => ProjectsModule),
+        ProcessMetricsModule
     ],
     exports: [
         ChatService,
