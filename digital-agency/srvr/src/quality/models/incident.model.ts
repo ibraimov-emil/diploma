@@ -10,6 +10,7 @@ export interface IncidentCreationAttrs {
     userId: number;
     registrationTime?: Date;
     resolutionTime?: Date;
+    metadata?: string;
 }
 
 @Table({ tableName: 'incidents' })
@@ -46,6 +47,10 @@ export class Incident extends Model<Incident, IncidentCreationAttrs> {
     @ForeignKey(() => User)
     @Column({ type: DataType.INTEGER, allowNull: false })
     userId: number;
+
+    @ApiProperty({ example: '{"relatedEntityType":"invoice","relatedEntityId":123}', description: 'Additional metadata for the incident' })
+    @Column({ type: DataType.TEXT, allowNull: true })
+    metadata: string;
 
     @BelongsTo(() => User)
     user: User;

@@ -88,4 +88,53 @@ export default class QualityService {
         const { data } = await $host.post('quality-seed');
         return data;
     }
+
+    static async createIncident(incidentData) {
+        // Ensure required fields are never null
+        const sanitizedData = {
+            ...incidentData,
+            title: incidentData.title || 'Без заголовка',
+            description: incidentData.description || 'Без описания',
+            severity: incidentData.severity || 'medium',
+            userId: incidentData.userId || 1,
+            registrationTime: incidentData.registrationTime || new Date(),
+            status: incidentData.status || 'open'
+        };
+        
+        // If metadata is provided as an object, stringify it
+        if (sanitizedData.metadata && typeof sanitizedData.metadata === 'object') {
+            sanitizedData.metadata = JSON.stringify(sanitizedData.metadata);
+        }
+        
+        // If we have relatedEntityType and relatedEntityId but no metadata, create it
+        if (!sanitizedData.metadata && incidentData.relatedEntityType && incidentData.relatedEntityId) {
+            sanitizedData.metadata = JSON.stringify({
+                relatedEntityType: incidentData.relatedEntityType,
+                relatedEntityId: incidentData.relatedEntityId,
+                requestTitle: incidentData.requestTitle || '',
+                additionalInfo: incidentData.additionalInfo || ''
+            });
+        }
+        
+        const { data } = await $host.post('incidents', sanitizedData);
+        return data;
+    }
+
+    static async updateIncident(id, incidentData) {
+        // Ensure required fields are never null
+        const sanitizedData = {
+            ...incidentData
+        };
+        
+        if (incidentData.title === null || incidentData.title === undefined) {
+            delete sanitizedData.title;
+        }
+        
+        if (incidentData.description === null || incidentData.description === undefined) {
+            delete sanitizedData.description;
+        }
+        
+        const { data } = await $host.put(`incidents/${id}`, sanitizedData);
+        return data;
+    }
 } 

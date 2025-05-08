@@ -31,7 +31,8 @@ import EmployeesProject from "./components/Projects/EmployeesProject";
 import ProfilePage from "./components/Projects/ProfilePage";
 import ItsmDashboard from "./components/admin/itsm-dashboard";
 import MonitoringDashboard from "./components/admin/monitoring-dashboard";
-import ProcessMetrics from "./components/admin/process-metrics/process-metrics.jsx";
+import ProcessMetricsPage from "./components/admin/process-metrics/ProcessMetricsPage";
+import IncidentPage from "./components/admin/incidents/IncidentPage";
 
 export const clientRoutes = [
   // dashboard
@@ -46,6 +47,7 @@ export const clientRoutes = [
   { path: "/clients", Component: <Clients /> },
 
   { path: "/requests", Component: <Requests /> },
+  { path: "/requests/add", Component: <AddRequest /> },
   { path: "/requests/view/:id", Component: <ViewRequest /> },
 
   { path: "/chats", Component: <Chat /> },
@@ -112,7 +114,10 @@ export const employeeRoutes = [
   { path: "/monitoring", Component: <MonitoringDashboard /> },
 
   // Process Metrics Dashboard
-  { path: "/process-metrics", Component: <ProcessMetrics /> },
+  { path: "/process-metrics", Component: <ProcessMetricsPage /> },
+
+  // Incidents Management
+  { path: "/incidents", Component: <IncidentPage /> },
 ];
 
 export const publicRoutes = [

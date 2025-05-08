@@ -32,7 +32,7 @@ const TaskForm = ({stageId, id, onClose}) => {
         {onSuccess: () => queryClient.invalidateQueries(["tasks"])}
     )
 
-    const updateTaskMutation = useMutation(updatedTask => updateTask(id, updatedTask), { // Corrected mutation
+    const updateTaskMutation = useMutation(updatedTask => updateTask(id, updatedTask), {
         onSuccess: () => queryClient.invalidateQueries(["tasks"]),
     });
 
@@ -40,11 +40,11 @@ const TaskForm = ({stageId, id, onClose}) => {
         if (task) {
             console.log(task.deadline)
             form.setFieldsValue({
-                name: task.name,
-                description: task.description,
-                employeesIds: task.employeesIds,
+                name: task.name || '',
+                description: task.description || '',
+                employeesIds: task.employeesIds || [],
                 // employeesIds: task.employees.map(e => e.id),
-                statusId: task.statusId,
+                statusId: task.statusId || null,
                 deadline: task.deadline ? dayjs(task.deadline) : null, // Преобразование строки в объект dayjs
             });
         }
@@ -52,6 +52,7 @@ const TaskForm = ({stageId, id, onClose}) => {
 
     const onFinish = async (values) => {
         try {
+            setLoading(true);
             if (id) {
                 await updateTaskMutation.mutateAsync({ ...values, id });
                 message.success('Task updated successfully');
@@ -59,15 +60,20 @@ const TaskForm = ({stageId, id, onClose}) => {
                 await createTaskMutation.mutateAsync({ ...values, stageId });
                 message.success('Task added successfully');
             }
+            if (onClose) {
+                onClose();
+            }
         } catch (error) {
             console.error('Error:', error);
             message.error('Failed to submit task');
+        } finally {
+            setLoading(false);
         }
     };
 
     return (
         <div className="m-2 p-2 bg-white rounded-3xl">
-            <Form disabled={user.isClient} layout="vertical" onFinish={onFinish} form={form}>
+            <Form disabled={user?.isClient} layout="vertical" onFinish={onFinish} form={form}>
                 <Form.Item
                     name="name"
                     label="Название"
@@ -91,7 +97,7 @@ const TaskForm = ({stageId, id, onClose}) => {
                         {employees &&
                             employees.map((item) => (
                                 <Option key={item.id} value={item.id}>
-                                    {item.user.name} {item.user.surname} - {item.description}
+                                    {item.user?.name || ''} {item.user?.surname || ''} - {item.description || ''}
                                 </Option>
                             ))}
                     </Select>
@@ -105,7 +111,7 @@ const TaskForm = ({stageId, id, onClose}) => {
                         {statuses &&
                             statuses.map((status) => (
                                 <Option key={status.id} value={status.id}>
-                                    {status.name}
+                                    {status.name || ''}
                                 </Option>
                             ))}
                     </Select>

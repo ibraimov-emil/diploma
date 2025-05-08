@@ -76,7 +76,7 @@ class UserStore{
 
     async checkAuth() {
         try {
-            const response = await $host.get(`${process.env.REACT_APP_API_URL}auth/refresh`, {withCredentials: true})
+            const response = await $host.get(`auth/refresh`, {withCredentials: true})
             console.log(response.data)
             Cookies.set('userId', response.data.user.id, { expires: 30 * 24 * 60 * 60 * 1000 });
             Cookies.set('refreshToken', response.data.refreshToken, { expires: 30 * 24 * 60 * 60 * 1000 });

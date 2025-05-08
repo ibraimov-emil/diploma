@@ -18,6 +18,33 @@ const StageCard = ({project}) => {
     const {user} = useContext(AuthContext)
     const [newCardTitle, setNewCardTitle] = useState('');
     const [newCardCost, setNewCardCost] = useState({});
+    
+    // Define all mutations at the top level
+    const createStageMutation = useMutation(newStage => createOneStage(newStage),
+        {onSuccess: () => queryClient.invalidateQueries(["project"])}
+    )
+
+    const ccreateCostStageMutation = useMutation(newStagePayment => createCostStage(newStagePayment),
+        {onSuccess: () => queryClient.invalidateQueries(["project"])}
+    )
+
+    const createTaskMutation = useMutation(newTask => createOneTask(newTask),
+        {onSuccess: () => queryClient.invalidateQueries(["tasks"])}
+    )
+
+    const completeTaskMutation = useMutation(check => completeOneTask(check),
+        {onSuccess: () => queryClient.invalidateQueries(["tasks"])}
+    )
+
+    const deleteTaskMutation = useMutation(taskId => deleteOneTask(taskId),
+        {onSuccess: () => queryClient.invalidateQueries(["tasks"])}
+    )
+    
+    // Ensure project is defined and has necessary properties
+    if (!project) {
+        return <div>Loading project details...</div>;
+    }
+    
     const crateStage = () => {
         const newStage = {
             projectId: project.id,
@@ -62,31 +89,17 @@ const StageCard = ({project}) => {
         }
     }
 
-    const createStageMutation = useMutation(newStage => createOneStage(newStage),
-        {onSuccess: () => queryClient.invalidateQueries(["project"])}
-    )
+    // Ensure user.user is defined before logging
+    if (user && user.user) {
+        console.log(user.user);
+    }
 
-    const ccreateCostStageMutation = useMutation(newStagePayment => createCostStage(newStagePayment),
-        {onSuccess: () => queryClient.invalidateQueries(["project"])}
-    )
-
-    const createTaskMutation = useMutation(newTask => createOneTask(newTask),
-        {onSuccess: () => queryClient.invalidateQueries(["tasks"])}
-    )
-
-    const completeTaskMutation = useMutation(check => completeOneTask(check),
-        {onSuccess: () => queryClient.invalidateQueries(["tasks"])}
-    )
-
-    const deleteTaskMutation = useMutation(taskId => deleteOneTask(taskId),
-        {onSuccess: () => queryClient.invalidateQueries(["tasks"])}
-    )
-
-    console.log(user.user)
+    // Ensure project.stages exists before rendering
+    const stages = project.stages || [];
 
     return (
         <div className="mx-auto p-4">
-            {!user.isClient &&
+            {!user?.isClient &&
                 <div className="mb-6">
                     <Input
                         rows={1}
@@ -99,7 +112,7 @@ const StageCard = ({project}) => {
                     </Button>
                 </div>}
             <Row gutter={[16, 16]}>
-                {project.stages.map((stage) => (
+                {stages.map((stage) => (
                     <Col key={stage.id} xs={24} md={12} xxl={8}>
                         <Card className={`h-full rounded-[30px]`} title={stage.name}
                               extra={stage.cost ? `Стоимость: ${stage.cost} руб` : ''}>
@@ -109,7 +122,7 @@ const StageCard = ({project}) => {
                                 completeTaskMutation={completeTaskMutation}
                                 deleteTaskMutation={deleteTaskMutation}
                             />
-                            {(stage.paymentStatus != 'succeeded') && !user.isClient && (
+                            {(stage.paymentStatus != 'succeeded') && !user?.isClient && (
                                 <>
                                     <TextArea
                                         rows={1}
@@ -128,7 +141,7 @@ const StageCard = ({project}) => {
                                 stage.paymentStatus !== 'succeeded'
                                     ?
                                     <Button
-                                        disabled={user.user.id !== project.client.userId}
+                                        disabled={!user?.user?.id || !project?.client?.userId || user.user.id !== project.client.userId}
                                         onClick={() => handlePay(stage.id)}
                                         type="primary" color="success" className="mt-4">
                                         Оплатить

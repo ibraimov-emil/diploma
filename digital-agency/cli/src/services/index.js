@@ -4,11 +4,11 @@ import QualityService from './QualityService'
 export const API_URL = `http://localhost:5000/`
 
 const $authHost = axios.create({
-    baseURL: process.env.REACT_APP_API_URL
+    baseURL: API_URL
 })
 
 const $host = axios.create({
-    baseURL: process.env.REACT_APP_API_URL
+    baseURL: API_URL
 })
 
 //подставление токена к каждому запросу

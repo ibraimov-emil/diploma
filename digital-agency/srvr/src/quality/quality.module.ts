@@ -22,6 +22,10 @@ import { AuditLogsController } from './audit-logs.controller';
 import { SeedController } from './seed.controller';
 import { User } from '../auth/models/user.model';
 import * as client from 'prom-client';
+import { ChatsModule } from '../chats/chats.module';
+import { MonitoringModule } from '../monitoring/monitoring.module';
+import { PrometheusModule } from '../monitoring/prometheus.module';
+import { AuthModule } from '../auth/auth.module';
 
 // Create a Registry which registers the metrics
 const register = new client.Registry();
@@ -41,6 +45,10 @@ register.setDefaultLabels({
       ServiceMetrics,
       User
     ]),
+    ChatsModule,
+    MonitoringModule,
+    PrometheusModule,
+    AuthModule
   ],
   controllers: [
     QualityMetricsController, 

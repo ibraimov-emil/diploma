@@ -3,31 +3,66 @@ import * as client from 'prom-client';
 
 @Injectable()
 export class PrometheusService {
-    private readonly registry: client.Registry;
-    private readonly gauges: Map<string, client.Gauge>;
+    private metrics = {};
+    private registry: client.Registry;
 
     constructor() {
         this.registry = new client.Registry();
-        this.gauges = new Map();
+        this.registry.setDefaultLabels({
+            app: 'digital-agency'
+        });
     }
 
-    createGauge(name: string, help: string): void {
+    createGauge(name: string, help: string) {
         const gauge = new client.Gauge({
-            name: name,
-            help: help,
+            name,
+            help,
             registers: [this.registry]
         });
-        this.gauges.set(name, gauge);
+        this.metrics[name] = gauge;
     }
 
-    updateGauge(name: string, value: number): void {
-        const gauge = this.gauges.get(name);
-        if (gauge) {
-            gauge.set(value);
+    createCounter(name: string, help: string) {
+        const counter = new client.Counter({
+            name,
+            help,
+            registers: [this.registry]
+        });
+        this.metrics[name] = counter;
+    }
+
+    updateGauge(name: string, value: number) {
+        if (this.metrics[name]) {
+            this.metrics[name].set(value);
         }
     }
 
-    async getMetrics(): Promise<string> {
-        return await this.registry.metrics();
+    incrementCounter(name: string, value: number = 1) {
+        if (this.metrics[name]) {
+            this.metrics[name].inc(value);
+        }
+    }
+
+    createUserIncidentMetrics() {
+        // Initialize incident metrics if they don't exist
+        if (!this.metrics['user_reported_incidents_total']) {
+            this.createCounter('user_reported_incidents_total', 'Total number of incidents reported by users');
+        }
+        
+        if (!this.metrics['user_reported_incidents_by_severity']) {
+            this.createCounter('user_reported_incidents_by_severity', 'User reported incidents by severity');
+        }
+        
+        if (!this.metrics['user_reported_incidents_resolution_time']) {
+            this.createGauge('user_reported_incidents_resolution_time', 'Average resolution time for user reported incidents (minutes)');
+        }
+    }
+
+    getContentType() {
+        return this.registry.contentType;
+    }
+
+    getMetrics() {
+        return this.registry.metrics();
     }
 } 
