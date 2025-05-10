@@ -5,16 +5,21 @@ import {useQuery} from "react-query";
 import {fetchClients} from "../../services/ClientService";
 import {Button, IconButton, List, ListItem, ListItemSecondaryAction, ListItemText} from "@mui/material";
 import CommentIcon from '@mui/icons-material/Comment';
-import {Space, Table} from "antd";
-import {Link} from "react-router-dom";
-import {DeleteOutlined, EditOutlined, EyeOutlined} from "@ant-design/icons";
+import {Space, Table, Tag} from "antd";
+import {Link, useNavigate} from "react-router-dom";
+import {DeleteOutlined, EditOutlined, EyeOutlined, MessageOutlined} from "@ant-design/icons";
 import {AuthContext} from "../../contexts/authContext";
 
 const ClientsList = observer(() => {
     const {data: clients, isLoading, isError} = useQuery('clients', fetchClients)
     const {user} = useContext(AuthContext)
-    // console.log(data)
-    // const {device} = useContext(ContextProvider)
+    const navigate = useNavigate();
+    
+    // Function to open a chat with a client
+    const handleOpenChat = (clientId, clientName) => {
+        // Navigate to chat page with this client
+        navigate(`/chats/${clientId}`, { state: { clientName } });
+    };
 
     if(isLoading){
         return <div>Loading...</div>
@@ -35,11 +40,17 @@ const ClientsList = observer(() => {
             title: 'Имя',
             dataIndex: ['user', 'name'],
             key: 'description',
+            render: (text, record) => (
+                <span className="font-semibold">{text}</span>
+            ),
         },
         {
             title: 'Фамилия',
             dataIndex: ['user', 'surname'],
             key: 'description',
+            render: (text, record) => (
+                <span className="font-semibold">{text}</span>
+            ),
         },
         {
             title: 'Телефон',
@@ -58,42 +69,47 @@ const ClientsList = observer(() => {
                 return (
                     <Space size="middle">
                         <Link to={`/requests/view/` + record.id}>
-                            Посмотреть
+                            <Tag color="blue">Посмотреть</Tag>
                         </Link>
                     </Space>
                 );
             },
         },
         {
-            key: "5",
+            key: "6",
             title: "Проекты клиента",
             render: (record) => {
                 return (
                     <Space size="middle">
                         <Link to={`/projects/` + record.id}>
-                            Посмотреть
+                            <Tag color="green">Посмотреть</Tag>
                         </Link>
                     </Space>
                 );
             },
         },
         {
-            key: "5",
+            key: "7",
             title: "Действия",
             render: (record) => {
                 return (
                     <Space size="middle">
+                        {/* Write button for chat */}
+                        <Button 
+                            variant="contained" 
+                            color="primary" 
+                            size="small"
+                            startIcon={<MessageOutlined />}
+                            onClick={() => handleOpenChat(record.id, `${record.user.name} ${record.user.surname}`)}
+                        >
+                            Написать
+                        </Button>
+                        
                         {!user.isClient &&
                             <>
                                 <Link to={`/requests/edit/` + record.id}>
                                     <EditOutlined />
                                 </Link>
-                                {/*<DeleteOutlined*/}
-                                {/*    onClick={() => {*/}
-                                {/*        // onDeleteRequest(record.id);*/}
-                                {/*    }}*/}
-                                {/*    style={{ color: "red", marginLeft: 12 }}*/}
-                                {/*/>*/}
                             </>
                         }
                         <Link to={`/requests/view/` + record.id}>
@@ -105,47 +121,23 @@ const ClientsList = observer(() => {
         },
     ];
 
-
-
     return (
-        // <Row className="lg:flex md:flex-wrap">
-        //     {/*{data && data.map(client =>*/}
-        //     {/*    <ProjectItem key={client.id} client={client} />*/}
-        //     {/*)}*/}
-        //
-        //     <List sx={{ width: '100%', maxWidth: 960, bgcolor: 'background.paper' }}>
-        //         {data && data.map((client) => (
-        //             <ListItem key={client.id}
-        //                       secondaryAction={
-        //                           <IconButton aria-label="comment">
-        //                               <CommentIcon />
-        //                           </IconButton>
-        //                       }
-        //             >
-        //                 <ListItemText primary={client.user.name} primary={client.user.surname} secondary={`User ID: ${client.userId}`} />
-        //                 {/*<ListItemSecondaryAction>*/}
-        //                 {/*    <IconButton edge="end" onClick={() => onEdit(client)}>*/}
-        //                 {/*        <Edit />*/}
-        //                 {/*    </IconButton>*/}
-        //                 {/*    <IconButton edge="end" onClick={() => onDelete(client.id)}>*/}
-        //                 {/*        <Delete />*/}
-        //                 {/*    </IconButton>*/}
-        //                 {/*</ListItemSecondaryAction>*/}
-        //             </ListItem>
-        //         ))}
-        //     </List>
-        // </Row>
-            <div className="App">
-                <header className="App-header">
-                    <Table columns={columns}
-                           dataSource={clients}
-                           loading={isLoading}
-                           rowKey="id"
-                           scroll={{ x: true }}
-                    >
-                    </Table>
-                </header>
-            </div>
+        <div className="App">
+            <header className="App-header">
+                <Table 
+                    columns={columns}
+                    dataSource={clients}
+                    loading={isLoading}
+                    rowKey="id"
+                    scroll={{ x: true }}
+                    pagination={{ 
+                        pageSize: 10,
+                        showTotal: (total, range) => `${range[0]}-${range[1]} из ${total} клиентов`
+                    }}
+                    className="shadow-md rounded-lg overflow-hidden"
+                />
+            </header>
+        </div>
     );
 });
 

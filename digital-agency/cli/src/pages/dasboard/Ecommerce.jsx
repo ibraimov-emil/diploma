@@ -1,5 +1,5 @@
-import React, {useContext, useState} from 'react';
-import {BsBoxSeam, BsCurrencyDollar} from 'react-icons/bs';
+import React, {useContext, useState, useEffect} from 'react';
+import {BsBoxSeam, BsCurrencyDollar, BsBarChart} from 'react-icons/bs';
 import {GoPrimitiveDot} from 'react-icons/go';
 import {IoIosMore} from 'react-icons/io';
 import {DropDownListComponent} from '@syncfusion/ej2-react-dropdowns';
@@ -21,12 +21,13 @@ import UserService from "../../services/UserService";
 import {useQuery} from "react-query";
 import {AuthContext} from "../../contexts/authContext";
 import {fetchStatsCounts} from "../../services/StatService";
-import {MdOutlineSupervisorAccount} from "react-icons/md";
+import {MdOutlineSupervisorAccount, MdPendingActions} from "react-icons/md";
 import {Spinner} from "react-bootstrap";
 import {SlLayers} from "react-icons/sl";
 import {FiBarChart} from "react-icons/fi";
-import {FaTasks} from "react-icons/fa";
+import {FaTasks, FaMoneyBillWave, FaProjectDiagram, FaUserTie, FaUsers, FaRegClipboard} from "react-icons/fa";
 import { Link } from 'react-router-dom';
+import { Tooltip, Progress, Card as AntCard } from 'antd';
 
 const DropDown = ({currentMode}) => (
     <div className="w-28 border-1 border-color px-2 py-1 rounded-md">
@@ -36,11 +37,20 @@ const DropDown = ({currentMode}) => (
     </div>
 );
 
+// Форматирование чисел для отображения
+const formatNumber = (value) => {
+    if (value === undefined || value === null) return '0';
+    return Intl.NumberFormat('ru-RU').format(value);
+};
+
 const Ecommerce = () => {
     const {user} = useContext(AuthContext)
     const {currentColor, currentMode} = useStateContext();
     const [users, setUsers] = useState([]);
-    const {data: statCounts, isLoading, isError} = useQuery('counts', fetchStatsCounts)
+    
+    const {data: statCounts, isLoading, isError} = useQuery('counts', fetchStatsCounts, {
+        refetchOnWindowFocus: false
+    });
 
     async function getUsers() {
         try {
@@ -52,12 +62,28 @@ const Ecommerce = () => {
     }
 
     if (isError) {
-        return isError
+        return <div className="flex flex-col items-center justify-center h-96">
+            <div className="text-xl text-red-500 mb-4">Ошибка загрузки данных</div>
+            <Button
+                color="white"
+                bgColor={currentColor}
+                text="Попробовать снова"
+                borderRadius="10px"
+                onClick={() => window.location.reload()}
+            />
+        </div>;
     }
 
     if (isLoading) {
-        return <Spinner/>
+        return <div className="flex justify-center items-center h-screen">
+            <Spinner animation="border" role="status" className="text-blue-500" size="lg" />
+            <span className="ml-3 text-xl">Загрузка статистики...</span>
+        </div>;
     }
+
+    // Calculate task completion rate
+    const totalTasks = (statCounts?.tasksCompleted || 0) + (statCounts?.tasksProcessed || 0) + (statCounts?.tasksСons || 0);
+    const completionRate = totalTasks ? Math.round((statCounts?.tasksCompleted / totalTasks) * 100) : 0;
 
     // Client view - simplified dashboard
     if (user?.isClient) {
@@ -77,73 +103,88 @@ const Ecommerce = () => {
                         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
                             {/* Projects card */}
                             <Link to="/projects" className="block">
-                                <div className="bg-white dark:text-gray-200 dark:bg-secondary-dark-bg p-6 rounded-xl shadow-md hover:shadow-lg transition-shadow cursor-pointer h-full">
+                                <AntCard className="h-full hover:shadow-lg transition-all duration-300">
                                     <div className="flex justify-between items-center mb-4">
                                         <div className="text-lg font-semibold">Мои проекты</div>
-                                        <button
-                                            type="button"
-                                            style={{color: 'rgb(228, 106, 118)', backgroundColor: 'rgb(255, 244, 229)'}}
-                                            className="text-2xl opacity-0.9 rounded-full p-3 hover:drop-shadow-xl"
-                                        >
-                                            <BsBoxSeam/>
-                                        </button>
+                                        <div className="bg-blue-100 rounded-full p-3 text-blue-500">
+                                            <FaProjectDiagram size={24} />
+                                        </div>
                                     </div>
-                                    <div className="text-3xl font-bold mb-2">{statCounts?.project || 0}</div>
-                                    <p className="text-gray-500">Активных проектов</p>
-                                </div>
+                                    <span className="text-3xl font-bold">{formatNumber(statCounts?.project)}</span>
+                                    <p className="text-gray-500 mt-2">Активных проектов</p>
+                                    <Progress 
+                                        percent={statCounts?.project > 0 ? 100 : 0} 
+                                        showInfo={false}
+                                        strokeColor={{
+                                            '0%': '#108ee9',
+                                            '100%': '#87d068',
+                                        }}
+                                        className="mt-2"
+                                    />
+                                </AntCard>
                             </Link>
                             
                             {/* Requests card */}
                             <Link to="/requests" className="block">
-                                <div className="bg-white dark:text-gray-200 dark:bg-secondary-dark-bg p-6 rounded-xl shadow-md hover:shadow-lg transition-shadow cursor-pointer h-full">
+                                <AntCard className="h-full hover:shadow-lg transition-all duration-300">
                                     <div className="flex justify-between items-center mb-4">
                                         <div className="text-lg font-semibold">Мои заявки</div>
-                                        <button
-                                            type="button"
-                                            style={{color: 'rgb(255, 244, 229)', backgroundColor: 'rgb(254, 201, 15)'}}
-                                            className="text-2xl opacity-0.9 rounded-full p-3 hover:drop-shadow-xl"
-                                        >
-                                            <SlLayers/>
-                                        </button>
+                                        <div className="bg-amber-100 rounded-full p-3 text-amber-500">
+                                            <FaRegClipboard size={24} />
+                                        </div>
                                     </div>
-                                    <div className="text-3xl font-bold mb-2">{statCounts?.request || 0}</div>
-                                    <p className="text-gray-500">Всего заявок</p>
-                                </div>
+                                    <span className="text-3xl font-bold">{formatNumber(statCounts?.request)}</span>
+                                    <p className="text-gray-500 mt-2">Всего заявок</p>
+                                    <Progress 
+                                        percent={statCounts?.request > 0 ? 100 : 0} 
+                                        showInfo={false}
+                                        strokeColor={{
+                                            '0%': '#ffa940',
+                                            '100%': '#ffec3d',
+                                        }}
+                                        className="mt-2"
+                                    />
+                                </AntCard>
                             </Link>
                             
                             {/* Tasks card */}
-                            <div className="bg-white dark:text-gray-200 dark:bg-secondary-dark-bg p-6 rounded-xl shadow-md h-full">
+                            <AntCard className="h-full hover:shadow-lg transition-all duration-300">
                                 <div className="flex justify-between items-center mb-4">
                                     <div className="text-lg font-semibold">Задачи</div>
-                                    <button
-                                        type="button"
-                                        style={{color: 'rgb(0, 194, 146)', backgroundColor: 'rgb(235, 250, 242)'}}
-                                        className="text-2xl opacity-0.9 rounded-full p-3 hover:drop-shadow-xl"
-                                    >
-                                        <FaTasks/>
-                                    </button>
+                                    <div className="bg-green-100 rounded-full p-3 text-green-500">
+                                        <FaTasks size={24} />
+                                    </div>
                                 </div>
                                 <div className="flex flex-col">
                                     <div className="flex justify-between items-center mb-2">
                                         <span className="text-gray-600">Выполнено:</span>
-                                        <span className="font-bold">{statCounts?.tasksCompleted || 0}</span>
+                                        <span className="font-bold text-green-500">{formatNumber(statCounts?.tasksCompleted)}</span>
                                     </div>
                                     <div className="flex justify-between items-center mb-2">
                                         <span className="text-gray-600">В процессе:</span>
-                                        <span className="font-bold">{statCounts?.tasksProcessed || 0}</span>
+                                        <span className="font-bold text-blue-500">{formatNumber(statCounts?.tasksProcessed)}</span>
                                     </div>
                                     <div className="flex justify-between items-center">
                                         <span className="text-gray-600">На рассмотрении:</span>
-                                        <span className="font-bold">{statCounts?.tasksСons || 0}</span>
+                                        <span className="font-bold text-amber-500">{formatNumber(statCounts?.tasksСons)}</span>
                                     </div>
+                                    <Progress 
+                                        percent={completionRate} 
+                                        status={completionRate === 100 ? "success" : "active"}
+                                        strokeColor={{
+                                            '0%': '#108ee9',
+                                            '100%': '#87d068',
+                                        }}
+                                        className="mt-4"
+                                    />
                                 </div>
-                            </div>
+                            </AntCard>
                         </div>
                         
                         {/* Support and Payments section */}
                         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
                             {/* Payments section */}
-                            <div className="bg-white dark:text-gray-200 dark:bg-secondary-dark-bg p-6 rounded-xl shadow-md">
+                            <AntCard className="hover:shadow-lg transition-all duration-300">
                                 <div className="flex justify-between items-center mb-4">
                                     <h3 className="text-lg font-semibold">Платежи</h3>
                                     <Link to="/orders">
@@ -156,14 +197,17 @@ const Ecommerce = () => {
                                         />
                                     </Link>
                                 </div>
-                                <div className="text-center py-10">
-                                    <div className="text-3xl font-bold mb-2">₽ {statCounts?.budget?.toLocaleString() || 0}</div>
+                                <div className="text-center py-8">
+                                    <div className="text-3xl font-bold mb-2 flex justify-center items-center">
+                                        <FaMoneyBillWave className="text-green-500 mr-2" size={28} />
+                                        <span className="text-3xl font-bold">{formatNumber(statCounts?.budget)}</span>
+                                    </div>
                                     <p className="text-gray-500">Общая сумма платежей</p>
                                 </div>
-                            </div>
+                            </AntCard>
                             
                             {/* Help section */}
-                            <div className="bg-white dark:text-gray-200 dark:bg-secondary-dark-bg p-6 rounded-xl shadow-md">
+                            <AntCard className="hover:shadow-lg transition-all duration-300">
                                 <h3 className="text-lg font-semibold mb-4">Поддержка</h3>
                                 <p className="text-gray-600 mb-4">Если у вас возникли вопросы или нужна помощь, вы можете связаться с нами через чат или сообщить о проблеме.</p>
                                 <div className="flex flex-wrap gap-3">
@@ -184,7 +228,7 @@ const Ecommerce = () => {
                                         />
                                     </Link>
                                 </div>
-                            </div>
+                            </AntCard>
                         </div>
                     </div>
                 </div>
@@ -194,337 +238,272 @@ const Ecommerce = () => {
 
     // Original dashboard for employees and admins
     return (
-        <div className="mt-24">
+        <div className="mt-10">
             {/* Admin dashboard header with profit info */}
-            <div className="flex flex-wrap lg:flex-nowrap ">
-                <div
-                    className="bg-white dark:text-gray-200 dark:bg-secondary-dark-bg h-44 rounded-xl w-80 p-8 pt-9 m-3 bg-hero-pattern bg-no-repeat bg-cover bg-center">
+            <div className="flex flex-wrap lg:flex-nowrap mb-6">
+                <AntCard
+                    className="w-full lg:w-80 p-6 bg-gradient-to-r from-cyan-500 to-blue-500 text-white rounded-xl shadow-lg hover:shadow-xl transition-all duration-300"
+                >
                     <div className="flex justify-between items-center">
                         <div>
-                            <p className="font-bold text-gray-400">Прибыль</p>
-                            <p className="text-2xl">₽ {statCounts?.budget?.toLocaleString() || 0}</p>
+                            <p className="text-gray-100 font-bold text-lg mb-1">Общая прибыль</p>
+                            <span className="text-3xl font-bold">{formatNumber(statCounts?.budget)}</span>
                         </div>
-                        <button
-                            type="button"
-                            style={{backgroundColor: currentColor}}
-                            className="text-2xl opacity-0.9 text-white hover:drop-shadow-xl rounded-full  p-4"
-                        >
-                            <BsCurrencyDollar/>
-                        </button>
+                        <div className="bg-white/20 p-3 rounded-full">
+                            <BsCurrencyDollar size={28} className="text-white" />
+                        </div>
                     </div>
                     <div className="mt-6">
                         <Button
-                            color="white"
-                            bgColor={currentColor}
-                            text="Загрузить"
+                            color="blue"
+                            bgColor="white"
+                            text="Скачать отчет"
                             borderRadius="10px"
                         />
                     </div>
-                </div>
-            </div>
-            
-            {/* Admin dashboard stats cards */}
-            <div className="flex flex-wrap lg:flex-nowrap ">
-                <div className="flex m-3 flex-wrap gap-1 items-center">
-                    {/* Clients card */}
-                    <div
-                        className="bg-white h-44 dark:text-gray-200 dark:bg-secondary-dark-bg md:w-56  p-4 pt-9 rounded-2xl ">
-                        <button
-                            type="button"
-                            style={{color: '#03C9D7', backgroundColor: '#E5FAFB'}}
-                            className="text-2xl opacity-0.9 rounded-full  p-4 hover:drop-shadow-xl"
-                        >
-                            <MdOutlineSupervisorAccount/>
-                        </button>
-                        <p className="mt-3">
-                            <span className="text-lg font-semibold">{statCounts?.clients || 0}</span>
-                        </p>
-                        <p className="text-sm text-gray-400  mt-1">Клиенты</p>
-                    </div>
-                    
-                    {/* Requests card */}
-                    <div
-                        className="bg-white h-44 dark:text-gray-200 dark:bg-secondary-dark-bg md:w-56  p-4 pt-9 rounded-2xl ">
-                        <button
-                            type="button"
-                            style={{color: 'rgb(255, 244, 229)', backgroundColor: 'rgb(254, 201, 15)'}}
-                            className="text-2xl opacity-0.9 rounded-full  p-4 hover:drop-shadow-xl"
-                        >
-                            <SlLayers/>
-                        </button>
-                        <p className="mt-3">
-                            <span className="text-lg font-semibold">{statCounts?.request || 0}</span>
-                        </p>
-                        <p className="text-sm text-gray-400 mt-1">Заявки</p>
-                    </div>
-                    
-                    {/* Projects card */}
-                    <div
-                        className="bg-white h-44 dark:text-gray-200 dark:bg-secondary-dark-bg md:w-56  p-4 pt-9 rounded-2xl ">
-                        <button
-                            type="button"
-                            style={{color: 'rgb(228, 106, 118)', backgroundColor: 'rgb(255, 244, 229)'}}
-                            className="text-2xl opacity-0.9 rounded-full  p-4 hover:drop-shadow-xl"
-                        >
-                            <BsBoxSeam/>
-                        </button>
-                        <p className="mt-3">
-                            <span className="text-lg font-semibold">{statCounts?.project || 0}</span>
-                        </p>
-                        <p className="text-sm text-gray-400 mt-1">Проекты</p>
-                    </div>
-                    
-                    {/* Sales card */}
-                    <div
-                        className="bg-white h-44 dark:text-gray-200 dark:bg-secondary-dark-bg md:w-56  p-4 pt-9 rounded-2xl ">
-                        <button
-                            type="button"
-                            style={{color: 'rgb(0, 194, 146)', backgroundColor: 'rgb(235, 250, 242)'}}
-                            className="text-2xl opacity-0.9 rounded-full  p-4 hover:drop-shadow-xl"
-                        >
-                            <FiBarChart/>
-                        </button>
-                        <p className="mt-3">
-                            <span className="text-lg font-semibold">{statCounts?.payment || 0}</span>
-                        </p>
-                        <p className="text-sm text-gray-400 mt-1">Продажи</p>
-                    </div>
-                    
-                    {/* Completed tasks card */}
-                    <div
-                        className="bg-white h-44 dark:text-gray-200 dark:bg-secondary-dark-bg md:w-56  p-4 pt-9 rounded-2xl ">
-                        <button
-                            type="button"
-                            style={{color: 'rgb(0, 194, 146)', backgroundColor: 'rgb(235, 250, 242)'}}
-                            className="text-2xl opacity-0.9 rounded-full  p-4 hover:drop-shadow-xl"
-                        >
-                            <FaTasks/>
-                        </button>
-                        <p className="mt-3">
-                            <span className="text-lg font-semibold">{statCounts?.tasksCompleted || 0}</span>
-                        </p>
-                        <p className="text-sm text-gray-400 mt-1">Выполненные задачи</p>
-                    </div>
-                    
-                    {/* In-progress tasks card */}
-                    <div
-                        className="bg-white h-44 dark:text-gray-200 dark:bg-secondary-dark-bg md:w-56  p-4 pt-9 rounded-2xl ">
-                        <button
-                            type="button"
-                            style={{color: 'rgb(0, 194, 146)', backgroundColor: 'rgb(235, 250, 242)'}}
-                            className="text-2xl opacity-0.9 rounded-full  p-4 hover:drop-shadow-xl"
-                        >
-                            <FaTasks/>
-                        </button>
-                        <p className="mt-3">
-                            <span className="text-lg font-semibold">{statCounts?.tasksProcessed || 0}</span>
-                        </p>
-                        <p className="text-sm text-gray-400 mt-1">Задачи в процессе</p>
-                    </div>
-                    
-                    {/* Review tasks card */}
-                    <div
-                        className="bg-white h-44 dark:text-gray-200 dark:bg-secondary-dark-bg md:w-56  p-4 pt-9 rounded-2xl ">
-                        <button
-                            type="button"
-                            style={{color: 'rgb(0, 194, 146)', backgroundColor: 'rgb(235, 250, 242)'}}
-                            className="text-2xl opacity-0.9 rounded-full  p-4 hover:drop-shadow-xl"
-                        >
-                            <FaTasks/>
-                        </button>
-                        <p className="mt-3">
-                            <span className="text-lg font-semibold">{statCounts?.tasksСons || 0}</span>
-                        </p>
-                        <p className="text-sm text-gray-400 mt-1">Задачи на рассмотрении</p>
-                    </div>
-                </div>
+                </AntCard>
             </div>
 
-            {/* Admin charts and analytics section */}
-            <div className="flex gap-10 flex-wrap justify-center">
-                {/* Income information chart */}
-                <div className="bg-white dark:text-gray-200 dark:bg-secondary-dark-bg m-3 p-4 rounded-2xl md:w-780  ">
-                    <div className="flex justify-between">
-                        <p className="font-semibold text-xl">Информация о доходах</p>
-                        <div className="flex items-center gap-4">
-                            <p className="flex items-center gap-2 text-gray-600 hover:drop-shadow-xl">
-                <span>
-                  <GoPrimitiveDot/>
-                </span>
-                                <span>Расход</span>
-                            </p>
-                            <p className="flex items-center gap-2 text-green-400 hover:drop-shadow-xl">
-                <span>
-                  <GoPrimitiveDot/>
-                </span>
-                                <span>Бюджет</span>
-                            </p>
+            {/* Admin dashboard stats cards */}
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+                {/* Clients card */}
+                <AntCard className="hover:shadow-lg transition-all duration-300 border-l-4 border-blue-500">
+                    <div className="flex justify-between items-center">
+                        <div>
+                            <p className="text-gray-700 font-bold text-lg">Клиенты</p>
+                            <span className="text-3xl font-bold mt-2">{formatNumber(statCounts?.clients)}</span>
+                        </div>
+                        <div className="bg-blue-100 p-3 rounded-full">
+                            <FaUsers size={24} className="text-blue-500" />
                         </div>
                     </div>
-                    <div className="mt-10 flex gap-10 flex-wrap justify-center">
-                        <div className=" border-r-1 border-color m-4 pr-10">
-                            <div>
-                                <p>
-                                    <span className="text-3xl font-semibold">₽ 93,438</span>
-                                    <span className="p-1.5 hover:drop-shadow-xl cursor-pointer rounded-full text-white bg-green-400 ml-3 text-xs">
-                    23%
-                  </span>
-                                </p>
-                                <p className="text-gray-500 mt-1">Бюджет</p>
-                            </div>
-                            <div className="mt-8">
-                                <p className="text-3xl font-semibold">₽ 48,487</p>
-
-                                <p className="text-gray-500 mt-1">Расход</p>
-                            </div>
-
-                            <div className="mt-5">
-                                <SparkLine currentColor={currentColor} id="line-sparkLine" type="Line" height="80px"
-                                           width="250px" data={SparklineAreaData} color={currentColor}/>
-                            </div>
-                            <div className="mt-10">
+                    <Link to="/clients" className="block mt-3">
                                 <Button
                                     color="white"
                                     bgColor={currentColor}
-                                    text="Загрузить отчёт"
+                            text="Подробнее"
                                     borderRadius="10px"
-                                />
-                            </div>
-                        </div>
+                            size="sm"
+                        />
+                    </Link>
+                </AntCard>
+
+                {/* Employees card */}
+                <AntCard className="hover:shadow-lg transition-all duration-300 border-l-4 border-purple-500">
+                    <div className="flex justify-between items-center">
                         <div>
-                            <Stacked currentMode={currentMode} width="320px" height="360px"/>
+                            <p className="text-gray-700 font-bold text-lg">Сотрудники</p>
+                            <span className="text-3xl font-bold mt-2">{8}</span>
+                        </div>
+                        <div className="bg-purple-100 p-3 rounded-full">
+                            <FaUserTie size={24} className="text-purple-500" />
                         </div>
                     </div>
-                </div>
-                
-                {/* Profit and sales charts */}
-                <div>
-                    <div
-                        className="rounded-2xl md:w-400 p-4 m-3"
-                        style={{backgroundColor: currentColor}}
-                    >
-                        <div className="flex justify-between items-center ">
-                            <p className="font-semibold text-white text-2xl">Прибыль</p>
+                    <Link to="/employees" className="block mt-3">
+                        <Button
+                            color="white"
+                            bgColor={currentColor}
+                            text="Подробнее"
+                            borderRadius="10px"
+                            size="sm"
+                        />
+                    </Link>
+                </AntCard>
 
+                {/* Projects card */}
+                <AntCard className="hover:shadow-lg transition-all duration-300 border-l-4 border-amber-500">
+                        <div className="flex justify-between items-center">
                             <div>
-                                <p className="text-2xl text-white font-semibold mt-8">₽ 63,448.78</p>
-                                <p className="text-gray-200">Месячная прибыль</p>
-                            </div>
+                            <p className="text-gray-700 font-bold text-lg">Проекты</p>
+                            <span className="text-3xl font-bold mt-2">{formatNumber(statCounts?.project)}</span>
                         </div>
-
-                        <div className="mt-4">
-                            <SparkLine currentColor={currentColor} id="column-sparkLine" height="100px" type="Column"
-                                       data={SparklineAreaData} width="320" color="rgb(242, 252, 253)"/>
+                        <div className="bg-amber-100 p-3 rounded-full">
+                            <FaProjectDiagram size={24} className="text-amber-500" />
                         </div>
                     </div>
+                    <Link to="/projects" className="block mt-3">
+                        <Button
+                            color="white"
+                            bgColor={currentColor}
+                            text="Подробнее"
+                            borderRadius="10px"
+                            size="sm"
+                        />
+                    </Link>
+                </AntCard>
 
-                    <div className="bg-white dark:text-gray-200 dark:bg-secondary-dark-bg rounded-2xl md:w-400 p-8 m-3 flex justify-center items-center gap-10">
+                {/* Requests card */}
+                <AntCard className="hover:shadow-lg transition-all duration-300 border-l-4 border-rose-500">
+                    <div className="flex justify-between items-center">
                         <div>
-                            <p className="text-2xl font-semibold ">₽ 43,246</p>
-                            <p className="text-gray-400">Годовые продажи</p>
+                            <p className="text-gray-700 font-bold text-lg">Заявки</p>
+                            <span className="text-3xl font-bold mt-2">{formatNumber(statCounts?.request)}</span>
                         </div>
-
-                        <div className="w-40">
-                            <Pie id="pie-chart" data={ecomPieChartData} legendVisiblity={false} height="160px"/>
+                        <div className="bg-rose-100 p-3 rounded-full">
+                            <FaRegClipboard size={24} className="text-rose-500" />
                         </div>
                     </div>
-                </div>
+                    <Link to="/requests" className="block mt-3">
+                        <Button
+                            color="white"
+                            bgColor={currentColor}
+                            text="Подробнее"
+                            borderRadius="10px"
+                            size="sm"
+                        />
+                    </Link>
+                </AntCard>
             </div>
 
-            {/* Transaction and statistics section */}
-            <div className="flex gap-10 m-4 flex-wrap justify-center">
-                {/* Recent transactions */}
-                <div className="bg-white dark:text-gray-200 dark:bg-secondary-dark-bg p-6 rounded-2xl">
-                    <div className="flex justify-between items-center gap-2">
-                        <p className="text-xl font-semibold">Последние транзакции</p>
-                        <DropDown currentMode={currentMode}/>
+            {/* Task statistics */}
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+                <AntCard className="md:col-span-2 hover:shadow-lg transition-all duration-300">
+                    <div className="flex justify-between items-center mb-4">
+                        <h3 className="text-lg font-bold">Статистика задач</h3>
                     </div>
-                    <div className="mt-10 w-72 md:w-400">
-                        {recentTransactions.map((item) => (
-                            <div key={item.title} className="flex justify-between mt-4">
-                                <div className="flex gap-4">
-                                    <button
-                                        type="button"
-                                        style={{
-                                            color: item.iconColor,
-                                            backgroundColor: item.iconBg,
-                                        }}
-                                        className="text-2xl rounded-lg p-4 hover:drop-shadow-xl"
-                                    >
-                                        {item.icon}
-                                    </button>
-                                    <div>
-                                        <p className="text-md font-semibold">{item.title}</p>
-                                        <p className="text-sm text-gray-400">{item.desc}</p>
+                    <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                        <div className="bg-blue-50 p-4 rounded-lg text-center">
+                            <div className="text-blue-500 mb-2"><FaTasks size={24} className="mx-auto" /></div>
+                            <p className="text-gray-700 font-semibold">Выполнено</p>
+                            <span className="text-2xl font-bold text-blue-500">{formatNumber(statCounts?.tasksCompleted)}</span>
+                        </div>
+                        <div className="bg-amber-50 p-4 rounded-lg text-center">
+                            <div className="text-amber-500 mb-2"><MdPendingActions size={24} className="mx-auto" /></div>
+                            <p className="text-gray-700 font-semibold">В процессе</p>
+                            <span className="text-2xl font-bold text-amber-500">{formatNumber(statCounts?.tasksProcessed)}</span>
+                        </div>
+                        <div className="bg-green-50 p-4 rounded-lg text-center">
+                            <div className="text-green-500 mb-2"><BsBarChart size={24} className="mx-auto" /></div>
+                            <p className="text-gray-700 font-semibold">На рассмотрении</p>
+                            <span className="text-2xl font-bold text-green-500">{formatNumber(statCounts?.tasksСons)}</span>
                                     </div>
                                 </div>
-                                <p className={`text-${item.pcColor}`}>{item.amount}</p>
+                    <div className="mt-6">
+                        <p className="text-gray-700 mb-2">Прогресс выполнения задач:</p>
+                        <Progress 
+                            percent={completionRate} 
+                            strokeColor={{
+                                '0%': '#108ee9',
+                                '100%': '#87d068',
+                            }}
+                            format={percent => `${percent}% выполнено`}
+                        />
                             </div>
-                        ))}
-                    </div>
-                    <div className="flex justify-between items-center mt-5 border-t-1 border-color">
-                        <div className="mt-3">
-                            <Button
-                                color="white"
-                                bgColor={currentColor}
-                                text="Добавить"
-                                borderRadius="10px"
-                            />
-                        </div>
-
-                        <p className="text-gray-400 text-sm">36 Последних транзакций</p>
-                    </div>
-                </div>
+                </AntCard>
                 
-                {/* Overall statistics */}
-                <div className="bg-white dark:text-gray-200 dark:bg-secondary-dark-bg p-6 rounded-2xl w-96 md:w-760">
-                    <div className="flex justify-between items-center gap-2 mb-10">
-                        <p className="text-xl font-semibold">Общая статистика</p>
-                        <DropDown currentMode={currentMode}/>
+                <AntCard className="hover:shadow-lg transition-all duration-300">
+                    <div className="flex justify-between items-center mb-4">
+                        <h3 className="text-lg font-bold">Финансы</h3>
                     </div>
-                    <div className="md:w-full overflow-auto">
-                        <LineChart/>
+                    <div className="text-center py-4">
+                        <div className="text-3xl font-bold mb-2 flex justify-center items-center">
+                            <FaMoneyBillWave className="text-green-500 mr-2" size={28} />
+                            <span className="text-3xl font-bold">{formatNumber(statCounts?.budget)}</span>
+                        </div>
+                        <p className="text-gray-500 mb-4">Общий бюджет</p>
+                        <Pie 
+                            id="finance-pie-chart" 
+                            data={[
+                                { name: 'Доход', value: statCounts?.budget || 0, color: '#4CAF50' },
+                                { name: 'Расходы', value: statCounts?.budget ? Math.round(statCounts?.budget * 0.7) : 0, color: '#F44336' }
+                            ]} 
+                            height="160px"
+                        />
                     </div>
+                </AntCard>
                 </div>
-            </div>
 
-            {/* Weekly statistics */}
-            <div className="flex flex-wrap justify-center">
-                <div className="md:w-400 bg-white dark:text-gray-200 dark:bg-secondary-dark-bg rounded-2xl p-6 m-3">
-                    <div className="flex justify-between">
-                        <p className="text-xl font-semibold">Еженедельная статистика</p>
-                        <button type="button" className="text-xl font-semibold text-gray-500">
-                            <IoIosMore/>
-                        </button>
+            {/* Additional stats and charts */}
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
+                <AntCard className="hover:shadow-lg transition-all duration-300">
+                    <div className="flex justify-between items-center mb-4">
+                        <h3 className="text-lg font-bold">Проекты по статусам</h3>
                     </div>
-
-                    <div className="mt-10 ">
-                        {weeklyStats.map((item) => (
-                            <div key={item.title} className="flex justify-between mt-4 w-full">
-                                <div className="flex gap-4">
-                                    <button
-                                        type="button"
-                                        style={{background: item.iconBg}}
-                                        className="text-2xl hover:drop-shadow-xl text-white rounded-full p-3"
-                                    >
-                                        {item.icon}
-                                    </button>
-                                    <div>
-                                        <p className="text-md font-semibold">{item.title}</p>
-                                        <p className="text-sm text-gray-400">{item.desc}</p>
+                    <div className="h-60">
+                        <Stacked 
+                            currentMode={currentMode} 
+                            width="100%" 
+                            height="100%"
+                        />
+                    </div>
+                </AntCard>
+                
+                <AntCard className="hover:shadow-lg transition-all duration-300">
+                    <div className="flex justify-between items-center mb-4">
+                        <h3 className="text-lg font-bold">Недельная активность</h3>
+                    </div>
+                    <div className="h-60">
+                        <SparkLine
+                            currentColor={currentColor}
+                            id="area-sparkLine"
+                            type="Area"
+                            height="100%"
+                            width="100%"
+                            data={SparklineAreaData}
+                            color={currentColor}
+                        />
                                     </div>
+                </AntCard>
                                 </div>
 
-                                <p className={`text-${item.pcColor}`}>{item.amount}</p>
+            {/* Recent transactions */}
+            <AntCard className="mb-8 hover:shadow-lg transition-all duration-300">
+                <div className="flex justify-between items-center mb-4">
+                    <h3 className="text-lg font-bold">Последние транзакции</h3>
+                    <DropDown currentMode={currentMode} />
+                </div>
+                <div className="overflow-auto">
+                    <table className="min-w-full divide-y divide-gray-200">
+                        <thead className="bg-gray-50">
+                            <tr>
+                                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Транзакция</th>
+                                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Клиент</th>
+                                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Дата</th>
+                                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Сумма</th>
+                            </tr>
+                        </thead>
+                        <tbody className="bg-white divide-y divide-gray-200">
+                            {recentTransactions.slice(0, 5).map((item, index) => (
+                                <tr key={index} className="hover:bg-gray-50">
+                                    <td className="px-6 py-4 whitespace-nowrap">
+                                        <div className="flex items-center">
+                                            <div className="flex-shrink-0 h-10 w-10 flex items-center justify-center rounded-full" 
+                                                style={{
+                                                    color: item.iconColor,
+                                                    backgroundColor: item.iconBg,
+                                                }}>
+                                                {item.icon}
                             </div>
-                        ))}
-                        <div className="mt-4">
-                            <SparkLine currentColor={currentColor} id="area-sparkLine" height="160px" type="Area"
-                                       data={SparklineAreaData} width="320" color="rgb(242, 252, 253)"/>
+                                            <div className="ml-4">
+                                                <div className="text-sm font-medium text-gray-900">{item.title}</div>
+                                                <div className="text-sm text-gray-500">{item.desc}</div>
                         </div>
                     </div>
+                                    </td>
+                                    <td className="px-6 py-4 whitespace-nowrap">
+                                        <div className="text-sm text-gray-900">Клиент #{index + 1}</div>
+                                    </td>
+                                    <td className="px-6 py-4 whitespace-nowrap">
+                                        <div className="text-sm text-gray-500">{new Date().toLocaleDateString()}</div>
+                                    </td>
+                                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                        <span className={`text-${item.pcColor}`}>{item.amount}</span>
+                                    </td>
+                                </tr>
+                            ))}
+                        </tbody>
+                    </table>
                 </div>
+                <div className="flex justify-between items-center mt-5 border-t pt-3">
+                    <Button
+                        color="white"
+                        bgColor={currentColor}
+                        text="Все транзакции"
+                        borderRadius="10px"
+                    />
+                    <p className="text-gray-400 text-sm">Всего транзакций: {recentTransactions.length}</p>
             </div>
+            </AntCard>
         </div>
     );
 };

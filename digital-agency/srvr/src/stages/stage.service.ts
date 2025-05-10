@@ -80,12 +80,33 @@ export class StagesService {
     }
 
     async updateStage(id: number, dto: UpdateStageDto) {
+        console.log('Updating stage with ID:', id, 'Data:', dto);
+        
         const stage = await this.stageRepository.findByPk(id);
         if (!stage){
-            throw new HttpException('Заявка не найдена', HttpStatus.NOT_FOUND);
+            throw new HttpException('Этап не найден', HttpStatus.NOT_FOUND);
         }
-        await this.stageRepository.update(dto, {where: {id}})
-        return dto;
+        
+        // Ensure cost is properly handled as a number if provided
+        let updatedDto = {...dto};
+        if (updatedDto.cost !== undefined) {
+            console.log('Setting cost:', updatedDto.cost, 'Type:', typeof updatedDto.cost);
+            // Convert string to number if needed
+            if (typeof updatedDto.cost === 'string') {
+                updatedDto = {
+                    ...updatedDto,
+                    cost: parseFloat(updatedDto.cost)
+                };
+            }
+        }
+        
+        await this.stageRepository.update(updatedDto, {where: {id}});
+        
+        // Get updated stage to return
+        const updatedStage = await this.stageRepository.findByPk(id);
+        console.log('Stage updated, new data:', updatedStage);
+        
+        return updatedStage;
     }
 
     async deleteStageById(id: number): Promise<{ message: string }> {
@@ -98,27 +119,34 @@ export class StagesService {
     }
 
     async createPayment(stageId: number, client) {
-        if (!client) {
-            throw new NotFoundException(`Оплачивать может только клиент`);
-        }
-
         const stage = await this.findOneById(stageId);
         if (!stage) {
             throw new NotFoundException(`Этап не найден`);
         }
 
         if (!stage.cost) {
-            throw new HttpException('Не задана стоимость этапа', HttpStatus.NOT_FOUND);
+            throw new HttpException('Не задана стоимость этапа. Сначала установите стоимость в разделе "Выставление счета".', HttpStatus.BAD_REQUEST);
         }
 
-        const project = await this.projectService.findOneMyById(stage.projectId, client.id);
-        if (!project) {
-            throw new NotFoundException(`Вы не являетесь участником проекта`);
+        // If client exists, verify they are part of the project
+        if (client) {
+            const project = await this.projectService.findOneMyById(stage.projectId, client.id);
+            if (!project) {
+                throw new NotFoundException(`Вы не являетесь участником проекта`);
+            }
         }
 
         const payment = await this.paymentService.createPayment(stage);
-        await this.stageRepository.update({...stage, paymentId: payment.paymentId, paymentLink: payment.paymentLink}, {where: {id: stageId}})
-            return payment;
+        await this.stageRepository.update(
+            {
+                ...stage, 
+                paymentId: payment.paymentId, 
+                paymentLink: payment.paymentLink
+            }, 
+            {where: {id: stageId}}
+        );
+        
+        return payment;
     }
 
     async capturePayment(paymentId: string): Promise<void> {
