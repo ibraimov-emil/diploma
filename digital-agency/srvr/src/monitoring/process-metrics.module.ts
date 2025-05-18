@@ -2,7 +2,7 @@ import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ProcessMetricsController } from './process-metrics.controller';
 import { ProcessMetricsService } from './process-metrics.service';
-import { PrometheusModule } from './prometheus.module';
+import { PrometheusModule } from '../prometheus/prometheus.module';
 import { RequestToProjectTracking } from './entities/request-to-project-tracking.entity';
 import { ChatResponseTracking } from './entities/chat-response-tracking.entity';
 import { InvoicePaymentTracking } from './entities/invoice-payment-tracking.entity';

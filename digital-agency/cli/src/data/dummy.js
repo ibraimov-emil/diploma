@@ -20,7 +20,7 @@ import {
 import { BiColorFill } from 'react-icons/bi';
 import { IoMdContacts } from 'react-icons/io';
 import { RiContactsLine, RiStockLine } from 'react-icons/ri';
-import { MdOutlineSupervisorAccount } from 'react-icons/md';
+import { MdOutlineSupervisorAccount, MdFeedback } from 'react-icons/md';
 import { HiOutlineRefresh } from 'react-icons/hi';
 import { TiTick } from 'react-icons/ti';
 import { GiLouvrePyramid } from 'react-icons/gi';
@@ -71,6 +71,11 @@ const adminLinks = {
       link: 'support',
       name: 'Поддержка',
       icon: <BsChatLeft />,
+    },
+    {
+      link: 'feedback-dashboard',
+      name: 'Управление качеством',
+      icon: <MdFeedback />,
     },
   ],
 };

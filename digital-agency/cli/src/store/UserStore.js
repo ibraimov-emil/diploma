@@ -21,7 +21,7 @@ class UserStore{
         this.isClient = bool
     }
 
-    setUser(    user){
+    setUser(user){
         this.user = user
     }
 

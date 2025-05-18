@@ -51,6 +51,7 @@ import {ChatResponseTracking} from "./monitoring/entities/chat-response-tracking
 import {InvoicePaymentTracking} from "./monitoring/entities/invoice-payment-tracking.entity";
 import {TaskCompletionTracking} from "./monitoring/entities/task-completion-tracking.entity";
 import {SLADefinitions} from "./monitoring/entities/sla-definitions.entity";
+import {PrometheusModule} from "./prometheus/prometheus.module";
 
 @Module({
     controllers: [],
@@ -107,7 +108,8 @@ import {SLADefinitions} from "./monitoring/entities/sla-definitions.entity";
         TasksModule,
         QualityModule,
         MonitoringModule,
-        ProcessMetricsModule
+        ProcessMetricsModule,
+        PrometheusModule
     ]
 })
 export class AppModule implements NestModule {

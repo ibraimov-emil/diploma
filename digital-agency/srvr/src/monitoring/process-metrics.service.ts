@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { PrometheusService } from './prometheus.service';
+import { PrometheusService } from '../prometheus/prometheus.service';
 import { RequestToProjectTracking } from './entities/request-to-project-tracking.entity';
 import { ChatResponseTracking } from './entities/chat-response-tracking.entity';
 import { InvoicePaymentTracking } from './entities/invoice-payment-tracking.entity';
@@ -28,10 +28,10 @@ export class ProcessMetricsService {
 
     private async initializeMetrics() {
         // Initialize Prometheus metrics
-        this.prometheusService.createGauge('request_to_project_time_seconds', 'Time to convert request to project');
-        this.prometheusService.createGauge('chat_response_time_seconds', 'Time to respond to chat messages');
-        this.prometheusService.createGauge('invoice_payment_time_seconds', 'Time from invoice to payment');
-        this.prometheusService.createGauge('task_completion_rate', 'Percentage of tasks completed on time');
+        this.prometheusService.registerGauge('request_to_project_time_seconds', 'Time to convert request to project');
+        this.prometheusService.registerGauge('chat_response_time_seconds', 'Time to respond to chat messages');
+        this.prometheusService.registerGauge('invoice_payment_time_seconds', 'Time from invoice to payment');
+        this.prometheusService.registerGauge('task_completion_rate', 'Percentage of tasks completed on time');
     }
 
     async trackRequestToProject(requestId: number, projectId: number, requestCreatedAt: Date, projectCreatedAt: Date) {
@@ -46,7 +46,7 @@ export class ProcessMetricsService {
         });
 
         // Update Prometheus metric
-        this.prometheusService.updateGauge('request_to_project_time_seconds', conversionTimeSeconds);
+        this.prometheusService.setGauge('request_to_project_time_seconds', conversionTimeSeconds);
     }
 
     async trackChatResponse(chatId: number, messageId: number, senderId: number, employeeId: number, 
@@ -64,7 +64,7 @@ export class ProcessMetricsService {
         });
 
         // Update Prometheus metric
-        this.prometheusService.updateGauge('chat_response_time_seconds', responseTimeSeconds);
+        this.prometheusService.setGauge('chat_response_time_seconds', responseTimeSeconds);
     }
 
     async trackInvoicePayment(invoiceId: number, projectId: number, invoiceCreatedAt: Date, paymentReceivedAt: Date) {
@@ -79,7 +79,7 @@ export class ProcessMetricsService {
         });
 
         // Update Prometheus metric
-        this.prometheusService.updateGauge('invoice_payment_time_seconds', paymentTimeSeconds);
+        this.prometheusService.setGauge('invoice_payment_time_seconds', paymentTimeSeconds);
     }
 
     async trackTaskCompletion(taskId: number, projectId: number, dueDate: Date, completedAt: Date) {
@@ -99,7 +99,7 @@ export class ProcessMetricsService {
         const completionRate = totalTasks > 0 ? completedTasks / totalTasks : 0;
 
         // Update Prometheus metric
-        this.prometheusService.updateGauge('task_completion_rate', completionRate);
+        this.prometheusService.setGauge('task_completion_rate', completionRate);
     }
 
     async getSLACompliance(metricName: string): Promise<{ current: number; target: number; compliant: boolean }> {
@@ -179,5 +179,9 @@ export class ProcessMetricsService {
             console.error(`Error in getSLACompliance for ${metricName}:`, error);
             return { current: 0, target: 0, compliant: false };
         }
+    }
+
+    private async updateMetrics(metricName: string, value: number) {
+        this.prometheusService.setGauge(metricName, value);
     }
 } 

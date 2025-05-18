@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { SystemMetrics } from '../models/system-metrics.model';
-import * as tf from '@tensorflow/tfjs-node';
+import * as tf from '@tensorflow/tfjs';
 
 @Injectable()
 export class LoadPredictionService {
@@ -94,11 +94,24 @@ export class LoadPredictionService {
 
       // Обновляем данные для следующего прогноза
       currentData = currentData.slice(1);
-      currentData.push({
-        ...currentData[currentData.length - 1],
+      
+      // Создаем новый документ с необходимыми полями
+      const lastItem = currentData[currentData.length - 1];
+      const newMetricsData = {
+        cpuUsage: lastItem.cpuUsage,
+        memoryUsage: lastItem.memoryUsage,
         requestCount: prediction,
+        responseTime: lastItem.responseTime,
+        errorRate: lastItem.errorRate,
+        activeUsers: lastItem.activeUsers,
+        networkTraffic: lastItem.networkTraffic,
+        diskUsage: lastItem.diskUsage,
         timestamp
-      } as SystemMetrics);
+      };
+      
+      // Создаем новый экземпляр модели
+      const newMetricsDoc = new this.systemMetricsModel(newMetricsData);
+      currentData.push(newMetricsDoc);
     }
 
     return forecast;
