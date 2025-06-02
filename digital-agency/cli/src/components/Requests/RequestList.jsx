@@ -1,8 +1,8 @@
 import React, {useContext, useState} from 'react';
 import {observer} from "mobx-react-lite";
-import { Table, Modal, Input, Space  } from 'antd';
+import { Table, Modal, Input, Space, Tooltip } from 'antd';
 import { Button } from '@mui/material';
-import { PlusOutlined, EditOutlined, DeleteOutlined } from '@ant-design/icons';
+import { PlusOutlined, EditOutlined, DeleteOutlined, WarningOutlined } from '@ant-design/icons';
 import { EyeOutlined } from '@ant-design/icons';
 import {Row} from "react-bootstrap";
 import {useMutation, useQuery, useQueryClient} from "react-query";
@@ -10,15 +10,29 @@ import {deleteOneRequest, fetchMyRequests, fetchRequest, fetchRequests} from "..
 import {Link} from "react-router-dom";
 import {AuthContext} from "../../contexts/authContext";
 import {fetchMyProjects, fetchProjects} from "../../services/ProjectService";
+import ReportRequestIncident from './ReportRequestIncident';
 
 const RequestList = observer(() => {
     const {user} = useContext(AuthContext)
     const queryClient = useQueryClient()
+    const [isIncidentModalVisible, setIsIncidentModalVisible] = useState(false);
+    const [selectedRequest, setSelectedRequest] = useState(null);
+    
     const {data: requests, isLoading, isError} = useQuery('requests', user.isClient ? fetchMyRequests : fetchRequests)
 
     const deleteRequestMutation = useMutation(requestId => deleteOneRequest(requestId),
     {onSuccess: () => queryClient.invalidateQueries(["requests"])}
     )
+
+    const showIncidentModal = (record) => {
+        setSelectedRequest(record);
+        setIsIncidentModalVisible(true);
+    };
+
+    const handleIncidentModalClose = () => {
+        setIsIncidentModalVisible(false);
+        setSelectedRequest(null);
+    };
 
     const columns = [
         {
@@ -72,6 +86,12 @@ const RequestList = observer(() => {
                         <Link to={`/requests/view/` + record.id}>
                             <EyeOutlined />
                         </Link>
+                        <Tooltip title="Сообщить о проблеме">
+                            <WarningOutlined 
+                                onClick={() => showIncidentModal(record)}
+                                style={{ color: "#ff9800" }}
+                            />
+                        </Tooltip>
                     </Space>
                 );
             },
@@ -96,11 +116,11 @@ const RequestList = observer(() => {
     return (
         <div className="App">
             <header className="App-header">
-                {!user.isClient &&
+                {/* {!user.isClient && */}
                 <Link to={`/requests/add`}>
                     <Button>Добавить заявку</Button>
                 </Link>
-                }
+                {/* } */}
                 <Table columns={columns}
                        dataSource={requests}
                        loading={isLoading}
@@ -109,6 +129,15 @@ const RequestList = observer(() => {
                 >
                 </Table>
             </header>
+            
+            {selectedRequest && (
+                <ReportRequestIncident
+                    requestId={selectedRequest.id}
+                    requestTitle={selectedRequest.description}
+                    visible={isIncidentModalVisible}
+                    onClose={handleIncidentModalClose}
+                />
+            )}
         </div>
     );
 });

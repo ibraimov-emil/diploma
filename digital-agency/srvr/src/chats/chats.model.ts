@@ -35,7 +35,7 @@ export class Chat extends Model<Chat, ChatCreationAttrs> {
     @BelongsTo(() => User)
     creator: User;
 
-    @BelongsToMany(() => User, () => ChatParticipant)
+    @BelongsToMany(() => User, () => ChatParticipant, 'chatId', 'userId')
     participants: User[];
 
     @HasMany(() => Message)

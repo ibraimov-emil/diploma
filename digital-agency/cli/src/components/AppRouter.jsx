@@ -10,15 +10,15 @@ const AppRouter = observer(() => {
 
     return (
         <Routes>
-            {user.isAuth && user.isClient && clientRoutes.map(({path, Component}) =>
-                <Route key={path} path={path} element={Component} exact/>
+            {user.isAuth && user.isClient && clientRoutes.map(({path, element}) =>
+                <Route key={path} path={path} element={element} exact/>
             )}
-            {user.isAuth && !user.isClient && employeeRoutes.map(({path, Component}) =>
-                <Route key={path} path={path} element={Component} exact/>
+            {user.isAuth && !user.isClient && employeeRoutes.map(({path, element}) =>
+                <Route key={path} path={path} element={element} exact/>
             )}
 
-            {!user.isAuth && publicRoutes.map(({path, Component}) =>
-                <Route key={path} path={path} element={Component} exact/>
+            {!user.isAuth && publicRoutes.map(({path, element}) =>
+                <Route key={path} path={path} element={element} exact/>
             )}
              <Route path="*" element={<Navigate to="/"/>}/>
         </Routes>

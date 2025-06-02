@@ -2,23 +2,42 @@ import {NestFactory} from "@nestjs/core";
 import {AppModule} from "./app.module";
 import {DocumentBuilder, SwaggerModule} from "@nestjs/swagger";
 import {JwtAuthGuard} from "./auth/jwt-auth.guard";
-import { ValidationPipe } from '@nestjs/common';
+import { ValidationPipe, Logger } from '@nestjs/common';
 import * as cookieParser from 'cookie-parser';
 import {AuthMiddleware} from "./auth/auth.middleware";
 import {ChatsGateway} from "./chats/chats.gateway";
 import { WsAdapter } from '@nestjs/platform-ws'
+import * as fs from 'fs';
+import * as path from 'path';
+import * as client from 'prom-client';
 
 
 async function start() {
+    const logger = new Logger('Bootstrap');
     const PORT = process.env.PORT || 5000;
-    const app = await NestFactory.create(AppModule)
-    app.use(cookieParser());
-    app.enableCors({
-        // origin: "localhost:3000",
-        origin:'http://localhost:3000',
-        credentials: true
+    
+    logger.log(`Starting application with NODE_ENV=${process.env.NODE_ENV}`);
+    
+    const app = await NestFactory.create(AppModule, {
+        logger: ['error', 'warn', 'log', 'debug', 'verbose'],
     });
-    app.useWebSocketAdapter(new WsAdapter(app))
+    
+    // Apply cookie parser middleware
+    app.use(cookieParser());
+    
+    // Configure CORS
+    app.enableCors({
+        origin: ['http://localhost:3000', 'http://localhost:3001', 'http://127.0.0.1:3000'],
+        methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS', 'PATCH'],
+        credentials: true,
+        allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With'],
+        exposedHeaders: ['Authorization']
+    });
+    
+    // Configure WebSockets
+    app.useWebSocketAdapter(new WsAdapter(app));
+    
+    // Configure Swagger documentation
     const config = new DocumentBuilder()
         .setTitle('Digital-agency')
         .setDescription('Сервис для оказания услуг по разработке, сопровождению, консалтингу в IT сфере')
@@ -26,6 +45,7 @@ async function start() {
         .addBearerAuth()
         // .addTag(Emil Dev')
         .build()
+    
     const document = SwaggerModule.createDocument(app, config);
     SwaggerModule.setup('/api/docs', app, document, {
         swaggerOptions: {
@@ -33,9 +53,52 @@ async function start() {
         }
     })
 
-    app.useGlobalPipes(new ValidationPipe())
+    // Apply global pipes
+    app.useGlobalPipes(new ValidationPipe({
+        transform: true,
+        whitelist: true
+    }));
 
-    await app.listen(PORT, () => console.log(`Server started on port = ${PORT}`))
+    // Prometheus metrics setup
+    // Create a Registry which registers the metrics
+    const register = new client.Registry();
+    // Add a default label which is added to all metrics
+    register.setDefaultLabels({
+        app: 'digital-agency-api'
+    });
+    // Enable the collection of default metrics
+    client.collectDefaultMetrics({ register });
+
+    // Get HTTP adapter (Express) for direct route handling
+    const httpAdapter = app.getHttpAdapter();
+
+    // Expose metrics endpoint
+    httpAdapter.get('/metrics', async (req, res) => {
+        res.set('Content-Type', register.contentType);
+        res.end(await register.metrics());
+    });
+
+    // Health check endpoint
+    httpAdapter.get('/health', (req, res) => {
+        res.status(200).send({
+            status: 'ok',
+            uptime: process.uptime(),
+            timestamp: Date.now()
+        });
+    });
+
+    // Uptime endpoint
+    httpAdapter.get('/metrics/uptime', (req, res) => {
+        res.status(200).send({
+            uptime: process.uptime(),
+            unit: 'seconds'
+        });
+    });
+
+    await app.listen(PORT, () => logger.log(`Server started on port = ${PORT}`));
 }
 
-start()
+start().catch(err => {
+    const logger = new Logger('Bootstrap');
+    logger.error(`Failed to start application: ${err.message}`, err.stack);
+});

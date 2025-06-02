@@ -1,0 +1,19 @@
+# HELP service_uptime Service uptime percentage
+# TYPE service_uptime gauge
+service_uptime 99.95
+
+# HELP service_mttr Mean Time To Recovery in minutes
+# TYPE service_mttr gauge
+service_mttr 15.5
+
+# HELP service_mtbf Mean Time Between Failures in minutes
+# TYPE service_mtbf gauge
+service_mtbf 2160.0
+
+# HELP service_error_rate Service error rate percentage
+# TYPE service_error_rate gauge
+service_error_rate 0.03
+
+# HELP incident_count Count of open incidents
+# TYPE incident_count gauge
+incident_count 3.0

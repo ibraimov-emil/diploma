@@ -40,6 +40,11 @@ export const createOneRequest = async (request) => {
     const {data} = await $host.post('requests/', request)
     return data
 }
+
+export const createClientRequest = async (request) => {
+    const {data} = await $host.post('requests/createMyRequest', request)
+    return data
+}
 //
 // export const createOneTask = async (task) => {
 //     const {data} = await $host.post('tasks/', task)

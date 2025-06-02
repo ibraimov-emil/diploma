@@ -19,6 +19,7 @@ interface UserCreationAttrs {
     email: string;
     password: string;
     phone: string;
+    role?: string;
 }
 
 @Table({tableName: 'users'})
@@ -57,6 +58,10 @@ export class User extends Model<User, UserCreationAttrs> {
     @Column({type: DataType.STRING, allowNull: true})
     banReason: string;
 
+    @ApiProperty({example: 'user', description: 'Роль пользователя'})
+    @Column({type: DataType.STRING, defaultValue: 'user'})
+    role: string;
+
     @ApiProperty({example: 'Токен', description: 'Рефреш'})
     @Column({type: DataType.STRING})
     refreshToken: any;
@@ -71,6 +76,6 @@ export class User extends Model<User, UserCreationAttrs> {
     @HasOne(() => Client)
     client: Client;
 
-    @BelongsToMany(() => Chat, () => ChatParticipant)
+    @BelongsToMany(() => Chat, () => ChatParticipant, 'userId', 'chatId')
     chats: Chat[];
 }

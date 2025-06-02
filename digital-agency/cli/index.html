@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JWT Token Refresh Tester</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        h1 {
+            text-align: center;
+            color: #333;
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+        input[type="text"], textarea {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            box-sizing: border-box;
+            font-family: monospace;
+        }
+        textarea {
+            min-height: 100px;
+            resize: vertical;
+        }
+        button {
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            cursor: pointer;
+            border-radius: 4px;
+            font-size: 16px;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+        .result {
+            margin-top: 20px;
+            padding: 15px;
+            background-color: #f8f9fa;
+            border-radius: 4px;
+            border-left: 5px solid #6c757d;
+        }
+        .error {
+            color: #721c24;
+            background-color: #f8d7da;
+            border-color: #f5c6cb;
+            padding: 10px;
+            border-radius: 4px;
+            margin-top: 10px;
+        }
+        pre {
+            background-color: #f8f9fa;
+            padding: 10px;
+            border-radius: 4px;
+            overflow-x: auto;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>JWT Token Refresh Tester</h1>
+        
+        <div class="form-group">
+            <label for="apiUrl">API URL:</label>
+            <input type="text" id="apiUrl" value="http://localhost:5000/auth/token/refresh">
+        </div>
+        
+        <div class="form-group">
+            <label for="refreshToken">Refresh Token:</label>
+            <textarea id="refreshToken" placeholder="Paste your refresh token here"></textarea>
+        </div>
+        
+        <button id="refreshBtn">Refresh Token</button>
+        
+        <div class="result" id="result" style="display: none;">
+            <h3>Result:</h3>
+            <pre id="resultContent"></pre>
+        </div>
+    </div>
+    
+    <script>
+        document.getElementById('refreshBtn').addEventListener('click', async () => {
+            const apiUrl = document.getElementById('apiUrl').value;
+            const refreshToken = document.getElementById('refreshToken').value.trim();
+            const resultDiv = document.getElementById('result');
+            const resultContent = document.getElementById('resultContent');
+            
+            resultDiv.style.display = 'none';
+            
+            if (!refreshToken) {
+                showError('Please enter a refresh token');
+                return;
+            }
+            
+            try {
+                const response = await fetch(apiUrl, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${refreshToken}`
+                    }
+                });
+                
+                const data = await response.json();
+                
+                resultDiv.style.display = 'block';
+                resultContent.textContent = JSON.stringify(data, null, 2);
+                
+                if (data.accessToken) {
+                    // Store the new tokens
+                    localStorage.setItem('accessToken', data.accessToken);
+                    localStorage.setItem('refreshToken', data.refreshToken);
+                    
+                    // Copy to clipboard
+                    navigator.clipboard.writeText(data.accessToken)
+                        .then(() => alert('Access token copied to clipboard!'))
+                        .catch(() => console.error('Failed to copy access token'));
+                }
+                
+            } catch (error) {
+                showError(`Error: ${error.message}`);
+            }
+        });
+        
+        function showError(message) {
+            const resultDiv = document.getElementById('result');
+            const resultContent = document.getElementById('resultContent');
+            
+            resultDiv.style.display = 'block';
+            resultContent.innerHTML = `<div class="error">${message}</div>`;
+        }
+        
+        // Get refresh token from localStorage if available
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedRefreshToken = localStorage.getItem('refreshToken');
+            if (savedRefreshToken) {
+                document.getElementById('refreshToken').value = savedRefreshToken;
+            }
+        });
+    </script>
+</body>
+</html> 

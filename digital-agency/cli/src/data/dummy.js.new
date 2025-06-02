@@ -1,0 +1,143 @@
+import React from 'react';
+import {
+  AiOutlineCalendar,
+  AiOutlineShoppingCart,
+  AiOutlineAreaChart,
+  AiOutlineBarChart,
+  AiOutlineStock,
+  AiFillProject
+} from 'react-icons/ai';
+import { FiShoppingBag, FiEdit, FiPieChart, FiBarChart, FiCreditCard, FiStar, FiShoppingCart } from 'react-icons/fi';
+import {
+  BsKanban,
+  BsBarChart,
+  BsBoxSeam,
+  BsCurrencyDollar,
+  BsShield,
+  BsChatLeft,
+  BsFillChatDotsFill
+} from 'react-icons/bs';
+import { BiColorFill } from 'react-icons/bi';
+import { IoMdContacts } from 'react-icons/io';
+import { RiContactsLine, RiStockLine } from 'react-icons/ri';
+import { MdOutlineSupervisorAccount } from 'react-icons/md';
+import { HiOutlineRefresh } from 'react-icons/hi';
+import { TiTick } from 'react-icons/ti';
+import { GiLouvrePyramid } from 'react-icons/gi';
+import { GrLocation } from 'react-icons/gr';
+import {SlLayers, SlPeople} from "react-icons/sl";
+
+// This file contains a modified version of the links array with a monitoring dashboard section
+
+export const links = [
+  {
+    title: 'Dashboard',
+    client: false,
+    links: [
+      {
+        link: 'ecommerce',
+        name: 'Статистика',
+        icon: <FiShoppingBag />,
+      },
+    ],
+  },
+  {
+    title: 'Страницы',
+    client: true,
+    links: [
+      {
+        link: 'requests',
+        name: 'Заявки',
+        icon: <SlLayers />,
+      },
+      {
+        link: 'projects',
+        name: 'Проекты',
+        icon: <AiFillProject />,
+      },
+      {
+        link: 'chats',
+        name: 'Чат',
+        icon: <BsFillChatDotsFill />,
+      },
+      {
+        link: 'orders',
+        name: 'Платежи',
+        icon: <AiOutlineShoppingCart />,
+      },
+      {
+        link: 'employees',
+        name: 'Сотрудники',
+        icon: <IoMdContacts />,
+      },
+    ],
+  },
+  {
+    title: 'Страницы',
+    client: false,
+    links: [
+      {
+        link: 'requests',
+        name: 'Заявки',
+        icon: <SlLayers />,
+      },
+      {
+        link: 'projects',
+        name: 'Проекты',
+        icon: <AiFillProject />,
+      },
+      {
+        link: 'clients',
+        name: 'Клиенты',
+        icon: <SlPeople />,
+      },
+      {
+        link: 'chats',
+        name: 'Чат',
+        icon: <BsFillChatDotsFill />,
+      },
+      {
+        link: 'orders',
+        name: 'Платежи',
+        icon: <AiOutlineShoppingCart />,
+      },
+      {
+        link: 'employees',
+        name: 'Сотрудники',
+        icon: <IoMdContacts />,
+      },
+    ],
+  },
+  {
+    title: 'Apps',
+    client: false,
+    links: [
+      {
+        link: 'calendar',
+        name: 'Календарь',
+        icon: <AiOutlineCalendar />,
+      },
+      {
+        link: 'kanban',
+        name: 'Канбан',
+        icon: <BsKanban />,
+      },
+    ],
+  },
+  {
+    title: 'Администрирование',
+    client: false,
+    links: [
+      {
+        link: 'itsm',
+        name: 'ITSM Панель',
+        icon: <BsShield />,
+      },
+      {
+        link: 'monitoring',
+        name: 'Мониторинг',
+        icon: <AiOutlineAreaChart />,
+      },
+    ],
+  },
+]; 

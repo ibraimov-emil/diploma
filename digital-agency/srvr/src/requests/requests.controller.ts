@@ -10,6 +10,8 @@ import {UpdateRequestDto} from "./dto/update-request.dto";
 import {Project} from "../projects/projects.model";
 import {AuthUser} from "../utils/decorators";
 import {User} from "../users/users.model";
+import {JwtAuthGuard} from "../auth/jwt-auth.guard";
+import {ChatService} from "../chats/chats.service";
 
 @ApiTags('Заявки')
 @Controller('requests')
@@ -17,15 +19,61 @@ import {User} from "../users/users.model";
 export class RequestsController {
 
     //инъекция чтобы использовать сервис
-    constructor(private requestsService: RequestsService) {}
+    constructor(
+        private requestsService: RequestsService,
+        private chatService: ChatService
+    ) {}
 
-    @ApiOperation({summary: 'Добавление заявки'})
+    @ApiOperation({summary: 'Добавление заявки админом'})
     @ApiResponse({status: 200, type: RequestTable})
     @Roles("ADMIN")
     @UseGuards(RolesGuard)
     @Post()
     create(@Body() requestDto: CreateRequestDto) {
         return this.requestsService.createRequest(requestDto);
+    }
+
+    @ApiOperation({summary: 'Добавление заявки клиентом'})
+    @ApiResponse({status: 200, type: RequestTable})
+    @UseGuards(JwtAuthGuard)
+    @Post('/createMyRequest')
+    async createMyRequest(@Body() requestDto: CreateRequestDto, @AuthUser() user: User) {
+        // Ensure the client can only create requests for themselves
+        if (user.client && user.client.id) {
+            // Create a new request DTO with the client ID
+            const clientRequestDto: CreateRequestDto = {
+                serviceId: requestDto.serviceId,
+                clientId: user.client.id,
+                statusId: 1, // Default status (usually "New")
+                description: requestDto.description
+            };
+            
+            // Create the request
+            const request = await this.requestsService.createRequest(clientRequestDto);
+            
+            // Create a chat for the request
+            const chat = await this.chatService.createChat(
+                'Заявка №' + request.id,
+                user.id
+            );
+            
+            // Add a support user to the chat (assuming user ID 7 is a support representative)
+            const supportUserId = 7; // This should be configured or retrieved dynamically
+            await this.chatService.addUserToChat(
+                supportUserId,
+                chat.id
+            );
+            
+            // Send an initial welcome message
+            await this.chatService.sendMessage(
+                chat.id,
+                supportUserId,
+                'Добрый день, вы оставили заявку: ' + requestDto.description + '. В ближайшее время вам ответит первый освободившийся менеджер'
+            );
+            
+            return request;
+        }
+        throw new Error('User is not a client');
     }
 
     @ApiOperation({summary: 'Получить все заявки'})

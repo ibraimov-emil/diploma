@@ -10,7 +10,7 @@ import {AuthModule} from "../auth/auth.module";;
 import {User} from "../users/users.model";
 import {Client} from "../clients/clients.model";
 import {Project} from "../projects/projects.model";
-import {ProjectsModule} from "../projects/projects,.module";
+import {ProjectsModule} from "../projects/projects.module";
 
 @Module({
   controllers: [EmployeesController],

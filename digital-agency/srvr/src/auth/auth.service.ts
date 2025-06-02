@@ -4,6 +4,7 @@ import {
   HttpException,
   HttpStatus,
   Injectable,
+  Logger,
   UnauthorizedException,
 } from "@nestjs/common";
 import { CreateUserDto } from "../users/dto/create-user.dto";
@@ -21,6 +22,8 @@ import {ChatService} from "../chats/chats.service";
 
 @Injectable()
 export class AuthService {
+  private readonly logger = new Logger(AuthService.name);
+  
   constructor(
     private userService: UsersService,
     private clientService: ClientsService,
@@ -31,14 +34,27 @@ export class AuthService {
   ) {}
 
   async login(userDto: LoginUserDto) {
-    const user = await this.validateUser(userDto);
-    if (user) {
-      const tokens = await this.getTokens(user.id, user);
-      // res.cookie('refreshToken', tokens.refreshToken, {maxAge: 30 * 24 * 60 * 60 * 1000, httpOnly: true})
-      await this.updateRefreshToken(user.id, tokens.refreshToken);
-      return { ...tokens, user };
+    try {
+      const user = await this.validateUser(userDto);
+      if (user) {
+        const tokens = await this.getTokens(user.id, user);
+        // res.cookie('refreshToken', tokens.refreshToken, {maxAge: 30 * 24 * 60 * 60 * 1000, httpOnly: true})
+        try {
+          await this.updateRefreshToken(user.id, tokens.refreshToken);
+        } catch (error) {
+          this.logger.error(`Error updating refresh token: ${error.message}`);
+          // Continue anyway since we can still provide the tokens
+        }
+        return { ...tokens, user };
+      }
+      return user;
+    } catch (error) {
+      this.logger.error(`Login error: ${error.message}`);
+      throw new HttpException(
+        error.message || 'Internal server error during login',
+        error.status || HttpStatus.INTERNAL_SERVER_ERROR
+      );
     }
-    return user;
   }
 
   async registration(userDto: CreateUserDto) {
@@ -123,27 +139,44 @@ export class AuthService {
   }
 
   private async validateUser(userDto: LoginUserDto) {
-    const user = await this.userService.getUserByEmail(userDto.email);
-    if (!user) throw new BadRequestException("Некорректный email или пароль");
+    try {
+      const user = await this.userService.getUserByEmail(userDto.email);
+      if (!user) throw new BadRequestException("Некорректный email или пароль");
 
-    const passwordEquals = await bcrypt.compare(
-      userDto.password,
-      user.password
-    );
-    console.log(passwordEquals)
-    if (user && passwordEquals) {
-      return user;
+      const passwordEquals = await bcrypt.compare(
+        userDto.password,
+        user.password
+      );
+      this.logger.log(`Password validation result: ${passwordEquals}`);
+      
+      if (user && passwordEquals) {
+        return user;
+      }
+      throw new UnauthorizedException({
+        message: "Некорректный email или пароль",
+      });
+    } catch (error) {
+      this.logger.error(`User validation error: ${error.message}`);
+      if (error instanceof BadRequestException || error instanceof UnauthorizedException) {
+        throw error;
+      }
+      throw new BadRequestException("Ошибка при проверке учетных данных");
     }
-    throw new UnauthorizedException({
-      message: "Некорректный email или пароль",
-    });
   }
 
   async updateRefreshToken(userId: number, refreshToken: string) {
-    const hashedRefreshToken = await this.hashData(refreshToken);
-    await this.userService.updateUser(userId, {
-      refreshToken: hashedRefreshToken,
-    });
+    try {
+      const hashedRefreshToken = await this.hashData(refreshToken);
+      await this.userService.updateUser(userId, {
+        refreshToken: hashedRefreshToken,
+      });
+    } catch (error) {
+      this.logger.error(`Error updating refresh token: ${error.message}`);
+      throw new HttpException(
+        'Failed to update refresh token',
+        HttpStatus.INTERNAL_SERVER_ERROR
+      );
+    }
   }
 
   async getTokens(userId: number, user: User) {
@@ -188,19 +221,58 @@ export class AuthService {
   }
 
   async refreshTokens(userId: number, refreshToken: string) {
-    const user = await this.userService.findById(userId);
-    if (!user || !user.refreshToken)
-      throw new ForbiddenException("Access Denied");
+    try {
+      this.logger.log(`Attempting to refresh token for user ID: ${userId}`);
+      
+      // First, try to decode and verify the JWT directly
+      let jwtPayload = null;
+      try {
+        jwtPayload = this.jwtService.verify(refreshToken, {
+          secret: this.configService.get<string>("JWT_REFRESH_SECRET") || 'JWT_REFRESH_SECRET',
+          ignoreExpiration: false
+        });
+        this.logger.log(`JWT verified successfully, payload user ID: ${jwtPayload.sub || jwtPayload.id}`);
+      } catch (error) {
+        this.logger.error(`JWT verification failed: ${error.message}`);
+        throw new ForbiddenException("Invalid or expired token");
+      }
+      
+      // Verify token belongs to requesting user
+      const tokenUserId = jwtPayload.sub || jwtPayload.id;
+      if (tokenUserId != userId) { // Using loose equality to handle string/number differences
+        this.logger.warn(`Token user ID (${tokenUserId}) does not match request user ID (${userId})`);
+        throw new ForbiddenException("Token does not belong to this user");
+      }
 
-    const refreshTokenMatches = await argon2.verify(
-      user.refreshToken,
-      refreshToken
-    );
-
-    if (!refreshTokenMatches) throw new ForbiddenException("Access Denied");
-    const tokens = await this.getTokens(user.id, user);
-    // console.log(user)
-    await this.updateRefreshToken(user.id, tokens.refreshToken);
-    return { ...tokens, user };
+      // Get user details if token is valid
+      const user = await this.userService.findById(userId);
+      if (!user) {
+        this.logger.warn(`User with ID ${userId} not found`);
+        throw new ForbiddenException("User not found");
+      }
+      
+      // Generate new tokens
+      this.logger.log(`Generating new tokens for user ${userId}`);
+      const tokens = await this.getTokens(user.id, user);
+      
+      // Update refresh token in database if possible, but don't fail if it doesn't work
+      try {
+        await this.updateRefreshToken(user.id, tokens.refreshToken);
+        this.logger.log(`Updated refresh token for user ${userId} in database`);
+      } catch (error) {
+        this.logger.warn(`Failed to update refresh token in database: ${error.message}`);
+      }
+      
+      return { ...tokens, user };
+    } catch (error) {
+      if (error instanceof ForbiddenException) {
+        throw error;
+      }
+      this.logger.error(`Refresh tokens failed: ${error.message}`);
+      throw new HttpException(
+        'Failed to refresh tokens',
+        HttpStatus.INTERNAL_SERVER_ERROR
+      );
+    }
   }
 }

@@ -36,16 +36,42 @@ export class UsersService {
     }
 
     async getUserByEmail(email: string) {
-        const user = await this.userRepository.findOne({where: {email}, include: {all: true}})
-        return user;
+        try {
+            // Try first with only essential attributes
+            const user = await this.userRepository.findOne({
+                where: {email},
+                attributes: ['id', 'name', 'surname', 'email', 'phone', 'password'],
+                include: ['employee', 'client']
+            });
+            return user;
+        } catch (error) {
+            console.error('Error finding user by email:', error);
+            // Fallback to a more basic query if the full one fails
+            return this.userRepository.findOne({
+                where: {email}
+            });
+        }
     }
 
     async findById(id: number): Promise<User> {
-        const user = await this.userRepository.findOne({where: {id}, include: {all: true}});
-        if (!user) {
-            throw new NotFoundException(`User with id ${id} not found`);
+        try {
+            const user = await this.userRepository.findOne({
+                where: {id},
+                attributes: ['id', 'name', 'surname', 'email', 'phone', 'password'],
+                include: ['employee', 'client']
+            });
+            if (!user) {
+                throw new NotFoundException(`User with id ${id} not found`);
+            }
+            return user;
+        } catch (error) {
+            console.error('Error finding user by id:', error);
+            const basicUser = await this.userRepository.findByPk(id);
+            if (!basicUser) {
+                throw new NotFoundException(`User with id ${id} not found`);
+            }
+            return basicUser;
         }
-        return user;
     }
 
     async updateUser(id: number, dto: UpdateUserDto): Promise<UpdateUserDto> {

@@ -29,7 +29,12 @@ export class ClientsService {
     }
 
     async getAllClients() {
-        const clients = await this.clientRepository.findAll({include: {all: true}});
+        const clients = await this.clientRepository.findAll({
+            include: [{
+                model: User,
+                attributes: ['id', 'name', 'surname', 'email', 'phone']
+            }]
+        });
         return clients;
     }
 

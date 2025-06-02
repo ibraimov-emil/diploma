@@ -33,7 +33,7 @@ const StageTasks = ({
         isLoading,
         isError,
     } = useQuery(["tasks", stageId], () =>
-        user.isClient ? fetchMyTasksStage(stageId) : fetchTasksStage(stageId)
+        user?.isClient ? fetchMyTasksStage(stageId) : fetchTasksStage(stageId)
     );
 
     if (isLoading) {
@@ -43,6 +43,9 @@ const StageTasks = ({
     if (isError) {
         return <div>Error</div>;
     }
+
+    // Ensure tasks is always an array
+    const tasksList = tasks || [];
 
     const handleTaskToggle = (taskId) => {
         try {
@@ -62,7 +65,7 @@ const StageTasks = ({
 
     return (
         <>
-            {!user.isClient && (
+            {!user?.isClient && (
                 <>
                     <CustomModal
                         title={'Добавить задачу'}
@@ -79,20 +82,20 @@ const StageTasks = ({
             )}
             <InfiniteScroll
                 className={`!overflow-visible`}
-                dataLength={tasks.length}
+                dataLength={tasksList.length}
                 loader={<Skeleton avatar paragraph={{rows: 1}} active/>}
                 // endMessage={<Divider plain>It is all, nothing more 🤐</Divider>}
                 scrollableTarget="scrollableDiv"
             >
                 <List
-                    dataSource={tasks}
+                    dataSource={tasksList}
                     renderItem={(item) => (
-                        <Badge.Ribbon className={`-m-1`} text={item.status?.name} color={item.statusColor}>
-                            <List.Item divider={false} key={item.email}>
+                        <Badge.Ribbon className={`-m-1`} text={item.status?.name || ''} color={item.statusColor || 'blue'}>
+                            <List.Item divider={false} key={item.id || Math.random()}>
                                 <List.Item.Meta
                                     // avatar={<Avatar src={item.picture.large}/>}
-                                    title={<a href="https://ant.design">{item.name}</a>}
-                                    description={item.description}
+                                    title={<a href="https://ant.design">{item.name || 'Задача'}</a>}
+                                    description={item.description || ''}
                                 />
                                 <div className={`flex gap-[10px] items-center`}>
                                     <CustomModal
@@ -104,7 +107,7 @@ const StageTasks = ({
                                             className={`cursor-pointer`}
                                         />
                                     </CustomModal>
-                                    {!user.isClient &&
+                                    {!user?.isClient &&
                                         <AiFillDelete
                                             className={`cursor-pointer`}
                                             onClick={() => handleDeleteTask(item.id)}

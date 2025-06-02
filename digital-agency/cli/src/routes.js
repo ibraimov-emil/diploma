@@ -29,92 +29,116 @@ import AddProject from "./components/Projects/AddProject";
 import EditProject from "./components/Projects/EditProject";
 import EmployeesProject from "./components/Projects/EmployeesProject";
 import ProfilePage from "./components/Projects/ProfilePage";
+import ItsmDashboard from "./components/admin/itsm-dashboard";
+import MonitoringDashboard from "./components/admin/monitoring-dashboard";
+import ProcessMetricsPage from "./components/admin/process-metrics/ProcessMetricsPage";
+import IncidentPage from "./components/admin/incidents/IncidentPage";
+import FeedbackDashboard from "./components/Dashboard/FeedbackDashboard.jsx";
 
 export const clientRoutes = [
   // dashboard
-  { path: "/", Component: <Ecommerce /> },
+  { path: "/", element: <Ecommerce /> },
 
-  { path: "/ecommerce", Component: <Ecommerce /> },
+  { path: "/ecommerce", element: <Ecommerce /> },
 
   // pages
-  { path: "/projects", Component: <Projects /> },
-  { path: "/projects/:id", Component: <ProjectPage /> },
+  { path: "/projects", element: <Projects /> },
+  { path: "/projects/:id", element: <ProjectPage /> },
 
-  { path: "/clients", Component: <Clients /> },
+  { path: "/clients", element: <Clients /> },
 
-  { path: "/requests", Component: <Requests /> },
-  { path: "/requests/view/:id", Component: <ViewRequest /> },
+  { path: "/requests", element: <Requests /> },
+  { path: "/requests/add", element: <AddRequest /> },
+  { path: "/requests/view/:id", element: <ViewRequest /> },
 
-  { path: "/chats", Component: <Chat /> },
-  { path: "/myProfile", Component: <MyProfile /> },
-  { path: "/orders", Component: <Orders /> },
+  { path: "/chats", element: <Chat /> },
+  { path: "/myProfile", element: <MyProfile /> },
+  { path: "/orders", element: <Orders /> },
   {
     path: "/employees",
-    Component: <Employees />,
+    element: <Employees />,
   },
-  { path: "/customers", Component: <Customers /> },
+  { path: "/customers", element: <Customers /> },
 
   // apps
-  { path: "/kanban", Component: <Kanban /> },
-  { path: "/calendar", Component: <Calendar /> },
+  { path: "/kanban", element: <Kanban /> },
+  { path: "/calendar", element: <Calendar /> },
 
   {
     path: "/profile/:id",
-    Component: <ProfilePage />,
+    element: <ProfilePage />,
   },
+  
+  // Feedback Dashboard
+  { path: "/feedback-dashboard", element: <FeedbackDashboard /> },
 ];
 
 export const employeeRoutes = [
   // dashboard
-  { path: "/", Component: <Ecommerce /> },
+  { path: "/", element: <Ecommerce /> },
 
-  { path: "/ecommerce", Component: <Ecommerce /> },
+  { path: "/ecommerce", element: <Ecommerce /> },
 
   // pages
-  { path: "/projects", Component: <Projects /> },
-  { path: "/projects/:id", Component: <ProjectPage /> },
-  { path: "/projects/add", Component: <AddProject /> },
-  { path: "/projects/edit/:id", Component: <EditProject /> },
+  { path: "/projects", element: <Projects /> },
+  { path: "/projects/:id", element: <ProjectPage /> },
+  { path: "/projects/add", element: <AddProject /> },
+  { path: "/projects/edit/:id", element: <EditProject /> },
 
-  { path: "/clients", Component: <Clients /> },
+  { path: "/clients", element: <Clients /> },
 
-  { path: "/requests", Component: <Requests /> },
-  { path: "/test", Component: <EmployeesProject /> },
-  { path: "/requests/add", Component: <AddRequest /> },
-  { path: "/requests/view/:id", Component: <ViewRequest /> },
-  { path: "/requests/edit/:id", Component: <EditRequest /> },
+  { path: "/requests", element: <Requests /> },
+  { path: "/test", element: <EmployeesProject /> },
+  { path: "/requests/add", element: <AddRequest /> },
+  { path: "/requests/view/:id", element: <ViewRequest /> },
+  { path: "/requests/edit/:id", element: <EditRequest /> },
 
-  { path: "/chats", Component: <Chat /> },
-  { path: "/myProfile", Component: <MyProfile /> },
-  { path: "/orders", Component: <Orders /> },
+  { path: "/chats", element: <Chat /> },
+  { path: "/myProfile", element: <MyProfile /> },
+  { path: "/orders", element: <Orders /> },
   {
     path: "/employees",
-    Component: <Employees />,
+    element: <Employees />,
   },
-  { path: "/customers", Component: <Customers /> },
+  { path: "/customers", element: <Customers /> },
 
   // apps
-  { path: "/kanban", Component: <Kanban /> },
-  { path: "/calendar", Component: <Calendar /> },
+  { path: "/kanban", element: <Kanban /> },
+  { path: "/calendar", element: <Calendar /> },
 
   {
     path: "/profile/:id",
-    Component: <ProfilePage />,
+    element: <ProfilePage />,
   },
+
+  // ITSM Dashboard
+  { path: "/itsm", element: <ItsmDashboard /> },
+  
+  // Monitoring Dashboard
+  { path: "/monitoring", element: <MonitoringDashboard /> },
+
+  // Process Metrics Dashboard
+  { path: "/process-metrics", element: <ProcessMetricsPage /> },
+
+  // Incidents Management
+  { path: "/incidents", element: <IncidentPage /> },
+  
+  // Feedback Dashboard
+  { path: "/feedback-dashboard", element: <FeedbackDashboard /> },
 ];
 
 export const publicRoutes = [
-  { path: "/", Component: <Landing /> },
+  { path: "/", element: <Landing /> },
   {
     path: FORM_ROUTE,
-    Component: <FormPage />,
+    element: <FormPage />,
   },
   {
     path: LOGIN_ROUTE,
-    Component: <Auth />,
+    element: <Auth />,
   },
   {
     path: REGISTRATION_ROUTE,
-    Component: <Auth />,
+    element: <Auth />,
   },
 ];

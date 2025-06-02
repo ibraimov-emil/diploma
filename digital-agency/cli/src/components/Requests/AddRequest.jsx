@@ -1,33 +1,53 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import {HashRouter, useNavigate} from 'react-router-dom';
 import { Form, Input, message, Select } from 'antd';
 import { Button } from '@mui/material';
 import {useQuery, useMutation, useQueryClient} from 'react-query';
 import axios from 'axios';
-import {createOneRequest, fetchRequest, fetchServices, fetchStatuses} from "../../services/RequestService";
+import {createOneRequest, createClientRequest, fetchRequest, fetchServices, fetchStatuses} from "../../services/RequestService";
 import {fetchClients} from "../../services/ClientService";
 import {Header} from "../Dashboard";
 import RequestList from "./RequestList";
+import {AuthContext} from "../../contexts/authContext";
 
 const { Option } = Select;
 
 const AddRequest = () => {
   const navigate = useNavigate();
-  const queryClient = useQueryClient()
+  const queryClient = useQueryClient();
   const [loading, setLoading] = useState(false);
+  const {user} = useContext(AuthContext);
 
   const {data: services, isLoading, isError} = useQuery('services', fetchServices)
   const {data: clients, isLoading: isLoadingClients, isError: isErrorClients} = useQuery('clients', fetchClients)
   const {data: statuses} = useQuery('statuses', fetchStatuses)
-  {console.log(clients)}
-  const createStageMutation  = useMutation(requestData => createOneRequest(requestData),
+  
+  const createAdminRequestMutation = useMutation(requestData => createOneRequest(requestData),
       {onSuccess: () => queryClient.invalidateQueries(["requests"])}
-  )
+  );
+  
+  const createClientRequestMutation = useMutation(requestData => createClientRequest(requestData),
+      {onSuccess: () => queryClient.invalidateQueries(["requests"])}
+  );
 
   const onFinish = async (values) => {
     setLoading(true);
     try {
-      createStageMutation.mutate(values);
+      // Use different mutation based on user role
+      if (user.isClient) {
+        // For clients, we only need serviceId and description
+        // The backend will set the clientId and statusId
+        createClientRequestMutation.mutate({
+          serviceId: values.serviceId,
+          clientId: user.user.id,
+          statusId: 1,
+          description: values.description
+        });
+      } else {
+        // For admins, use the full form data
+        createAdminRequestMutation.mutate(values);
+      }
+      
       message.success('Request added successfully');
       navigate('/requests');
     } catch (error) {
@@ -64,20 +84,26 @@ const AddRequest = () => {
               ))}
           </Select>
         </Form.Item>
-        <Form.Item
-          name="clientId"
-          label="Client"
-          rules={[{ required: true, message: 'Please select the client' }]}
-        >
-          <Select placeholder="Select a client">
-            {clients &&
-              clients.map((client) => (
-                <Option key={client.id} value={client.id}>
-                  {client.user.name} {client.user.surname} {client.user.email}
-                </Option>
-              ))}
-          </Select>
-        </Form.Item>
+        
+        {/* Only show the Client field if user is not a client */}
+        {!user.isClient && (
+          <Form.Item
+            name="clientId"
+            label="Client"
+            rules={[{ required: true, message: 'Please select the client' }]}
+          >
+            <Select placeholder="Select a client">
+              {clients &&
+                clients.map((client) => (
+                  <Option key={client.id} value={client.id}>
+                    {client.user.name} {client.user.surname} {client.user.email}
+                  </Option>
+                ))}
+            </Select>
+          </Form.Item>
+        )}
+
+        {!user.isClient && (
         <Form.Item
           name="statusId"
           label="Status"
@@ -92,11 +118,13 @@ const AddRequest = () => {
               ))}
           </Select>
         </Form.Item>
+        )}
         <Form.Item>
           <Button type="primary" htmlType="submit" loading={loading}>
             Создать
           </Button>
         </Form.Item>
+        
       </Form>
     </div>
   );

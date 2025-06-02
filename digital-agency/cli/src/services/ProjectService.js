@@ -50,14 +50,44 @@ export const createOneStage = async (stage) => {
 }
 
 export const createCostStage = async (newStagePayment) => {
-    const {data} = await $host.put('stages/' + newStagePayment.stageId, {cost: newStagePayment.cost})
-    await $host.post('stages/' + newStagePayment.stageId + '/payments')
-    return data
+    try {
+        console.log('Creating cost stage with data:', newStagePayment);
+        
+        // First update the stage with the cost
+        const {data} = await $host.put('stages/' + newStagePayment.stageId, {cost: newStagePayment.cost});
+        console.log('Stage updated with cost, response:', data);
+        
+        // Wait a moment to ensure the cost is updated in the database
+        console.log('Waiting for database update...');
+        await new Promise(resolve => setTimeout(resolve, 1000));
+        
+        // Then create a payment for the stage
+        console.log('Creating payment for stage:', newStagePayment.stageId);
+        const paymentResponse = await $host.post('stages/' + newStagePayment.stageId + '/payments');
+        console.log('Payment created, response:', paymentResponse.data);
+        
+        return {
+            ...data,
+            paymentLink: paymentResponse.data?.paymentLink
+        };
+    } catch (error) {
+        console.error('Error in createCostStage:', error);
+        console.error('Error details:', error.response?.data);
+        throw error;
+    }
 }
 
 export const createPaymentStage = async (stageId) => {
-    const {data} = await $host.post('stages/' + stageId + '/payments')
-    return data.paymentLink
+    try {
+        const {data} = await $host.post('stages/' + stageId + '/payments');
+        if (!data || !data.paymentLink) {
+            throw new Error('Не удалось получить ссылку на оплату');
+        }
+        return data.paymentLink;
+    } catch (error) {
+        console.error('Error in createPaymentStage:', error);
+        throw error;
+    }
 }
 
 export const createOneTask = async (task) => {

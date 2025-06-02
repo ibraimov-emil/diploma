@@ -15,8 +15,9 @@ import {RequestTable} from "./requests.model";
 import {ServicesModule} from "../services/services.module";
 import {StatusesModule} from "../statuses/statuses.module";
 import {ClientsModule} from "../clients/clients.module";
-import {ProjectsModule} from "../projects/projects,.module";
+import {ProjectsModule} from "../projects/projects.module";
 import {Project} from "../projects/projects.model";
+import {ChatsModule} from "../chats/chats.module";
 
 @Module({
   controllers: [RequestsController],
@@ -29,6 +30,7 @@ import {Project} from "../projects/projects.model";
       forwardRef(() => AuthModule),
       forwardRef(() => EmployeesModule),
       forwardRef(() => ProjectsModule),
+      forwardRef(() => ChatsModule),
   ],
     exports: [
         RequestsService,
